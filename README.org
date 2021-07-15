@@ -1,0 +1,90 @@
+#+TITLE:      Build-system Hackathon 8-12 Nov 2021
+#+OPTIONS:    num:nil ^:{} \n:nil toc:nil
+#+STARTUP:    align fold nodlcheck hidestars oddeven lognotestate
+#+LANGUAGE:   en
+#+SETUPFILE:  org/theme-readtheorg-local.setup
+
+* Presentation
+  
+Making HPC software installable on multiple supercomputers or
+different architectures is a difficult task: different systems have
+different compilers, libraries, system commands etc. This task can be
+helped by tools like CMake and GNU Autotools.
+
+In this Hackathon, we will help code developers better understand
+how to use these build systems to improve the portability of their
+applications. In addition, well-done configuration scripts facilitate
+the packaging of the software, and presentations will be given to
+propose different packaging possibilities to distribute the software.
+
+This Hackathon will take place as a virtual event from 8 to 12 July,
+and is targeting students/researchers developing HPC open-source
+software.
+
+* Prerequisites
+
+Participants are expected to come with a code for which they want to
+improve the installation scripts. The supported build systems for this
+Hackathon are Autotools and CMake.
+Participants should agree to share their source code with all the
+other participants. Therefore a an open-source license (GPL, BSD, MIT,
+...) is required.
+This event will take place with Zoom, and a Slack space will be used
+for communicating between teams.
+
+
+* Registration
+
+  
+To register for this hackathon, follow this link:
+<TODO>
+
+Registrations will be closed on 1 Nov 2021.
+
+
+* Agenda
+  
+** Monday 8 Nov 2021
+
+  - 09:00-09:15 : Intro to hackathon
+  - 09:15-10:00 : Autotools presentation (Christian Feld)
+  - 10:15-10:45 : CMake presentation (Radovan Bast)
+  - 10:45-11:30 : Participants present how their code is installed
+  - 13:30-17:30 : CMake tutorial (Radovan Bast)
+
+** Tuesday 9 Nov 2021
+
+  - 09:00-12:00 : Autotools tutorial / Hands on
+  - 13:30-17:30 : Hands on
+
+** Wednesday 10 Nov 2021
+
+  - 09:00-10:30 : Participants present what they have achieved
+  - 10:30-12:30 : Participants install other teams' codes
+  - 13:30-15:00 : Participants take feedback from other teams and fix problems
+  - 15:00-15:45 : Spack presentation (Todd Gamblin)
+  - 16:00-16:45 : HPC Containers presentation (Axel?)
+
+** Friday 12 Nov 2021
+
+  - 09:00-09:45 : Guix-HPC presentation (Ludovic Courtès)
+  - 09:45-10:00 : Break
+  - 10:00-12:00 : Participants present what they have achieved
+
+
+https://imgs.xkcd.com/comics/dependency.png
+
+--------------
+
+* Acknowledgments
+
+This Hackathon is supported by the TREX european Center fo Excellence.
+
+[[https://trex-coe.eu/sites/default/files/inline-images/euflag.jpg]]
+[[https://trex-coe.euTREX: Targeting Real Chemical Accuracy at the
+Exascale]] project has received funding from the European Union’s
+Horizon 2020 - Research and Innovation program - under grant agreement
+no. 952165. The content of this document does not represent the
+opinion of the European Union, and the European Union is not
+responsible for any use that might be made of such content.
+
