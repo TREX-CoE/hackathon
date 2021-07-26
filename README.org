@@ -6,7 +6,7 @@
 
 * Presentation
   
-Making HPC software installable on multiple supercomputers or
+Making HPC software easy to install on multiple supercomputers or
 different architectures is a difficult task: different systems have
 different compilers, libraries, system commands etc. This task can be
 helped by tools like CMake and GNU Autotools.
@@ -24,7 +24,7 @@ software.
 * Prerequisites
 
 Participants are expected to come with a code for which they want to
-improve the installation scripts. The supported build systems for this
+create or improve installation scripts. The supported build systems for this
 Hackathon are Autotools and CMake.
 Participants should agree to share their source code with all the
 other participants. Therefore a an open-source license (GPL, BSD, MIT,
@@ -35,11 +35,10 @@ for communicating between teams.
 
 * Registration
 
-  
 To register for this hackathon, follow this link:
 <TODO>
 
-Registrations will be closed on 1 Nov 2021.
+Registrations will be closed on <TODO> Nov 2021.
 
 
 * Agenda
@@ -81,8 +80,8 @@ https://imgs.xkcd.com/comics/dependency.png
 This Hackathon is supported by the TREX european Center fo Excellence.
 
 [[https://trex-coe.eu/sites/default/files/inline-images/euflag.jpg]]
-[[https://trex-coe.euTREX: Targeting Real Chemical Accuracy at the
-Exascale]] project has received funding from the European Union’s
+[[https://trex-coe.eu][TREX: Targeting Real Chemical Accuracy at the Exascale]]
+project has received funding from the European Union’s
 Horizon 2020 - Research and Innovation program - under grant agreement
 no. 952165. The content of this document does not represent the
 opinion of the European Union, and the European Union is not
