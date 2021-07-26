@@ -63,7 +63,7 @@ Registrations will be closed on 1 Nov 2021.
   - 10:30-12:30 : Participants install other teams' codes
   - 13:30-15:00 : Participants take feedback from other teams and fix problems
   - 15:00-15:45 : Spack presentation (Todd Gamblin)
-  - 16:00-16:45 : HPC Containers presentation (Axel?)
+  - 16:00-16:45 : HPC Containers presentation (Axel Auweter)
 
 ** Friday 12 Nov 2021
 
