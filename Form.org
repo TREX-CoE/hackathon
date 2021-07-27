@@ -18,7 +18,7 @@
    - [ ] Engineer
    - [ ] Researcher
    - [ ] Other: 
-  - Build system:
+ - Build system:
     - [ ] Autotools
     - [ ] CMake
     - [ ] Both CMake and Autotools
