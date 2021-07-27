@@ -1,0 +1,38 @@
+#+TITLE: TREX Build System Hackathon Registration Form
+
+
+* Personal information
+--------------------
+
+** Required information
+   
+ - First Name: 
+ - Last Name:  
+ - Email address:
+ - Country of residence:
+ - Laboratory / Company:
+ - Name of the team for the Hackathon:
+ - Position:
+   - [ ] Student
+   - [ ] Post-doc
+   - [ ] Engineer
+   - [ ] Researcher
+   - [ ] Other: 
+  - Build system:
+    - [ ] Autotools
+    - [ ] CMake
+    - [ ] Both CMake and Autotools
+    - [ ] I will figure it out after the presentations
+ 
+
+** Optional information
+   
+ - Web page:
+ - Social coding account (GitHub, GitLab, etc):
+
+* Code participating to the hackathon
+
+ - Name of the code:
+ - Repository or web page:
+ - Open-source license:
+ - Supported operating systems:
