@@ -5,7 +5,7 @@
 #+SETUPFILE:  org/theme-readtheorg-local.setup
 
 * Presentation
-  
+
 Making HPC software easy to install on multiple supercomputers or
 different architectures is a difficult task: different systems have
 different compilers, libraries, system commands etc. This task can be
@@ -51,7 +51,7 @@ To register for this hackathon, please follow this link:
 Application deadline: 1 Nov 2021
 
 * Agenda
-  
+
 ** Monday 8 Nov 2021
 
   - 09:00-09:15 : Intro to hackathon
@@ -69,15 +69,16 @@ Application deadline: 1 Nov 2021
 
   - 09:00-10:30 : Participants present what they have achieved
   - 10:30-12:30 : Participants install other teams' codes
-  - 13:30-15:00 : Participants take feedback from other teams and fix problems
-  - 15:00-15:45 : Spack presentation (Todd Gamblin)
+  - 14:00-16:00 : Participants take feedback from other teams and fix problems
   - 16:00-16:45 : HPC Containers presentation (Axel Auweter)
 
 ** Friday 12 Nov 2021
 
   - 09:00-09:45 : Guix-HPC presentation (Ludovic Courtès)
   - 09:45-10:00 : Break
-  - 10:00-12:00 : Participants present what they have achieved
+  - 10:00-12:00 : Hands on
+  - 14:00-16:00 : Participants present what they have achieved
+  - 16:00-16:45 : Spack presentation (Todd Gamblin)
 
 
 https://imgs.xkcd.com/comics/dependency.png
