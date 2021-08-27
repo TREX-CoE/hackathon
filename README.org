@@ -80,7 +80,6 @@ Application deadline: 1 Nov 2021
   - 14:00-16:00 : Participants present what they have achieved
   - 16:00-16:45 : Spack presentation (Todd Gamblin)
 
-
 https://imgs.xkcd.com/comics/dependency.png
 
 --------------
