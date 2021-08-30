@@ -58,12 +58,12 @@ Application deadline: 1 Nov 2021
   - 09:15-10:00 : Autotools presentation (Christian Feld)
   - 10:15-10:45 : CMake presentation (Radovan Bast)
   - 10:45-11:30 : Participants present how their code is installed
-  - 13:30-17:30 : CMake tutorial (Radovan Bast)
+  - 13:30-16:30 : CMake tutorial (Radovan Bast)
 
 ** Tuesday 9 Nov 2021
 
   - 09:00-12:00 : Autotools tutorial / Hands on
-  - 13:30-17:30 : Hands on
+  - 13:30-16:30 : Hands on
 
 ** Wednesday 10 Nov 2021
 
