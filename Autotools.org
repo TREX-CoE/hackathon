@@ -1,0 +1,52 @@
+#+TITLE: Autotools
+#+AUTHOR: Evgey Posenitskiy, Anthony Scemama
+#+LANGUAGE:  en
+#+INFOJS_OPT: toc:t mouse:underline path:org-info.js
+#+STARTUP: latexpreview
+#+LATEX_CLASS: report
+#+LATEX_HEADER_EXTRA: \usepackage{minted}
+#+HTML_HEAD: <link rel="stylesheet" title="Standard" href="worg.css" type="text/css" />
+
+#+OPTIONS: H:4 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+OPTIONS: TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
+# EXCLUDE_TAGS: solution solution2 noexport
+# EXCLUDE_TAGS: solution noexport
+#+EXCLUDE_TAGS: noexport
+
+  #+BEGIN_SRC elisp :output none :exports none
+(setq org-latex-listings 'minted
+      org-latex-packages-alist '(("" "minted"))
+      org-latex-pdf-process
+      '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+(setq org-latex-minted-options '(("breaklines" "true")
+                                 ("breakanywhere" "true")))
+(setq org-latex-minted-options
+      '(("frame" "lines")
+        ("fontsize" "\\scriptsize")
+        ("linenos" "")))
+(org-beamer-export-to-pdf)
+
+  #+END_SRC
+
+  #+RESULTS:
+  : /home/scemama/TREX-Admin/hackathon/Autotools.pdf
+
+* Introduction
+  
+  This website contains the Autotools tutorial of the
+  [[https://trex-coe.eu/events/trex-build-system-hackathon-8-12-nov-2021][TREX build system Hackathon]].
+
+* Autoconf
+* Automake
+* Acknowledgments
+
+[[https://trex-coe.eu/sites/default/files/inline-images/euflag.jpg]]
+
+[[https://trex-coe.eu][TREX]] : Targeting Real Chemical Accuracy at the Exascale project
+has received funding from the European Union’s Horizon 2020 - Research and
+Innovation program - under grant agreement no. 952165. The content of this
+document does not represent the opinion of the European Union, and the European
+Union is not responsible for any use that might be made of such content.
+
