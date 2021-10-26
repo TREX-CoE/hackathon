@@ -36,10 +36,10 @@
 --------------------------------
 
   This website contains the Autotools tutorial of the
-  [[https://trex-coe.eu/events/trex-build-system-hackathon-8-12-nov-2021][TREX build system Hackathon]].
+  [[https://trex-coe.eu/events/trex-build-system-hackathon-8-12-nov-2021][TREX build system Hackathon]]. 
 
-   - [[./autoconf.html][Autoconf]
-   - [[./automake.html][Automake]
+   - [[./autoconf.html][Autoconf]]
+   - [[./automake.html][Automake]]
 
 --------------------------------
 
