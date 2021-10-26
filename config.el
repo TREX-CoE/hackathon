@@ -4,6 +4,21 @@
 (package-initialize)
 (require 'htmlize)
 (require 'font-lock)
+(global-font-lock-mode t)
+(setq org-src-fontify-natively t)
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '( 
+   (emacs-lisp . t)
+   (shell . t)
+   (python . t)
+   (fortran . t)
+   (C . t)
+   (org . t)
+   (makefile . t)
+   ))
+
+
 (require 'subr-x) ;; for `when-let'
 
 (unless (boundp 'maximal-integer)

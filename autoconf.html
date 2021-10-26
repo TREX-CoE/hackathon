@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-10-26 Tue 15:10 -->
+<!-- 2021-10-26 Tue 15:16 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Autoconf</title>
@@ -240,14 +240,14 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org7e7e6a2">1. Introduction</a></li>
-<li><a href="#org1eb4eed">2. Step 1: Makefile</a>
+<li><a href="#orgc51f8f2">1. Introduction</a></li>
+<li><a href="#org787eb02">2. Step 1: Makefile</a>
 <ul>
-<li><a href="#org9e529cf">2.1. Possible answer</a></li>
+<li><a href="#org933d7cd">2.1. Possible answer</a></li>
 </ul>
 </li>
-<li><a href="#org7dd5293">3. Step 2: configure.ac</a></li>
-<li><a href="#org53bb415">4. Step 3: Grande finale</a></li>
+<li><a href="#org2ac64b4">3. Step 2: configure.ac</a></li>
+<li><a href="#org3d4b410">4. Step 3: Grande finale</a></li>
 </ul>
 </div>
 </div>
@@ -256,8 +256,8 @@ This page contains tutorial on the usage <a href="https://www.gnu.org/software/a
 This is the first part of the Autotools tutorial.
 </p>
 
-<div id="outline-container-org7e7e6a2" class="outline-2">
-<h2 id="org7e7e6a2"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-orgc51f8f2" class="outline-2">
+<h2 id="orgc51f8f2"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Building software on different platforms is a challenging task.
@@ -318,19 +318,19 @@ The goal is to demonstrate how cumbersome configuration/compilation steps can be
 </div>
 </div>
 
-<div id="outline-container-org1eb4eed" class="outline-2">
-<h2 id="org1eb4eed"><span class="section-number-2">2</span> Step 1: Makefile</h2>
+<div id="outline-container-org787eb02" class="outline-2">
+<h2 id="org787eb02"><span class="section-number-2">2</span> Step 1: Makefile</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 Let's have a look at the following part of our <code>Makefile</code>:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-make">CXX      = g++
-CPPFLAGS = -I./include/ -I/usr/include/hdf5/serial
-CXXFLAGS = -g -O2 -std=c++11
-LDFLAGS  = -L/usr/lib/x86_64-linux-gnu/hdf5/serial
-LIBS     = -lhdf5 -lhdf5_cpp -lpthread -lz
+<pre class="src src-makefile"><span style="color: #a0522d;">CXX</span>      = g++
+<span style="color: #a0522d;">CPPFLAGS</span> = -I./include/ -I/usr/include/hdf5/serial
+<span style="color: #a0522d;">CXXFLAGS</span> = -g -O2 -std=c++11
+<span style="color: #a0522d;">LDFLAGS</span>  = -L/usr/lib/x86_64-linux-gnu/hdf5/serial
+<span style="color: #a0522d;">LIBS</span>     = -lhdf5 -lhdf5_cpp -lpthread -lz
 </pre>
 </div>
 
@@ -339,8 +339,8 @@ LIBS     = -lhdf5 -lhdf5_cpp -lpthread -lz
 </p>
 </div>
 
-<div id="outline-container-org9e529cf" class="outline-3">
-<h3 id="org9e529cf"><span class="section-number-3">2.1</span> Possible answer</h3>
+<div id="outline-container-org933d7cd" class="outline-3">
+<h3 id="org933d7cd"><span class="section-number-3">2.1</span> Possible answer</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 Here we explicitly require to use the <code>C++</code> compiler to be GNU C++ compiler (<code>g++</code>).
@@ -351,17 +351,17 @@ What if another compiler like <code>icpc</code> of Intel has to be used ?
 </div>
 </div>
 
-<div id="outline-container-org7dd5293" class="outline-2">
-<h2 id="org7dd5293"><span class="section-number-2">3</span> Step 2: configure.ac</h2>
+<div id="outline-container-org2ac64b4" class="outline-2">
+<h2 id="org2ac64b4"><span class="section-number-2">3</span> Step 2: configure.ac</h2>
 </div>
 
-<div id="outline-container-org53bb415" class="outline-2">
-<h2 id="org53bb415"><span class="section-number-2">4</span> Step 3: Grande finale</h2>
+<div id="outline-container-org3d4b410" class="outline-2">
+<h2 id="org3d4b410"><span class="section-number-2">4</span> Step 3: Grande finale</h2>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Evgeny Posenitskiy, Anthony Scemama</p>
-<p class="date">Created: 2021-10-26 Tue 15:10</p>
+<p class="date">Created: 2021-10-26 Tue 15:16</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
