@@ -31,19 +31,19 @@
   #+END_SRC
 
   #+RESULTS:
-  : /home/scemama/TREX-Admin/hackathon/Autotools.pdf
+  : /home/evgeny/hackathon/Autotools.pdf
 
-* Introduction
-  
+--------------------------------
+
   This website contains the Autotools tutorial of the
   [[https://trex-coe.eu/events/trex-build-system-hackathon-8-12-nov-2021][TREX build system Hackathon]].
 
-* Autoconf
-* Automake
-* Acknowledgments
+   - [[./autoconf.html][Autoconf]
+   - [[./automake.html][Automake]
+
+--------------------------------
 
 [[https://trex-coe.eu/sites/default/files/inline-images/euflag.jpg]]
-
 [[https://trex-coe.eu][TREX]] : Targeting Real Chemical Accuracy at the Exascale project
 has received funding from the European Union’s Horizon 2020 - Research and
 Innovation program - under grant agreement no. 952165. The content of this
