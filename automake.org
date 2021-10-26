@@ -17,6 +17,15 @@ part of the Autotools tutorial.
 
 * Introduction
 
+Automake produces Makefiles that respect the GNU coding standards. This implies using
+standardized file names (=README=, =COPYING=, ...), build targets
+(~make install~, ~make clean~, ~make dist~, ...), and installation paths
+(=/usr/bin=, =/usr/share/=, =/usr/include=, =/usr/man=, ...).
+
+#The =Makefiles= produced by Automake are made to be portable
+
+# Maintainer mode 
+
 * Making Makefiles portable
 
 The most popular implementation of =make= is =GNU Make=. =GNU Make= is much more
@@ -48,5 +57,9 @@ at the top of your =Makefile=.
   write them for you.
 - Install =bmake= as an alternative to =GNU make= to check the portability of
   your =Makefiles=.
+
+** Useful links
+
+- [[http://gnu.ist.utl.pt/software/autoconf/manual/autoconf-2.57/html_chapter/autoconf_10.html][Portable shell programming]]
 
 
