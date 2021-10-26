@@ -11,8 +11,39 @@
 #+SETUPFILE: org-html-themes/org/theme-readtheorg-local.setup
 
 
-This page contains tutorial on the usage [[http://www.gnu.org/software/automake/][GNU Automake]]. 
+This page contains tutorial on the usage [[http://www.gnu.org/software/automake/][GNU Automake]].
 This is the second part of the Autotools tutorial.
 
 * Introduction
+
+* Making Makefiles portable
+
+The most popular implementation of =make= is GNU Make. GNU Make is much more
+evolved than the =POSIX= standard, so =Makefile=s designed for GNU Make are not
+guaranteed to work with alternate implementations of =make=, such as BSD make for
+instance. If you want your software to be /really/ portable, you should stick to the
+=POSIX= standard in your =Makefile= by including the line
+#BEGIN_SRC makefile
+.POSIX
+#END_SRC
+at the top of your =Makefile=.
+
+** What you will lose by sticking to the POSIX standard
+
+- Pattern rules, such as
+
+  #BEGIN_SRC makefile
+  %_test.o: %_test.c
+          $(CC) $< -o $@
+  #END_SRC
+
+- Special functions ~$(wildcard *.c)~, ~$(patsubst %.f, %.o, $(SRC))~, ...
+
+** Rules that will make everything simpler
+
+- Use =/bin/sh= instead of =/bin/bash=
+- Don't put your compiled files (=.o=) in a separate location than the source files
+- Give up writing your =Makefiles=. Write *scripts* (Bash, Python) to write them for you.
+- Install =bmake= as an alternative to GNU make to check the portability of your =Makefiles=.
+
 
