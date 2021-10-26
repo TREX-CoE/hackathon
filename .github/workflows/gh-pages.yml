@@ -24,7 +24,7 @@ jobs:
         run: git clone https://github.com/hniksic/emacs-htmlize && cp emacs-htmlize/htmlize.el docs/
 
       - name: make
-        run: cd docs ; ./create.sh ../Autotools.org ; cd ..
+        run: ./create.sh
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
