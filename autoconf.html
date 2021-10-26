@@ -3,12 +3,12 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-10-26 Tue 15:06 -->
+<!-- 2021-10-26 Tue 15:07 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Autoconf</title>
 <meta name="generator" content="Org mode" />
-<meta name="author" content="Evgey Posenitskiy, Anthony Scemama" />
+<meta name="author" content="Evgeny Posenitskiy, Anthony Scemama" />
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
   .title  { text-align: center;
@@ -240,14 +240,14 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org7e8f42d">1. Introduction</a></li>
-<li><a href="#org3069389">2. Step 1: Makefile</a>
+<li><a href="#org02aa94f">1. Introduction</a></li>
+<li><a href="#org7204a54">2. Step 1: Makefile</a>
 <ul>
-<li><a href="#org04d88db">2.1. Possible answer</a></li>
+<li><a href="#org58757b9">2.1. Possible answer</a></li>
 </ul>
 </li>
-<li><a href="#orgfefc623">3. Step 2: configure.ac</a></li>
-<li><a href="#orgb9b09d2">4. Step 3: Grande finale</a></li>
+<li><a href="#org6bcd50b">3. Step 2: configure.ac</a></li>
+<li><a href="#org9a6b904">4. Step 3: Grande finale</a></li>
 </ul>
 </div>
 </div>
@@ -256,8 +256,8 @@ This page contains tutorial on the usage <a href="https://www.gnu.org/software/a
 This is the first part of the Autotools tutorial.
 </p>
 
-<div id="outline-container-org7e8f42d" class="outline-2">
-<h2 id="org7e8f42d"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-org02aa94f" class="outline-2">
+<h2 id="org02aa94f"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Building software on different platforms is a challenging task.
@@ -319,8 +319,8 @@ Sherman-Morrison/
 </div>
 </div>
 
-<div id="outline-container-org3069389" class="outline-2">
-<h2 id="org3069389"><span class="section-number-2">2</span> Step 1: Makefile</h2>
+<div id="outline-container-org7204a54" class="outline-2">
+<h2 id="org7204a54"><span class="section-number-2">2</span> Step 1: Makefile</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 Let's have a look at the following part of our <code>Makefile</code>:
@@ -339,8 +339,8 @@ LIBS     = -lhdf5 -lhdf5_cpp -lpthread -lz
 </p>
 </div>
 
-<div id="outline-container-org04d88db" class="outline-3">
-<h3 id="org04d88db"><span class="section-number-3">2.1</span> Possible answer</h3>
+<div id="outline-container-org58757b9" class="outline-3">
+<h3 id="org58757b9"><span class="section-number-3">2.1</span> Possible answer</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 Here we explicitly require to use the <code>C++</code> compiler to be GNU C++ compiler (<code>g++</code>). 
@@ -351,17 +351,17 @@ What if another compiler like <code>icpc</code> of Intel has to be used ?
 </div>
 </div>
 
-<div id="outline-container-orgfefc623" class="outline-2">
-<h2 id="orgfefc623"><span class="section-number-2">3</span> Step 2: configure.ac</h2>
+<div id="outline-container-org6bcd50b" class="outline-2">
+<h2 id="org6bcd50b"><span class="section-number-2">3</span> Step 2: configure.ac</h2>
 </div>
 
-<div id="outline-container-orgb9b09d2" class="outline-2">
-<h2 id="orgb9b09d2"><span class="section-number-2">4</span> Step 3: Grande finale</h2>
+<div id="outline-container-org9a6b904" class="outline-2">
+<h2 id="org9a6b904"><span class="section-number-2">4</span> Step 3: Grande finale</h2>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="author">Author: Evgey Posenitskiy, Anthony Scemama</p>
-<p class="date">Created: 2021-10-26 Tue 15:06</p>
+<p class="author">Author: Evgeny Posenitskiy, Anthony Scemama</p>
+<p class="date">Created: 2021-10-26 Tue 15:07</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
