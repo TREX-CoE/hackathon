@@ -4,11 +4,11 @@
 #+STARTUP: latexpreview
 
 # OLD STYLE
-###+HTML_HEAD: <link rel="stylesheet" title="Standard" href="worg.css" type="text/css" />
-###+INFOJS_OPT: toc:t mouse:underline path:org-info.js
+# #+HTML_HEAD: <link rel="stylesheet" title="Standard" href="worg.css" type="text/css" />
+# #+INFOJS_OPT: toc:t mouse:underline path:org-info.js
 
 # Read the org
-#+SETUPFILE: docs/org-html-themes/org/theme-readtheorg-local.setup
+#+SETUPFILE: org-html-themes/org/theme-readtheorg-local.setup
 
 
 This page contains tutorial on the usage [[http://www.gnu.org/software/automake/][GNU Automake]]. 
