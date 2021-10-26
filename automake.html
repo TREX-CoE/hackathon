@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-10-26 Tue 16:44 -->
+<!-- 2021-10-26 Tue 17:15 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Autoconf</title>
@@ -240,11 +240,12 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org6e43b22">1. Introduction</a></li>
-<li><a href="#org599af36">2. Making Makefiles portable</a>
+<li><a href="#orgd8633de">1. Introduction</a></li>
+<li><a href="#orgdaf47bf">2. Making Makefiles portable</a>
 <ul>
-<li><a href="#orgb86fc68">2.1. What you will lose by sticking to the POSIX standard</a></li>
-<li><a href="#orgf76da29">2.2. Rules that will make everything simpler</a></li>
+<li><a href="#orgb2897aa">2.1. What you will lose by sticking to the POSIX standard</a></li>
+<li><a href="#orgf672b10">2.2. Rules that will make everything simpler</a></li>
+<li><a href="#org70dd6e9">2.3. Useful links</a></li>
 </ul>
 </li>
 </ul>
@@ -256,12 +257,24 @@ This page contains tutorial on the usage
 part of the Autotools tutorial.
 </p>
 
-<div id="outline-container-org6e43b22" class="outline-2">
-<h2 id="org6e43b22"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-orgd8633de" class="outline-2">
+<h2 id="orgd8633de"><span class="section-number-2">1</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Automake produces Makefiles that respect the GNU coding standards. This implies using
+standardized file names (<code>README</code>, <code>COPYING</code>, &#x2026;), build targets
+(<code>make install</code>, <code>make clean</code>, <code>make dist</code>, &#x2026;), and installation paths
+(<code>/usr/bin</code>, <code>/usr/share/</code>, <code>/usr/include</code>, <code>/usr/man</code>, &#x2026;).
+</p>
+
+<p>
+#The <code>Makefiles</code> produced by Automake are made to be portable
+</p>
+</div>
 </div>
 
-<div id="outline-container-org599af36" class="outline-2">
-<h2 id="org599af36"><span class="section-number-2">2</span> Making Makefiles portable</h2>
+<div id="outline-container-orgdaf47bf" class="outline-2">
+<h2 id="orgdaf47bf"><span class="section-number-2">2</span> Making Makefiles portable</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 The most popular implementation of <code>make</code> is <code>GNU Make</code>. <code>GNU Make</code> is much more
@@ -279,8 +292,8 @@ at the top of your <code>Makefile</code>.
 </p>
 </div>
 
-<div id="outline-container-orgb86fc68" class="outline-3">
-<h3 id="orgb86fc68"><span class="section-number-3">2.1</span> What you will lose by sticking to the POSIX standard</h3>
+<div id="outline-container-orgb2897aa" class="outline-3">
+<h3 id="orgb2897aa"><span class="section-number-3">2.1</span> What you will lose by sticking to the POSIX standard</h3>
 <div class="outline-text-3" id="text-2-1">
 <ul class="org-ul">
 <li><p>
@@ -298,8 +311,8 @@ Pattern rules, such as
 </div>
 </div>
 
-<div id="outline-container-orgf76da29" class="outline-3">
-<h3 id="orgf76da29"><span class="section-number-3">2.2</span> Rules that will make everything simpler</h3>
+<div id="outline-container-orgf672b10" class="outline-3">
+<h3 id="orgf672b10"><span class="section-number-3">2.2</span> Rules that will make everything simpler</h3>
 <div class="outline-text-3" id="text-2-2">
 <ul class="org-ul">
 <li>Use <code>/bin/sh</code> instead of <code>/bin/bash</code></li>
@@ -311,11 +324,20 @@ your <code>Makefiles</code>.</li>
 </ul>
 </div>
 </div>
+
+<div id="outline-container-org70dd6e9" class="outline-3">
+<h3 id="org70dd6e9"><span class="section-number-3">2.3</span> Useful links</h3>
+<div class="outline-text-3" id="text-2-3">
+<ul class="org-ul">
+<li><a href="http://gnu.ist.utl.pt/software/autoconf/manual/autoconf-2.57/html_chapter/autoconf_10.html">Portable shell programming</a></li>
+</ul>
+</div>
+</div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Evgeny Posenitskiy, Anthony Scemama</p>
-<p class="date">Created: 2021-10-26 Tue 16:44</p>
+<p class="date">Created: 2021-10-26 Tue 17:15</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
