@@ -1,5 +1,5 @@
 #+TITLE: Autoconf
-#+AUTHOR: Evgey Posenitskiy, Anthony Scemama
+#+AUTHOR: Evgeny Posenitskiy, Anthony Scemama
 #+LANGUAGE:  en
 #+STARTUP: latexpreview
 
