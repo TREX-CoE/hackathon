@@ -24,19 +24,19 @@ evolved than the POSIX standard, so Makefiles designed for =GNU Make= are not
 guaranteed to work with alternate implementations of =make=, such as BSD make for
 instance. If you want your software to be /really/ portable, you should stick to the
 POSIX standard in your =Makefile= by including the line
-#BEGIN_SRC makefile
+#+BEGIN_SRC makefile
 .POSIX
-#END_SRC
+#+END_SRC
 at the top of your =Makefile=.
 
 ** What you will lose by sticking to the POSIX standard
 
 - Pattern rules, such as
 
-  #BEGIN_SRC makefile
+  #+BEGIN_SRC makefile
   %_test.o: %_test.c
           $(CC) $< -o $@
-  #END_SRC
+  #+END_SRC
 
 - Special functions ~$(wildcard *.c)~, ~$(patsubst %.f, %.o, $(SRC))~, ...
 
