@@ -5,7 +5,7 @@
 #+HTML_HEAD: <link rel="stylesheet" title="Standard" href="worg.css" type="text/css" />
 #+STARTUP: latexpreview
 
-This page contains tutorial on the usage [[https://www.gnu.org/software/autoconf/][GNU Autoconf]]. 
+This page contains the [[https://www.gnu.org/software/autoconf/][GNU Autoconf]] tutorial. 
 This is the first part of the Autotools tutorial.
 
 * Introduction
@@ -60,6 +60,62 @@ Sherman-Morrison/
 
 * Step 1: Makefile
 
+Below is the ~Makefile~ of our project:
+
+#+begin_src
+## Specify the C++ compiler as well as preprocessor, compiler and linking flags
+CXX      = g++
+CPPFLAGS = -I./include/ -I/usr/include/hdf5/serial
+CXXFLAGS = -g -O2 -std=c++11
+LDFLAGS  = -L/usr/lib/x86_64-linux-gnu/hdf5/serial
+LIBS     = -lhdf5 -lhdf5_cpp -lpthread -lz
+
+## Directory structure
+SRC_DIR := src
+TST_DIR := tests
+INC_DIR := include
+BIN_DIR := bin
+
+EXEC    := $(BIN_DIR)/test_h5
+
+## Dependencies
+DEPS_CXX = $(SRC_DIR)/SM_Maponi.o \
+           $(SRC_DIR)/SM_Standard.o \
+           $(SRC_DIR)/Woodbury.o \
+           $(SRC_DIR)/SMWB.o \
+           $(SRC_DIR)/Helpers.o
+
+## Build tagets
+.PHONY: all clean
+
+all: $(EXEC)
+
+clean:
+        @rm -rf -- $(SRC_DIR)/*.o $(TST_DIR)/*.o $(EXEC)
+
+## Compiling dependencies
+.SUFFIXES: .cpp .o
+
+## Linking
+$(BIN_DIR)/test_h5: $(DEPS_CXX) $(TST_DIR)/test_h5.o
+        $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(TST_DIR)/test_h5.o $(DEPS_CXX) -o $(EXEC) $(LDFLAGS) $(LIBS)
+#+end_src
+
+Let's execute **make** command and examine the output:
+
+#+begin_src
+g++ -g -O2 -std=c++11 -I./include/ -I/usr/include/hdf5/serial   -c -o src/SM_Maponi.o src/SM_Maponi.cpp
+g++ -g -O2 -std=c++11 -I./include/ -I/usr/include/hdf5/serial   -c -o src/SM_Standard.o src/SM_Standard.cpp
+g++ -g -O2 -std=c++11 -I./include/ -I/usr/include/hdf5/serial   -c -o src/Woodbury.o src/Woodbury.cpp
+g++ -g -O2 -std=c++11 -I./include/ -I/usr/include/hdf5/serial   -c -o src/SMWB.o src/SMWB.cpp
+g++ -g -O2 -std=c++11 -I./include/ -I/usr/include/hdf5/serial   -c -o src/Helpers.o src/Helpers.cpp
+g++ -g -O2 -std=c++11 -I./include/ -I/usr/include/hdf5/serial   -c -o tests/test_h5.o tests/test_h5.cpp
+g++ -I./include/ -I/usr/include/hdf5/serial  -g -O2 -std=c++11 tests/test_h5.o src/SM_Maponi.o src/SM_Standard.o src/Woodbury.o src/SMWB.o src/Helpers.o -o bin/test_h5  -L/usr/lib/x86_64-linux-gnu/hdf5/serial -lhdf5 -lhdf5_cpp -lpthread -lz 
+#+end_src
+
+So it works. We can already see that *.o* object files are compiled first since they are indicated as dependencies
+of the ~$(BIN_DIR)/test_h5$ target, which is compiled and linked at the very end.
+
 Let's have a look at the following part of our ~Makefile~:
 
 #+begin_src
@@ -70,14 +126,58 @@ LDFLAGS  = -L/usr/lib/x86_64-linux-gnu/hdf5/serial
 LIBS     = -lhdf5 -lhdf5_cpp -lpthread -lz
 #+end_src
 
-**Question:** What are advantages and disadvantages of the aforementioned definitions?
+**Question:** What are advantages and disadvantages of specifying compiler flags as above? 
 
-** Possible answer
+The crucial issue here is the portability of the hard-coded paths to HDF5 (see ~CPPFLAGS~ and ~LDFLAGS~).
 
-Here we explicitly require to use the ~C++~ compiler to be GNU C++ compiler (~g++~). 
-However, what if the compiler is not present on the current machine ?
-What if another compiler like ~icpc~ of Intel has to be used ?
+Moreover, in this example, we provide all the flags already. 
+However, in real life, defining them is challenging, especially for programs with external dependencies.
 
-* Step 2: configure.ac
+Wouldn't it be nice if we could automatize this process? Well, this is where **Autoconf** comes into play.
+
+* Step 2: Autoconf
+
+In this section, we will talk about several files:
+
+- configure.ac
+- configure
+- Makefile.in
+- Makefile
+
+The ultimate goal of the **Autoconf** is to produce the **configure** script based on the *configure.ac* file.
+The **configure** script then detects the **Makefile.in** file and replaces some variables there to produce
+the final **Makefile**, which is used to build a project.  
+
+TODO: PICTURE HERE
+
+Confused? We'll get there.
+
+Let's create a very simple ~configure.ac~ file with the following contents:
+
+#+begin_src
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+AC_INIT([sherman], [0.0.1], [])
+
+AC_OUTPUT
+#+end_src
+
+Here we provided the name of our project [~sherman~] and the current version [0.0.1] to AC_INIT macro.
+We will not cover in details specifics on the M4 syntax that is used internally by the Autoconf.
+For more information, see the [[https://www.gnu.org/software/autoconf/manual/autoconf-2.69/html_node/index.html][Autoconf documentation page]].
+
+
+
+The **configure** script can also define variables and pass them to other files. 
+ 
+Perhaps, you have already tried to install software from source on UNIX-like systems.
+Then the following sequence would look familiar to you. 
+
+#+begin_src
+./configure
+make
+#+end_src
+
 
 * Step 3: Grande finale 
