@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-10-26 Tue 16:35 -->
+<!-- 2021-10-26 Tue 16:44 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Autoconf</title>
@@ -240,69 +240,74 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org2e24ac2">1. Introduction</a></li>
-<li><a href="#org667ff49">2. Making Makefiles portable</a>
+<li><a href="#org6e43b22">1. Introduction</a></li>
+<li><a href="#org599af36">2. Making Makefiles portable</a>
 <ul>
-<li><a href="#org4b3fdcf">2.1. What you will lose by sticking to the POSIX standard</a></li>
-<li><a href="#orgfbed6cf">2.2. Rules that will make everything simpler</a></li>
+<li><a href="#orgb86fc68">2.1. What you will lose by sticking to the POSIX standard</a></li>
+<li><a href="#orgf76da29">2.2. Rules that will make everything simpler</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 <p>
-This page contains tutorial on the usage <a href="http://www.gnu.org/software/automake/">GNU Automake</a>.
-This is the second part of the Autotools tutorial.
+This page contains tutorial on the usage
+<a href="http://www.gnu.org/software/automake/">GNU Automake</a>.  This is the second
+part of the Autotools tutorial.
 </p>
 
-<div id="outline-container-org2e24ac2" class="outline-2">
-<h2 id="org2e24ac2"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-org6e43b22" class="outline-2">
+<h2 id="org6e43b22"><span class="section-number-2">1</span> Introduction</h2>
 </div>
 
-<div id="outline-container-org667ff49" class="outline-2">
-<h2 id="org667ff49"><span class="section-number-2">2</span> Making Makefiles portable</h2>
+<div id="outline-container-org599af36" class="outline-2">
+<h2 id="org599af36"><span class="section-number-2">2</span> Making Makefiles portable</h2>
 <div class="outline-text-2" id="text-2">
 <p>
-The most popular implementation of <code>make</code> is GNU Make. GNU Make is much more
-evolved than the <code>POSIX</code> standard, so <code>Makefile=s designed for GNU Make are not
-guaranteed to work with alternate implementations of =make</code>, such as BSD make for
+The most popular implementation of <code>make</code> is <code>GNU Make</code>. <code>GNU Make</code> is much more
+evolved than the POSIX standard, so Makefiles designed for <code>GNU Make</code> are not
+guaranteed to work with alternate implementations of <code>make</code>, such as BSD make for
 instance. If you want your software to be <i>really</i> portable, you should stick to the
-<code>POSIX</code> standard in your <code>Makefile</code> by including the line
-#BEGIN<sub>SRC</sub> makefile
-.POSIX
-#END<sub>SRC</sub>
+POSIX standard in your <code>Makefile</code> by including the line
+</p>
+<div class="org-src-container">
+<pre class="src src-makefile">.POSIX
+</pre>
+</div>
+<p>
 at the top of your <code>Makefile</code>.
 </p>
 </div>
 
-<div id="outline-container-org4b3fdcf" class="outline-3">
-<h3 id="org4b3fdcf"><span class="section-number-3">2.1</span> What you will lose by sticking to the POSIX standard</h3>
+<div id="outline-container-orgb86fc68" class="outline-3">
+<h3 id="orgb86fc68"><span class="section-number-3">2.1</span> What you will lose by sticking to the POSIX standard</h3>
 <div class="outline-text-3" id="text-2-1">
 <ul class="org-ul">
 <li><p>
 Pattern rules, such as
 </p>
 
-<p>
-#BEGIN<sub>SRC</sub> makefile
-%<sub>test.o</sub>: %<sub>test.c</sub>
-	$(CC) $&lt; -o $@
-#END<sub>SRC</sub>
-</p></li>
+<div class="org-src-container">
+<pre class="src src-makefile"><span style="color: #0000ff;">%_test.o</span>: %_test.c
+        $(<span style="color: #a0522d;">CC</span>) $<span style="color: #008b8b;">&lt;</span> -o <span style="color: #0000ff;">$</span><span style="color: #008b8b;">@</span>
+</pre>
+</div></li>
 
 <li>Special functions <code>$(wildcard *.c)</code>, <code>$(patsubst %.f, %.o, $(SRC))</code>, &#x2026;</li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgfbed6cf" class="outline-3">
-<h3 id="orgfbed6cf"><span class="section-number-3">2.2</span> Rules that will make everything simpler</h3>
+<div id="outline-container-orgf76da29" class="outline-3">
+<h3 id="orgf76da29"><span class="section-number-3">2.2</span> Rules that will make everything simpler</h3>
 <div class="outline-text-3" id="text-2-2">
 <ul class="org-ul">
 <li>Use <code>/bin/sh</code> instead of <code>/bin/bash</code></li>
 <li>Don't put your compiled files (<code>.o</code>) in a separate location than the source files</li>
-<li>Give up writing your <code>Makefiles</code>. Write <b>scripts</b> (Bash, Python) to write them for you.</li>
-<li>Install <code>bmake</code> as an alternative to GNU make to check the portability of your <code>Makefiles</code>.</li>
+<li>Give up writing your <code>Makefiles</code> by hand. Write <b>scripts</b> (Bash, Python) to
+write them for you.</li>
+<li>Install <code>bmake</code> as an alternative to <code>GNU make</code> to check the portability of
+your <code>Makefiles</code>.</li>
 </ul>
 </div>
 </div>
@@ -310,7 +315,7 @@ Pattern rules, such as
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Evgeny Posenitskiy, Anthony Scemama</p>
-<p class="date">Created: 2021-10-26 Tue 16:35</p>
+<p class="date">Created: 2021-10-26 Tue 16:44</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
