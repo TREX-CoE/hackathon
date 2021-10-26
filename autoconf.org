@@ -65,7 +65,7 @@ Sherman-Morrison/
 
 Let's have a look at the following part of our ~Makefile~:
 
-#+begin_src make
+#+begin_src makefile
 CXX      = g++
 CPPFLAGS = -I./include/ -I/usr/include/hdf5/serial
 CXXFLAGS = -g -O2 -std=c++11
