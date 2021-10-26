@@ -6,7 +6,7 @@
 <!-- 2021-10-26 Tue 13:44 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Autotools</title>
+<title>Autoconf</title>
 <meta name="generator" content="Org mode" />
 <meta name="author" content="Evgey Posenitskiy, Anthony Scemama" />
 <style type="text/css">
@@ -241,7 +241,7 @@ for the JavaScript code in this tag.
 */
 
 <!--/*--><![CDATA[/*><!--*/
-org_html_manager.set("TOC_DEPTH", "4");
+org_html_manager.set("TOC_DEPTH", "3");
 org_html_manager.set("LINK_HOME", "");
 org_html_manager.set("LINK_UP", "");
 org_html_manager.set("LOCAL_TOC", "1");
@@ -302,29 +302,129 @@ for the JavaScript code in this tag.
 </head>
 <body>
 <div id="content">
-<h1 class="title">Autotools</h1>
-<hr />
-
-<p>
-This website contains the Autotools tutorial of the
-<a href="https://trex-coe.eu/events/trex-build-system-hackathon-8-12-nov-2021">TREX build system Hackathon</a>. 
-</p>
-
-<ul class="org-ul">
-<li><a href="./autoconf.html">Autoconf</a></li>
-<li><a href="./automake.html">Automake</a></li>
+<h1 class="title">Autoconf</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org6ebfa6b">1. Introduction</a></li>
+<li><a href="#orge198e9a">2. Step 1: Makefile</a>
+<ul>
+<li><a href="#orgec5a042">2.1. Possible answer</a></li>
 </ul>
+</li>
+<li><a href="#orga5c525d">3. Step 2: configure.ac</a></li>
+<li><a href="#org61c4b60">4. Step 3: Grande finale</a></li>
+</ul>
+</div>
+</div>
+<p>
+This page contains tutorial on the usage <a href="https://www.gnu.org/software/autoconf/">GNU Autoconf</a>. 
+This is the first part of the Autotools tutorial.
+</p>
 
-<hr />
+<div id="outline-container-org6ebfa6b" class="outline-2">
+<h2 id="org6ebfa6b"><span class="section-number-2">1</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Building software on different platforms is a challenging task.
+Re-building it a few years later is even more challenging.
+</p>
 
 <p>
-<img src="https://trex-coe.eu/sites/default/files/inline-images/euflag.jpg" alt="euflag.jpg" />
-<a href="https://trex-coe.eu">TREX</a> : Targeting Real Chemical Accuracy at the Exascale project
-has received funding from the European Union’s Horizon 2020 - Research and
-Innovation program - under grant agreement no. 952165. The content of this
-document does not represent the opinion of the European Union, and the European
-Union is not responsible for any use that might be made of such content.
+Things get more complicated when the project introduces external dependencies 
+(e.g. libraries that are installed independently and outside of the source tree).
+Such dependencies can be located with some built-in tools like <code>pkg-config</code>.
+One could then modify the compilation flags to explicitly include installation paths, thus making the code compile on the current machine.
+This approach works fine as long as the code has to be compiled only locally and as long as the dependency is not moved to a different directory.
+However, the installation paths are likely to be different on another machine and the aforementioned build procedure might break. 
 </p>
+
+<p>
+In this tutorial, we will learn how to configure a particular project using Autoconf.
+This project consists of several <code>C++</code> source files, which are compiled into a single program using custom <code>Makefile</code>.
+We will learn how to configure and test the <code>C++</code> compiler before building the project.
+The source files depend on the <a href="https://portal.hdfgroup.org/display/HDF5/HDF5">HDF5 library</a>, which is a good example of external dependency.
+We will learn how to automatically locate the HDF5 library using macros.
+</p>
+
+<p>
+Below is a source tree of our project. Header and source files can be found in the <code>include/</code> and <code>src/</code> directories, respectively.
+The <code>tests/</code> directory contains the <code>test_h5.cpp</code> and <code>dataset.hdf5</code> files needed to test compilation of the aforementioned source code.
+</p>
+
+<p>
+For this tutorial, the contents of the source and header files are not important. 
+However, it is worth mentioning that they depend on the HDF5 library, which is not included in the source tree.
+The goal is to demonstrate how cumbersome configuration/compilation steps can be facilitated by the use of <b><b>Autoconf</b></b>.
+</p>
+
+
+<pre class="example">
+
+Sherman-Morrison/
+├─ include/
+│  ├─ Helpers.hpp
+│  ├─ SMWB.hpp
+│  ├─ SM_Maroni.hpp
+│  ├─ SM_Standard.hpp
+│  ├─ Woodbury.hpp
+├─ src/
+│  ├─ Helpers.cpp
+│  ├─ SMWB.cpp
+│  ├─ SM_Maroni.cpp
+│  ├─ SM_Standard.cpp
+│  ├─ Woodbury.cpp
+├─ tests/
+│  ├─ test_h5.cpp
+│  ├─ dataset.hdf5
+├─ bin/
+├─ Makefile
+├─ README.md
+
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orge198e9a" class="outline-2">
+<h2 id="orge198e9a"><span class="section-number-2">2</span> Step 1: Makefile</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Let's have a look at the following part of our <code>Makefile</code>:
+</p>
+
+<pre class="example">
+CXX      = g++
+CPPFLAGS = -I./include/ -I/usr/include/hdf5/serial
+CXXFLAGS = -g -O2 -std=c++11
+LDFLAGS  = -L/usr/lib/x86_64-linux-gnu/hdf5/serial
+LIBS     = -lhdf5 -lhdf5_cpp -lpthread -lz
+</pre>
+
+<p>
+<b><b>Question:</b></b> What are advantages and disadvantages of the aforementioned definitions?
+</p>
+</div>
+
+<div id="outline-container-orgec5a042" class="outline-3">
+<h3 id="orgec5a042"><span class="section-number-3">2.1</span> Possible answer</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+Here we explicitly require to use the <code>C++</code> compiler to be GNU C++ compiler (<code>g++</code>). 
+However, what if the compiler is not present on the current machine ?
+What if another compiler like <code>icpc</code> of Intel has to be used ?
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga5c525d" class="outline-2">
+<h2 id="orga5c525d"><span class="section-number-2">3</span> Step 2: configure.ac</h2>
+</div>
+
+<div id="outline-container-org61c4b60" class="outline-2">
+<h2 id="org61c4b60"><span class="section-number-2">4</span> Step 3: Grande finale</h2>
+</div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Evgey Posenitskiy, Anthony Scemama</p>
