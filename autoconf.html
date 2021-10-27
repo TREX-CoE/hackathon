@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-10-27 Wed 12:11 -->
+<!-- 2021-10-27 Wed 14:12 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Autoconf</title>
@@ -240,14 +240,14 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org338bf3c">1. Introduction</a></li>
-<li><a href="#orgc616b8f">2. Makefile</a></li>
-<li><a href="#org9b6a89c">3. configure</a>
+<li><a href="#org222e965">1. Introduction</a></li>
+<li><a href="#orgc854eea">2. Makefile</a></li>
+<li><a href="#orgf1dd345">3. configure</a>
 <ul>
-<li><a href="#org527e724">3.1. Detecting external dependencies</a></li>
+<li><a href="#orgfdceafa">3.1. Detecting external dependencies</a></li>
 </ul>
 </li>
-<li><a href="#org6c9d962">4. Conclusion</a></li>
+<li><a href="#orgea109e9">4. Conclusion</a></li>
 </ul>
 </div>
 </div>
@@ -255,8 +255,8 @@ for the JavaScript code in this tag.
 This page contains the <a href="https://www.gnu.org/software/autoconf/">GNU Autoconf</a> tutorial, which is the first part of the Autotools tutorial.
 </p>
 
-<div id="outline-container-org338bf3c" class="outline-2">
-<h2 id="org338bf3c"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-org222e965" class="outline-2">
+<h2 id="org222e965"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Building software on different platforms is a challenging task.
@@ -317,8 +317,8 @@ The goal is to demonstrate how cumbersome configuration/compilation steps can be
 </div>
 </div>
 
-<div id="outline-container-orgc616b8f" class="outline-2">
-<h2 id="orgc616b8f"><span class="section-number-2">2</span> Makefile</h2>
+<div id="outline-container-orgc854eea" class="outline-2">
+<h2 id="orgc854eea"><span class="section-number-2">2</span> Makefile</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 Below is the <code>Makefile</code> of our project:
@@ -415,8 +415,8 @@ Wouldn't it be nice if we could automatize this process? Well, this is where <b>
 </div>
 </div>
 
-<div id="outline-container-org9b6a89c" class="outline-2">
-<h2 id="org9b6a89c"><span class="section-number-2">3</span> configure</h2>
+<div id="outline-container-orgf1dd345" class="outline-2">
+<h2 id="orgf1dd345"><span class="section-number-2">3</span> configure</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 In this section, we will talk about several files:
@@ -596,7 +596,7 @@ echo \
 </div>
 
 <p>
-<code>Makefile.in</code> (only the top part has to be changed at the moment):
+<code>Makefile.in</code> (only the top part has to be changed):
 </p>
 <div class="org-src-container">
 <pre class="src src-makefile"><span style="color: #a0522d;">CXX</span>      = @CXX@
@@ -635,18 +635,171 @@ Let's try to find this library using Autoconf solutions.
 </p>
 </div>
 
-<div id="outline-container-org527e724" class="outline-3">
-<h3 id="org527e724"><span class="section-number-3">3.1</span> Detecting external dependencies</h3>
+<div id="outline-container-orgfdceafa" class="outline-3">
+<h3 id="orgfdceafa"><span class="section-number-3">3.1</span> Detecting external dependencies</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+It is possible to write your our own macros to detect an external dependency.
+However, in this example we will try to locate HDF5, which is quite commonly used.
+Luckily for us, the GNU website has an <a href="https://www.gnu.org/software/autoconf-archive/The-Macros.html">archive of Autoconf macros</a> for commonly used programs, including HDF5.
+The <code>ax_lib_hdf5.m4</code> file can be downloaded from the aforementioned page. 
+Autoconf can locate external macros in the root directory of the project or in the <code>m4</code> directory.
+The description of this macro can be found <a href="https://www.gnu.org/software/autoconf-archive/ax_lib_hdf5.html">here</a>. Notably, it says:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-text">If HDF5 is successfully found, this macro calls 
+
+  AC_SUBST(HDF5_VERSION)
+  AC_SUBST(HDF5_CC)
+  AC_SUBST(HDF5_CFLAGS)
+  AC_SUBST(HDF5_CPPFLAGS)
+  AC_SUBST(HDF5_LDFLAGS)
+  AC_SUBST(HDF5_LIBS)
+  AC_SUBST(HDF5_FC)
+  AC_SUBST(HDF5_FFLAGS)
+  AC_SUBST(HDF5_FLIBS)
+  AC_SUBST(HDF5_TYPE)
+  AC_DEFINE(HAVE_HDF5)
+
+and sets with_hdf5="yes". ...
+</pre>
+</div>
+
+<p>
+This means that the macro will define a set of variables that can be either manupulated 
+within the <code>configure.ac</code> or passed to the <code>Makefile.in</code> via substitution variables. 
+In this example, we choose the former and will append the necessary flags with the <code>HDF5_</code> ones.
+</p>
+
+<p>
+<code>configure.ac</code>:
+</p>
+<div class="org-src-container">
+<pre class="src src-makefile">#                                               <span style="color: #b22222;">-*- Autoconf -*-</span>
+# <span style="color: #b22222;">Process this file with autoconf to produce a configure script.</span>
+
+#<span style="color: #b22222;">initialize autoconf</span>
+AC_INIT([sherman-morrison], [0.0.1], [])
+
+# <span style="color: #b22222;">do the tests with C++ flags</span>
+AC_LANG(C++)
+# <span style="color: #b22222;">search for the C++ compiler</span>
+AC_PROG_CXX
+# <span style="color: #b22222;">check if the C++ compiler accepts -c and -o simultaneously</span>
+AC_PROG_CXX_C_O
+
+# <span style="color: #b22222;">call the m4 macro to locate the HDF5 library</span>
+AX_LIB_HDF5()
+
+# <span style="color: #b22222;">prepend compiler and linking flags with that of HDF5</span>
+<span style="color: #a0522d;">CXXFLAGS</span>=<span style="color: #8b2252;">"${</span><span style="color: #a0522d;">HDF5_CFLAGS</span><span style="color: #8b2252;">} ${</span><span style="color: #a0522d;">CXXFLAGS</span><span style="color: #8b2252;">} -std=c++11"</span>
+<span style="color: #a0522d;">CPPFLAGS</span>=<span style="color: #8b2252;">"${</span><span style="color: #a0522d;">HDF5_CPPFLAGS</span><span style="color: #8b2252;">} ${</span><span style="color: #a0522d;">CPPFLAGS</span><span style="color: #8b2252;">} -I./include/"</span>
+<span style="color: #a0522d;">LDFLAGS</span>=<span style="color: #8b2252;">"${</span><span style="color: #a0522d;">HDF5_LDFLAGS</span><span style="color: #8b2252;">} ${</span><span style="color: #a0522d;">LDFLAGS</span><span style="color: #8b2252;">}"</span>
+<span style="color: #a0522d;">LIBS</span>=<span style="color: #8b2252;">"${</span><span style="color: #a0522d;">HDF5_LIBS</span><span style="color: #8b2252;">} ${</span><span style="color: #a0522d;">LIBS</span><span style="color: #8b2252;">} -lhdf5_cpp"</span>
+
+AC_CONFIG_FILES([Makefile])
+
+AC_OUTPUT
+
+echo \
+<span style="color: #8b2252;">"-------------------------------------------------</span>
+
+<span style="color: #8b2252;">${</span><span style="color: #a0522d;">PACKAGE_NAME</span><span style="color: #8b2252;">} Version ${</span><span style="color: #a0522d;">PACKAGE_VERSION</span><span style="color: #8b2252;">}</span>
+
+<span style="color: #8b2252;">CXX ...........:  ${</span><span style="color: #a0522d;">CXX</span><span style="color: #8b2252;">}</span>
+<span style="color: #8b2252;">CXXFLAGS ......:  ${</span><span style="color: #a0522d;">CXXFLAGS</span><span style="color: #8b2252;">}</span>
+<span style="color: #8b2252;">CPPFLAGS ......:  ${</span><span style="color: #a0522d;">CPPFLAGS</span><span style="color: #8b2252;">}</span>
+<span style="color: #8b2252;">LDFLAGS .......:  ${</span><span style="color: #a0522d;">LDFLAGS</span><span style="color: #8b2252;">}</span>
+<span style="color: #8b2252;">LIBS ..........:  ${</span><span style="color: #a0522d;">LIBS</span><span style="color: #8b2252;">}</span>
+
+<span style="color: #8b2252;">Package features:</span>
+<span style="color: #8b2252;">  Compilation with HDF5 ..:  ${</span><span style="color: #a0522d;">with_hdf5</span><span style="color: #8b2252;">}</span>
+<span style="color: #8b2252;">  HDF5 version ...........:  ${</span><span style="color: #a0522d;">HDF5_VERSION</span><span style="color: #8b2252;">}</span>
+
+<span style="color: #8b2252;">--------------------------------------------------"</span>
+</pre>
+</div>
+
+<p>
+<code>Makefile.in</code> (only the top part has to be changed):
+</p>
+<div class="org-src-container">
+<pre class="src src-makefile"><span style="color: #a0522d;">CXX</span>      = @CXX@
+<span style="color: #a0522d;">CXXFLAGS</span> = @CXXFLAGS@
+<span style="color: #a0522d;">CPPFLAGS</span> = @CPPFLAGS@
+<span style="color: #a0522d;">LIBS</span>     = @LIBS@
+<span style="color: #a0522d;">LDFLAGS</span>  = @LDFLAGS@
+...........
+</pre>
+</div>
+
+<p>
+Now reconfigure and examine the output produced by the <b><b>configure</b></b> script. 
+In the end, you will see a more verbose summary of the detected flags and 
+newly added package features. The exact output may differ on your machine depending
+on the detected compiler and/or the HDF5 library.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile">-------------------------------------------------
+
+sherman-morrison Version 0.0.1
+
+<span style="color: #0000ff;">CXX ...........</span>:  g++
+<span style="color: #0000ff;">CXXFLAGS ......</span>:   -g -O2 -std=c++11
+<span style="color: #0000ff;">CPPFLAGS ......</span>:  -I/usr/include -I/usr/include/hdf5/serial  -I./include/
+<span style="color: #0000ff;">LDFLAGS .......</span>:   -L/usr/lib/x86_64-linux-gnu/hdf5/serial 
+<span style="color: #0000ff;">LIBS ..........</span>:  -lhdf5_hl -lhdf5  -lpthread -lsz -lz -ldl -lm  -lhdf5_cpp
+
+<span style="color: #0000ff;">Package features</span>:
+  <span style="color: #0000ff;">Compilation with HDF5 ..</span>:  yes
+  <span style="color: #0000ff;">HDF5 version ...........</span>:  1.10.4
+
+--------------------------------------------------
+</pre>
+</div>
+
+<p>
+You can now see how all the hard-coded HDF5 paths have been detected by the <code>ax_lib_hdf5.m4</code> macro.
+Moreover, all the flags are propagated to the resulting <code>Makefile</code> thanks to the use of substitution variables.
+This can also be checked by visualising differences between <code>Makefile.in</code> and <code>Makefile</code>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">$ diff Makefile.in Makefile
+
+&lt; CXX      = @CXX@
+&lt; CXXFLAGS = @CXXFLAGS@
+&lt; CPPFLAGS = @CPPFLAGS@
+&lt; LIBS     = @LIBS@
+&lt; LDFLAGS  = @LDFLAGS@
+---
+&gt; CXX      = g++
+&gt; CXXFLAGS =  -g -O2 -std=c++11
+&gt; CPPFLAGS = -I/usr/include -I/usr/include/hdf5/serial  -I./include/
+&gt; LIBS     = -lhdf5_hl -lhdf5  -lpthread -lsz -lz -ldl -lm  -lhdf5_cpp
+&gt; LDFLAGS  =  -L/usr/lib/x86_64-linux-gnu/hdf5/serial 
+</pre>
+</div>
+
+
+<p>
+<b><b>Note:</b></b> in the example output demonstated in this tutorial, 
+the environment was Ubuntu 20.04 OS with HDF5 installed via 
+<code>apt-get install libhdf5-dev</code> command.
+</p>
+</div>
 </div>
 </div>
 
-<div id="outline-container-org6c9d962" class="outline-2">
-<h2 id="org6c9d962"><span class="section-number-2">4</span> Conclusion</h2>
+<div id="outline-container-orgea109e9" class="outline-2">
+<h2 id="orgea109e9"><span class="section-number-2">4</span> Conclusion</h2>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Evgeny Posenitskiy, Anthony Scemama</p>
-<p class="date">Created: 2021-10-27 Wed 12:11</p>
+<p class="date">Created: 2021-10-27 Wed 14:12</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
