@@ -42,10 +42,13 @@
 --------------------------------
 
   This website contains the Autotools tutorial of the
-  [[https://trex-coe.eu/events/trex-build-system-hackathon-8-12-nov-2021][TREX build system Hackathon]]. 
+  [[https://trex-coe.eu/events/trex-build-system-hackathon-8-12-nov-2021][TREX build system Hackathon]].
 
    - [[./autoconf.html][Autoconf]]
    - [[./automake.html][Automake]]
+
+  If you want to go deeper into Autotools, we recommend the book
+  [[https://nostarch.com/autotools.htm][A Practitioner's Guide to GNU Autoconf, Automake, and Libtool]] by John Calcote.
 
 --------------------------------
 
