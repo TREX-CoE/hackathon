@@ -9,8 +9,7 @@
 # Read the org
 #+SETUPFILE: org-html-themes/org/theme-readtheorg-local.setup
 
-This page contains the [[https://www.gnu.org/software/autoconf/][GNU Autoconf]] tutorial. 
-This is the first part of the Autotools tutorial.
+This page contains the [[https://www.gnu.org/software/autoconf/][GNU Autoconf]] tutorial, which is the first part of the Autotools tutorial.
 
 * Introduction
 
@@ -60,11 +59,11 @@ Sherman-Morrison/
 ├─ README.md
 #+end_src
 
-* Step 1: Makefile
+* Makefile
 
 Below is the ~Makefile~ of our project:
 
-#+begin_src
+#+begin_src makefile
 ## Specify the C++ compiler as well as preprocessor, compiler and linking flags
 CXX      = g++
 CPPFLAGS = -I./include/ -I/usr/include/hdf5/serial
@@ -115,29 +114,29 @@ g++ -g -O2 -std=c++11 -I./include/ -I/usr/include/hdf5/serial   -c -o tests/test
 g++ -I./include/ -I/usr/include/hdf5/serial  -g -O2 -std=c++11 tests/test_h5.o src/SM_Maponi.o src/SM_Standard.o src/Woodbury.o src/SMWB.o src/Helpers.o -o bin/test_h5  -L/usr/lib/x86_64-linux-gnu/hdf5/serial -lhdf5 -lhdf5_cpp -lpthread -lz 
 #+end_src
 
-So it works. We can already see that *.o* object files are compiled first since they are indicated as dependencies
-of the ~$(BIN_DIR)/test_h5$ target, which is compiled and linked at the very end.
+So it works. We can already see that ~.o~ object files are compiled first since they are indicated as dependencies
+of the ~$(BIN_DIR)/test_h5~ target, which is compiled and linked at the very end.
 
 Let's have a look at the following part of our ~Makefile~:
 
 #+begin_src makefile
 CXX      = g++
-CPPFLAGS = -I./include/ -I/usr/include/hdf5/serial
 CXXFLAGS = -g -O2 -std=c++11
+CPPFLAGS = -I./include/ -I/usr/include/hdf5/serial
 LDFLAGS  = -L/usr/lib/x86_64-linux-gnu/hdf5/serial
 LIBS     = -lhdf5 -lhdf5_cpp -lpthread -lz
 #+end_src
 
 **Question:** What are advantages and disadvantages of specifying compiler flags as above? 
 
-The crucial issue here is the portability of the hard-coded paths to HDF5 (see ~CPPFLAGS~ and ~LDFLAGS~).
+Among other things, the crucial issue here is the portability of the hard-coded paths to HDF5 (see ~CPPFLAGS~ and ~LDFLAGS~).
 
 Moreover, in this example, we provide all the flags already. 
 However, in real life, defining them is challenging, especially for programs with external dependencies.
 
 Wouldn't it be nice if we could automatize this process? Well, this is where **Autoconf** comes into play.
 
-* Step 2: Autoconf
+* configure
 
 In this section, we will talk about several files:
 
@@ -152,36 +151,155 @@ the final **Makefile**, which is used to build a project.
 
 TODO: PICTURE HERE
 
-Confused? We'll get there.
+Confused? Don't worry, we will start from the minimal example.
 
-Let's create a very simple ~configure.ac~ file with the following contents:
+Let's create the ~configure.ac~ file with the following contents:
 
-#+begin_src
+#+begin_src makefile
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_INIT([sherman], [0.0.1], [])
+#initialize autoconf
+AC_INIT([sherman-morrison], [0.0.1], [])
 
 AC_OUTPUT
 #+end_src
 
-Here we provided the name of our project [~sherman~] and the current version [0.0.1] to AC_INIT macro.
-We will not cover in details specifics on the M4 syntax that is used internally by the Autoconf.
+Here we provided the name of our project [sherman-morrison] and the current version [0.0.1] to the ~AC_INIT~ macro.
+These are now stored in the ~$PACKAGE_NAME~ and ~$PACKAGE_VERSION~ variables, respectively.
+We will not cover the details of the M4 syntax that is used internally by the Autoconf.
 For more information, see the [[https://www.gnu.org/software/autoconf/manual/autoconf-2.69/html_node/index.html][Autoconf documentation page]].
 
+We know the the source code is written in ~C++~. 
+Thus, we would like the Autoconf to find and possibly run some checks 
+using the~C++~ compiler that is available on the current machine.
 
+Let's add a few additional macros for that and examine their output:
 
-The **configure** script can also define variables and pass them to other files. 
- 
-Perhaps, you have already tried to install software from source on UNIX-like systems.
-Then the following sequence would look familiar to you. 
+#+begin_src makefile
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
 
-#+begin_src
-./configure
-make
+#initialize autoconf
+AC_INIT([sherman-morrison], [0.0.1], [])
+
+# do the tests with C++ flags
+AC_LANG(C++)
+# search for the C++ compiler
+AC_PROG_CXX
+# check if the C++ compiler accepts -c and -o simultaneously
+AC_PROG_CXX_C_O
+
+AC_OUTPUT
+
+echo \
+"-------------------------------------------------
+
+${PACKAGE_NAME} Version ${PACKAGE_VERSION}
+
+CXX ...........:  ${CXX}
+CXXFLAGS ......:  ${CXXFLAGS}
+
+--------------------------------------------------"
 #+end_src
-Here we explicitly require to use the ~C++~ compiler to be GNU C++ compiler (~g++~).
-However, what if the compiler is not present on the current machine ?
-What if another compiler like ~icpc~ of Intel has to be used ?
 
-* Step 3: Grande finale
+The contents of the current directory should be as follows:
+
+~bin/  configure.ac  include/  Makefile  README.md  src/  tests/~
+
+Now run ~autoreconf~ command in your terminal and examine the directory again.
+After succesfull exection, a **configure** shell script should appear.
+
+Let's run it by calling ~./configure~. 
+Several checks have been performed by **Autoconf** and in the end one might get the following:
+
+#+begin_src makefile
+-------------------------------------------------
+
+sherman-morrison Version 0.0.1
+
+CXX ...........:  g++
+CXXFLAGS ......:  -g -O2
+
+--------------------------------------------------
+#+end_src 
+
+In the example of output above, the **configure** script has detected ~g++~ compiler and expanded the
+~${CXX}~ variable with the corresponding compiler name. 
+Moreover, the script detects the defaul ~C++~ compiler flags of ~g++~ and adds them to ~${CXXFLAGS}~.
+
+From now on we will work mostly with shell variables and call to the Autoconf macros.
+
+/Note/: whenever you make a change in ~configure.ac~, 
+execute ~autoreconf -i~ to update the generated ~configure~ script.
+
+The **configure** script can also define its own variables (e.g. ~$PACKAGE_NAME~ above) and pass them to other files.
+To benefit from the previously detected ~C++~ compiler and its flags, let's propagate them to ~Makefile~.
+
+This requires 2 actions:
+
+- Move ~Makefile~ to ~Makefile.in~ (this is the standard naming convention in Autotools) and replace the hard-coded variables with the ones defined by **configure**. For example, ~CXX = g++~ should be replaced by ~CXX = @CXX@~. Variables in between ~@~ signs are called substitutation variables.
+- Indicate to Autoconf that ~Makefile~ is now its responsibility (due to the variables that will be substituted by ~./configure~ call) by adding ~AC_CONFIG_FILES([Makefile])~.
+
+~configure.ac~:
+#+begin_src makefile
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+#initialize autoconf
+AC_INIT([sherman-morrison], [0.0.1], [])
+
+# do the tests with C++ flags
+AC_LANG(C++)
+# search for the C++ compiler
+AC_PROG_CXX
+# check if the C++ compiler accepts -c and -o simultaneously
+AC_PROG_CXX_C_O
+
+AC_CONFIG_FILES([Makefile])
+
+AC_OUTPUT
+
+echo \
+"-------------------------------------------------
+
+${PACKAGE_NAME} Version ${PACKAGE_VERSION}
+
+CXX ...........:  ${CXX}
+CXXFLAGS ......:  ${CXXFLAGS}
+
+--------------------------------------------------"
+#+end_src
+
+~Makefile.in~ (only the top part has to be changed at the moment):
+#+begin_src makefile
+CXX      = @CXX@
+CXXFLAGS = @CXXFLAGS@ -std=c++11
+CPPFLAGS = -I./include/ -I/usr/include/hdf5/serial
+LDFLAGS  = -L/usr/lib/x86_64-linux-gnu/hdf5/serial
+LIBS     = -lhdf5 -lhdf5_cpp -lpthread -lz
+...........
+#+end_src
+
+Let's reconfigure (~autoreconf -i && ./configure~) and examine the changes between the input
+~Makefile.in~ and output ~Makefile~ (you can use ~diff~ or ~vimdiff~ for example):
+
+#+begin_src shell
+$ diff Makefile.in Makefile
+
+< CXX      = @CXX@
+< CXXFLAGS = @CXXFLAGS@ -std=c++11
+---
+> CXX      = g++
+> CXXFLAGS = -g -O2 -std=c++11
+#+end_src
+ 
+This tells us that the substitution variables ~@CXX@~ and ~@CXXFLAGS@~ have been replaced 
+by ~g++~ and ~-g -O2~, respectively.
+
+Good, but we still have these hard-coded paths to HDF5 library in ~CPPFLAGS~ and ~LDFLAGS~.
+Let's try to find this library using Autoconf solutions.
+
+** Detecting external dependencies
+
+* Conclusion
