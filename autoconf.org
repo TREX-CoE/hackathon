@@ -1,9 +1,13 @@
 #+TITLE: Autoconf
-#+AUTHOR: Evgey Posenitskiy, Anthony Scemama
+#+AUTHOR: Evgeny Posenitskiy, Anthony Scemama
 #+LANGUAGE:  en
-#+INFOJS_OPT: toc:t mouse:underline path:org-info.js
-#+HTML_HEAD: <link rel="stylesheet" title="Standard" href="worg.css" type="text/css" />
-#+STARTUP: latexpreview
+
+# OLD STYLE
+# #+HTML_HEAD: <link rel="stylesheet" title="Standard" href="worg.css" type="text/css" />
+# #+INFOJS_OPT: toc:t mouse:underline path:org-info.js
+
+# Read the org
+#+SETUPFILE: org-html-themes/org/theme-readtheorg-local.setup
 
 This page contains the [[https://www.gnu.org/software/autoconf/][GNU Autoconf]] tutorial. 
 This is the first part of the Autotools tutorial.
@@ -13,12 +17,12 @@ This is the first part of the Autotools tutorial.
 Building software on different platforms is a challenging task.
 Re-building it a few years later is even more challenging.
 
-Things get more complicated when the project introduces external dependencies 
+Things get more complicated when the project introduces external dependencies
 (e.g. libraries that are installed independently and outside of the source tree).
 Such dependencies can be located with some built-in tools like ~pkg-config~.
 One could then modify the compilation flags to explicitly include installation paths, thus making the code compile on the current machine.
 This approach works fine as long as the code has to be compiled only locally and as long as the dependency is not moved to a different directory.
-However, the installation paths are likely to be different on another machine and the aforementioned build procedure might break. 
+However, the installation paths are likely to be different on another machine and the aforementioned build procedure might break.
 
 In this tutorial, we will learn how to configure a particular project using Autoconf.
 This project consists of several ~C++~ source files, which are compiled into a single program using custom ~Makefile~.
@@ -29,13 +33,12 @@ We will learn how to automatically locate the HDF5 library using macros.
 Below is a source tree of our project. Header and source files can be found in the ~include/~ and ~src/~ directories, respectively.
 The ~tests/~ directory contains the ~test_h5.cpp~ and ~dataset.hdf5~ files needed to test compilation of the aforementioned source code.
 
-For this tutorial, the contents of the source and header files are not important. 
+For this tutorial, the contents of the source and header files are not important.
 However, it is worth mentioning that they depend on the HDF5 library, which is not included in the source tree.
 The goal is to demonstrate how cumbersome configuration/compilation steps can be facilitated by the use of **Autoconf**.
 
 
-#+begin_src
-
+#+begin_src text
 Sherman-Morrison/
 ├─ include/
 │  ├─ Helpers.hpp
@@ -55,7 +58,6 @@ Sherman-Morrison/
 ├─ bin/
 ├─ Makefile
 ├─ README.md
-
 #+end_src
 
 * Step 1: Makefile
@@ -118,7 +120,7 @@ of the ~$(BIN_DIR)/test_h5$ target, which is compiled and linked at the very end
 
 Let's have a look at the following part of our ~Makefile~:
 
-#+begin_src
+#+begin_src makefile
 CXX      = g++
 CPPFLAGS = -I./include/ -I/usr/include/hdf5/serial
 CXXFLAGS = -g -O2 -std=c++11
@@ -178,6 +180,8 @@ Then the following sequence would look familiar to you.
 ./configure
 make
 #+end_src
+Here we explicitly require to use the ~C++~ compiler to be GNU C++ compiler (~g++~).
+However, what if the compiler is not present on the current machine ?
+What if another compiler like ~icpc~ of Intel has to be used ?
 
-
-* Step 3: Grande finale 
+* Step 3: Grande finale

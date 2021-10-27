@@ -1,17 +1,23 @@
 #+TITLE: Autotools
-#+AUTHOR: Evgey Posenitskiy, Anthony Scemama
+#+AUTHOR: Evgeny Posenitskiy, Anthony Scemama
 #+LANGUAGE:  en
-#+INFOJS_OPT: toc:t mouse:underline path:org-info.js
 #+STARTUP: latexpreview
 #+LATEX_CLASS: report
 #+LATEX_HEADER_EXTRA: \usepackage{minted}
-#+HTML_HEAD: <link rel="stylesheet" title="Standard" href="worg.css" type="text/css" />
 
 #+OPTIONS: H:4 num:t toc:t \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
 #+OPTIONS: TeX:t LaTeX:t skip:nil d:nil todo:t pri:nil tags:not-in-toc
 # EXCLUDE_TAGS: solution solution2 noexport
 # EXCLUDE_TAGS: solution noexport
 #+EXCLUDE_TAGS: noexport
+
+# OLD STYLE
+# #+HTML_HEAD: <link rel="stylesheet" title="Standard" href="worg.css" type="text/css" />
+# #+INFOJS_OPT: toc:t mouse:underline path:org-info.js
+
+# Read the org
+#+SETUPFILE: org-html-themes/org/theme-readtheorg-local.setup
+
 
   #+BEGIN_SRC elisp :output none :exports none
 (setq org-latex-listings 'minted
