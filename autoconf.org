@@ -271,7 +271,7 @@ CXXFLAGS ......:  ${CXXFLAGS}
 --------------------------------------------------"
 #+end_src
 
-~Makefile.in~ (only the top part has to be changed at the moment):
+~Makefile.in~ (only the top part has to be changed):
 #+begin_src makefile
 CXX      = @CXX@
 CXXFLAGS = @CXXFLAGS@ -std=c++11
@@ -301,5 +301,138 @@ Good, but we still have these hard-coded paths to HDF5 library in ~CPPFLAGS~ and
 Let's try to find this library using Autoconf solutions.
 
 ** Detecting external dependencies
+
+It is possible to write your our own macros to detect an external dependency.
+However, in this example we will try to locate HDF5, which is quite commonly used.
+Luckily for us, the GNU website has an [[https://www.gnu.org/software/autoconf-archive/The-Macros.html][archive of Autoconf macros]] for commonly used programs, including HDF5.
+The ~ax_lib_hdf5.m4~ file can be downloaded from the aforementioned page. 
+Autoconf can locate external macros in the root directory of the project or in the ~m4~ directory.
+The description of this macro can be found [[https://www.gnu.org/software/autoconf-archive/ax_lib_hdf5.html][here]]. Notably, it says:
+
+#+begin_src text
+If HDF5 is successfully found, this macro calls 
+
+  AC_SUBST(HDF5_VERSION)
+  AC_SUBST(HDF5_CC)
+  AC_SUBST(HDF5_CFLAGS)
+  AC_SUBST(HDF5_CPPFLAGS)
+  AC_SUBST(HDF5_LDFLAGS)
+  AC_SUBST(HDF5_LIBS)
+  AC_SUBST(HDF5_FC)
+  AC_SUBST(HDF5_FFLAGS)
+  AC_SUBST(HDF5_FLIBS)
+  AC_SUBST(HDF5_TYPE)
+  AC_DEFINE(HAVE_HDF5)
+
+and sets with_hdf5="yes". ...
+#+end_src
+
+This means that the macro will define a set of variables that can be either manupulated 
+within the ~configure.ac~ or passed to the ~Makefile.in~ via substitution variables. 
+In this example, we choose the former and will append the necessary flags with the ~HDF5_~ ones.
+
+~configure.ac~:
+#+begin_src makefile
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+#initialize autoconf
+AC_INIT([sherman-morrison], [0.0.1], [])
+
+# do the tests with C++ flags
+AC_LANG(C++)
+# search for the C++ compiler
+AC_PROG_CXX
+# check if the C++ compiler accepts -c and -o simultaneously
+AC_PROG_CXX_C_O
+
+# call the m4 macro to locate the HDF5 library
+AX_LIB_HDF5()
+
+# prepend compiler and linking flags with that of HDF5
+CXXFLAGS="${HDF5_CFLAGS} ${CXXFLAGS} -std=c++11"
+CPPFLAGS="${HDF5_CPPFLAGS} ${CPPFLAGS} -I./include/"
+LDFLAGS="${HDF5_LDFLAGS} ${LDFLAGS}"
+LIBS="${HDF5_LIBS} ${LIBS} -lhdf5_cpp"
+
+AC_CONFIG_FILES([Makefile])
+
+AC_OUTPUT
+
+echo \
+"-------------------------------------------------
+
+${PACKAGE_NAME} Version ${PACKAGE_VERSION}
+
+CXX ...........:  ${CXX}
+CXXFLAGS ......:  ${CXXFLAGS}
+CPPFLAGS ......:  ${CPPFLAGS}
+LDFLAGS .......:  ${LDFLAGS}
+LIBS ..........:  ${LIBS}
+
+Package features:
+  Compilation with HDF5 ..:  ${with_hdf5}
+  HDF5 version ...........:  ${HDF5_VERSION}
+
+--------------------------------------------------"
+#+end_src
+
+~Makefile.in~ (only the top part has to be changed):
+#+begin_src makefile
+CXX      = @CXX@
+CXXFLAGS = @CXXFLAGS@
+CPPFLAGS = @CPPFLAGS@
+LIBS     = @LIBS@
+LDFLAGS  = @LDFLAGS@
+...........
+#+end_src
+
+Now reconfigure and examine the output produced by the **configure** script. 
+In the end, you will see a more verbose summary of the detected flags and 
+newly added package features. The exact output may differ on your machine depending
+on the detected compiler and/or the HDF5 library.
+
+#+begin_src makefile
+-------------------------------------------------
+
+sherman-morrison Version 0.0.1
+
+CXX ...........:  g++
+CXXFLAGS ......:   -g -O2 -std=c++11
+CPPFLAGS ......:  -I/usr/include -I/usr/include/hdf5/serial  -I./include/
+LDFLAGS .......:   -L/usr/lib/x86_64-linux-gnu/hdf5/serial 
+LIBS ..........:  -lhdf5_hl -lhdf5  -lpthread -lsz -lz -ldl -lm  -lhdf5_cpp
+
+Package features:
+  Compilation with HDF5 ..:  yes
+  HDF5 version ...........:  1.10.4
+
+--------------------------------------------------
+#+end_src
+
+You can now see how all the hard-coded HDF5 paths have been detected by the ~ax_lib_hdf5.m4~ macro.
+Moreover, all the flags are propagated to the resulting ~Makefile~ thanks to the use of substitution variables.
+This can also be checked by visualising differences between ~Makefile.in~ and ~Makefile~:
+
+#+begin_src shell
+$ diff Makefile.in Makefile
+
+< CXX      = @CXX@
+< CXXFLAGS = @CXXFLAGS@
+< CPPFLAGS = @CPPFLAGS@
+< LIBS     = @LIBS@
+< LDFLAGS  = @LDFLAGS@
+---
+> CXX      = g++
+> CXXFLAGS =  -g -O2 -std=c++11
+> CPPFLAGS = -I/usr/include -I/usr/include/hdf5/serial  -I./include/
+> LIBS     = -lhdf5_hl -lhdf5  -lpthread -lsz -lz -ldl -lm  -lhdf5_cpp
+> LDFLAGS  =  -L/usr/lib/x86_64-linux-gnu/hdf5/serial 
+#+end_src
+ 
+
+**Note:** in the example output demonstated in this tutorial, 
+the environment was Ubuntu 20.04 OS with HDF5 installed via 
+~apt-get install libhdf5-dev~ command.
 
 * Conclusion
