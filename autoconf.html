@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-10-26 Tue 17:15 -->
+<!-- 2021-10-27 Wed 12:11 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Autoconf</title>
@@ -240,24 +240,23 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org5d0cf44">1. Introduction</a></li>
-<li><a href="#org6b608a6">2. Step 1: Makefile</a>
+<li><a href="#org338bf3c">1. Introduction</a></li>
+<li><a href="#orgc616b8f">2. Makefile</a></li>
+<li><a href="#org9b6a89c">3. configure</a>
 <ul>
-<li><a href="#org76f5029">2.1. Possible answer</a></li>
+<li><a href="#org527e724">3.1. Detecting external dependencies</a></li>
 </ul>
 </li>
-<li><a href="#org8aaa428">3. Step 2: configure.ac</a></li>
-<li><a href="#org2d13a22">4. Step 3: Grande finale</a></li>
+<li><a href="#org6c9d962">4. Conclusion</a></li>
 </ul>
 </div>
 </div>
 <p>
-This page contains tutorial on the usage <a href="https://www.gnu.org/software/autoconf/">GNU Autoconf</a>.
-This is the first part of the Autotools tutorial.
+This page contains the <a href="https://www.gnu.org/software/autoconf/">GNU Autoconf</a> tutorial, which is the first part of the Autotools tutorial.
 </p>
 
-<div id="outline-container-org5d0cf44" class="outline-2">
-<h2 id="org5d0cf44"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-org338bf3c" class="outline-2">
+<h2 id="org338bf3c"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Building software on different platforms is a challenging task.
@@ -318,50 +317,336 @@ The goal is to demonstrate how cumbersome configuration/compilation steps can be
 </div>
 </div>
 
-<div id="outline-container-org6b608a6" class="outline-2">
-<h2 id="org6b608a6"><span class="section-number-2">2</span> Step 1: Makefile</h2>
+<div id="outline-container-orgc616b8f" class="outline-2">
+<h2 id="orgc616b8f"><span class="section-number-2">2</span> Makefile</h2>
 <div class="outline-text-2" id="text-2">
+<p>
+Below is the <code>Makefile</code> of our project:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile">## <span style="color: #b22222;">Specify the C++ compiler as well as preprocessor, compiler and linking flags</span>
+<span style="color: #a0522d;">CXX</span>      = g++
+<span style="color: #a0522d;">CPPFLAGS</span> = -I./include/ -I/usr/include/hdf5/serial
+<span style="color: #a0522d;">CXXFLAGS</span> = -g -O2 -std=c++11
+<span style="color: #a0522d;">LDFLAGS</span>  = -L/usr/lib/x86_64-linux-gnu/hdf5/serial
+<span style="color: #a0522d;">LIBS</span>     = -lhdf5 -lhdf5_cpp -lpthread -lz
+
+## <span style="color: #b22222;">Directory structure</span>
+<span style="color: #a0522d;">SRC_DIR</span> := src
+<span style="color: #a0522d;">TST_DIR</span> := tests
+<span style="color: #a0522d;">INC_DIR</span> := include
+<span style="color: #a0522d;">BIN_DIR</span> := bin
+
+<span style="color: #a0522d;">EXEC</span>    := $(<span style="color: #a0522d;">BIN_DIR</span>)/test_h5
+
+## <span style="color: #b22222;">Dependencies</span>
+<span style="color: #a0522d;">DEPS_CXX</span> = $(<span style="color: #a0522d;">SRC_DIR</span>)/SM_Maponi.o \
+           $(<span style="color: #a0522d;">SRC_DIR</span>)/SM_Standard.o \
+           $(<span style="color: #a0522d;">SRC_DIR</span>)/Woodbury.o \
+           $(<span style="color: #a0522d;">SRC_DIR</span>)/SMWB.o \
+           $(<span style="color: #a0522d;">SRC_DIR</span>)/Helpers.o
+
+## <span style="color: #b22222;">Build tagets</span>
+<span style="color: #0000ff;">.PHONY</span>: all clean
+
+<span style="color: #0000ff;">all</span>: $(<span style="color: #a0522d;">EXEC</span>)
+
+<span style="color: #0000ff;">clean</span>:
+        <span style="color: #228b22;">@</span>rm -rf -- $(<span style="color: #a0522d;">SRC_DIR</span>)/*.o $(<span style="color: #a0522d;">TST_DIR</span>)/*.o $(<span style="color: #a0522d;">EXEC</span>)
+
+## <span style="color: #b22222;">Compiling dependencies</span>
+<span style="color: #0000ff;">.SUFFIXES</span>: .cpp .o
+
+## <span style="color: #b22222;">Linking</span>
+<span style="color: #0000ff;">$(</span><span style="color: #0000ff;">BIN_DIR</span><span style="color: #0000ff;">)/test_h5</span>: $(<span style="color: #a0522d;">DEPS_CXX</span>) $(<span style="color: #a0522d;">TST_DIR</span>)/test_h5.o
+        $(<span style="color: #a0522d;">CXX</span>) $(<span style="color: #a0522d;">CPPFLAGS</span>) $(<span style="color: #a0522d;">CXXFLAGS</span>) $(<span style="color: #a0522d;">TST_DIR</span>)/test_h5.o $(<span style="color: #a0522d;">DEPS_CXX</span>) -o $(<span style="color: #a0522d;">EXEC</span>) $(<span style="color: #a0522d;">LDFLAGS</span>) $(<span style="color: #a0522d;">LIBS</span>)
+</pre>
+</div>
+
+<p>
+Let's execute <b><b>make</b></b> command and examine the output:
+</p>
+
+<pre class="example">
+g++ -g -O2 -std=c++11 -I./include/ -I/usr/include/hdf5/serial   -c -o src/SM_Maponi.o src/SM_Maponi.cpp
+g++ -g -O2 -std=c++11 -I./include/ -I/usr/include/hdf5/serial   -c -o src/SM_Standard.o src/SM_Standard.cpp
+g++ -g -O2 -std=c++11 -I./include/ -I/usr/include/hdf5/serial   -c -o src/Woodbury.o src/Woodbury.cpp
+g++ -g -O2 -std=c++11 -I./include/ -I/usr/include/hdf5/serial   -c -o src/SMWB.o src/SMWB.cpp
+g++ -g -O2 -std=c++11 -I./include/ -I/usr/include/hdf5/serial   -c -o src/Helpers.o src/Helpers.cpp
+g++ -g -O2 -std=c++11 -I./include/ -I/usr/include/hdf5/serial   -c -o tests/test_h5.o tests/test_h5.cpp
+g++ -I./include/ -I/usr/include/hdf5/serial  -g -O2 -std=c++11 tests/test_h5.o src/SM_Maponi.o src/SM_Standard.o src/Woodbury.o src/SMWB.o src/Helpers.o -o bin/test_h5  -L/usr/lib/x86_64-linux-gnu/hdf5/serial -lhdf5 -lhdf5_cpp -lpthread -lz 
+</pre>
+
+<p>
+So it works. We can already see that <code>.o</code> object files are compiled first since they are indicated as dependencies
+of the <code>$(BIN_DIR)/test_h5</code> target, which is compiled and linked at the very end.
+</p>
+
 <p>
 Let's have a look at the following part of our <code>Makefile</code>:
 </p>
 
 <div class="org-src-container">
 <pre class="src src-makefile"><span style="color: #a0522d;">CXX</span>      = g++
-<span style="color: #a0522d;">CPPFLAGS</span> = -I./include/ -I/usr/include/hdf5/serial
 <span style="color: #a0522d;">CXXFLAGS</span> = -g -O2 -std=c++11
+<span style="color: #a0522d;">CPPFLAGS</span> = -I./include/ -I/usr/include/hdf5/serial
 <span style="color: #a0522d;">LDFLAGS</span>  = -L/usr/lib/x86_64-linux-gnu/hdf5/serial
 <span style="color: #a0522d;">LIBS</span>     = -lhdf5 -lhdf5_cpp -lpthread -lz
 </pre>
 </div>
 
 <p>
-<b><b>Question:</b></b> What are advantages and disadvantages of the aforementioned definitions?
+<b><b>Question:</b></b> What are advantages and disadvantages of specifying compiler flags as above? 
 </p>
-</div>
 
-<div id="outline-container-org76f5029" class="outline-3">
-<h3 id="org76f5029"><span class="section-number-3">2.1</span> Possible answer</h3>
-<div class="outline-text-3" id="text-2-1">
 <p>
-Here we explicitly require to use the <code>C++</code> compiler to be GNU C++ compiler (<code>g++</code>).
-However, what if the compiler is not present on the current machine ?
-What if another compiler like <code>icpc</code> of Intel has to be used ?
+Among other things, the crucial issue here is the portability of the hard-coded paths to HDF5 (see <code>CPPFLAGS</code> and <code>LDFLAGS</code>).
+</p>
+
+<p>
+Moreover, in this example, we provide all the flags already. 
+However, in real life, defining them is challenging, especially for programs with external dependencies.
+</p>
+
+<p>
+Wouldn't it be nice if we could automatize this process? Well, this is where <b><b>Autoconf</b></b> comes into play.
 </p>
 </div>
 </div>
+
+<div id="outline-container-org9b6a89c" class="outline-2">
+<h2 id="org9b6a89c"><span class="section-number-2">3</span> configure</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+In this section, we will talk about several files:
+</p>
+
+<ul class="org-ul">
+<li>configure.ac</li>
+<li>configure</li>
+<li>Makefile.in</li>
+<li>Makefile</li>
+</ul>
+
+<p>
+The ultimate goal of the <b><b>Autoconf</b></b> is to produce the <b><b>configure</b></b> script based on the <b>configure.ac</b> file.
+The <b><b>configure</b></b> script then detects the <b><b>Makefile.in</b></b> file and replaces some variables there to produce
+the final <b><b>Makefile</b></b>, which is used to build a project.  
+</p>
+
+<p>
+TODO: PICTURE HERE
+</p>
+
+<p>
+Confused? Don't worry, we will start from the minimal example.
+</p>
+
+<p>
+Let's create the <code>configure.ac</code> file with the following contents:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile">#                                               <span style="color: #b22222;">-*- Autoconf -*-</span>
+# <span style="color: #b22222;">Process this file with autoconf to produce a configure script.</span>
+
+#<span style="color: #b22222;">initialize autoconf</span>
+AC_INIT([sherman-morrison], [0.0.1], [])
+
+AC_OUTPUT
+</pre>
 </div>
 
-<div id="outline-container-org8aaa428" class="outline-2">
-<h2 id="org8aaa428"><span class="section-number-2">3</span> Step 2: configure.ac</h2>
+<p>
+Here we provided the name of our project [sherman-morrison] and the current version [0.0.1] to the <code>AC_INIT</code> macro.
+These are now stored in the <code>$PACKAGE_NAME</code> and <code>$PACKAGE_VERSION</code> variables, respectively.
+We will not cover the details of the M4 syntax that is used internally by the Autoconf.
+For more information, see the <a href="https://www.gnu.org/software/autoconf/manual/autoconf-2.69/html_node/index.html">Autoconf documentation page</a>.
+</p>
+
+<p>
+We know the the source code is written in <code>C++</code>. 
+Thus, we would like the Autoconf to find and possibly run some checks 
+using the~C++~ compiler that is available on the current machine.
+</p>
+
+<p>
+Let's add a few additional macros for that and examine their output:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile">#                                               <span style="color: #b22222;">-*- Autoconf -*-</span>
+# <span style="color: #b22222;">Process this file with autoconf to produce a configure script.</span>
+
+#<span style="color: #b22222;">initialize autoconf</span>
+AC_INIT([sherman-morrison], [0.0.1], [])
+
+# <span style="color: #b22222;">do the tests with C++ flags</span>
+AC_LANG(C++)
+# <span style="color: #b22222;">search for the C++ compiler</span>
+AC_PROG_CXX
+# <span style="color: #b22222;">check if the C++ compiler accepts -c and -o simultaneously</span>
+AC_PROG_CXX_C_O
+
+AC_OUTPUT
+
+echo \
+<span style="color: #8b2252;">"-------------------------------------------------</span>
+
+<span style="color: #8b2252;">${</span><span style="color: #a0522d;">PACKAGE_NAME</span><span style="color: #8b2252;">} Version ${</span><span style="color: #a0522d;">PACKAGE_VERSION</span><span style="color: #8b2252;">}</span>
+
+<span style="color: #8b2252;">CXX ...........:  ${</span><span style="color: #a0522d;">CXX</span><span style="color: #8b2252;">}</span>
+<span style="color: #8b2252;">CXXFLAGS ......:  ${</span><span style="color: #a0522d;">CXXFLAGS</span><span style="color: #8b2252;">}</span>
+
+<span style="color: #8b2252;">--------------------------------------------------"</span>
+</pre>
 </div>
 
-<div id="outline-container-org2d13a22" class="outline-2">
-<h2 id="org2d13a22"><span class="section-number-2">4</span> Step 3: Grande finale</h2>
+<p>
+The contents of the current directory should be as follows:
+</p>
+
+<p>
+<code>bin/  configure.ac  include/  Makefile  README.md  src/  tests/</code>
+</p>
+
+<p>
+Now run <code>autoreconf</code> command in your terminal and examine the directory again.
+After succesfull exection, a <b><b>configure</b></b> shell script should appear.
+</p>
+
+<p>
+Let's run it by calling <code>./configure</code>. 
+Several checks have been performed by <b><b>Autoconf</b></b> and in the end one might get the following:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile">-------------------------------------------------
+
+sherman-morrison Version 0.0.1
+
+<span style="color: #0000ff;">CXX ...........</span>:  g++
+<span style="color: #0000ff;">CXXFLAGS ......</span>:  -g -O2
+
+--------------------------------------------------
+</pre>
+</div>
+
+<p>
+In the example of output above, the <b><b>configure</b></b> script has detected <code>g++</code> compiler and expanded the
+<code>${CXX}</code> variable with the corresponding compiler name. 
+Moreover, the script detects the defaul <code>C++</code> compiler flags of <code>g++</code> and adds them to <code>${CXXFLAGS}</code>.
+</p>
+
+<p>
+From now on we will work mostly with shell variables and call to the Autoconf macros.
+</p>
+
+<p>
+<i>Note</i>: whenever you make a change in <code>configure.ac</code>, 
+execute <code>autoreconf -i</code> to update the generated <code>configure</code> script.
+</p>
+
+<p>
+The <b><b>configure</b></b> script can also define its own variables (e.g. <code>$PACKAGE_NAME</code> above) and pass them to other files.
+To benefit from the previously detected <code>C++</code> compiler and its flags, let's propagate them to <code>Makefile</code>.
+</p>
+
+<p>
+This requires 2 actions:
+</p>
+
+<ul class="org-ul">
+<li>Move <code>Makefile</code> to <code>Makefile.in</code> (this is the standard naming convention in Autotools) and replace the hard-coded variables with the ones defined by <b><b>configure</b></b>. For example, <code>CXX = g++</code> should be replaced by <code>CXX = @CXX@</code>. Variables in between <code>@</code> signs are called substitutation variables.</li>
+<li>Indicate to Autoconf that <code>Makefile</code> is now its responsibility (due to the variables that will be substituted by <code>./configure</code> call) by adding <code>AC_CONFIG_FILES([Makefile])</code>.</li>
+</ul>
+
+<p>
+<code>configure.ac</code>:
+</p>
+<div class="org-src-container">
+<pre class="src src-makefile">#                                               <span style="color: #b22222;">-*- Autoconf -*-</span>
+# <span style="color: #b22222;">Process this file with autoconf to produce a configure script.</span>
+
+#<span style="color: #b22222;">initialize autoconf</span>
+AC_INIT([sherman-morrison], [0.0.1], [])
+
+# <span style="color: #b22222;">do the tests with C++ flags</span>
+AC_LANG(C++)
+# <span style="color: #b22222;">search for the C++ compiler</span>
+AC_PROG_CXX
+# <span style="color: #b22222;">check if the C++ compiler accepts -c and -o simultaneously</span>
+AC_PROG_CXX_C_O
+
+AC_CONFIG_FILES([Makefile])
+
+AC_OUTPUT
+
+echo \
+<span style="color: #8b2252;">"-------------------------------------------------</span>
+
+<span style="color: #8b2252;">${</span><span style="color: #a0522d;">PACKAGE_NAME</span><span style="color: #8b2252;">} Version ${</span><span style="color: #a0522d;">PACKAGE_VERSION</span><span style="color: #8b2252;">}</span>
+
+<span style="color: #8b2252;">CXX ...........:  ${</span><span style="color: #a0522d;">CXX</span><span style="color: #8b2252;">}</span>
+<span style="color: #8b2252;">CXXFLAGS ......:  ${</span><span style="color: #a0522d;">CXXFLAGS</span><span style="color: #8b2252;">}</span>
+
+<span style="color: #8b2252;">--------------------------------------------------"</span>
+</pre>
+</div>
+
+<p>
+<code>Makefile.in</code> (only the top part has to be changed at the moment):
+</p>
+<div class="org-src-container">
+<pre class="src src-makefile"><span style="color: #a0522d;">CXX</span>      = @CXX@
+<span style="color: #a0522d;">CXXFLAGS</span> = @CXXFLAGS@ -std=c++11
+<span style="color: #a0522d;">CPPFLAGS</span> = -I./include/ -I/usr/include/hdf5/serial
+<span style="color: #a0522d;">LDFLAGS</span>  = -L/usr/lib/x86_64-linux-gnu/hdf5/serial
+<span style="color: #a0522d;">LIBS</span>     = -lhdf5 -lhdf5_cpp -lpthread -lz
+...........
+</pre>
+</div>
+
+<p>
+Let's reconfigure (<code>autoreconf -i &amp;&amp; ./configure</code>) and examine the changes between the input
+<code>Makefile.in</code> and output <code>Makefile</code> (you can use <code>diff</code> or <code>vimdiff</code> for example):
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">$ diff Makefile.in Makefile
+
+&lt; CXX      = @CXX@
+&lt; CXXFLAGS = @CXXFLAGS@ -std=c++11
+---
+&gt; CXX      = g++
+&gt; CXXFLAGS = -g -O2 -std=c++11
+</pre>
+</div>
+
+<p>
+This tells us that the substitution variables <code>@CXX@</code> and <code>@CXXFLAGS@</code> have been replaced 
+by <code>g++</code> and <code>-g -O2</code>, respectively.
+</p>
+
+<p>
+Good, but we still have these hard-coded paths to HDF5 library in <code>CPPFLAGS</code> and <code>LDFLAGS</code>.
+Let's try to find this library using Autoconf solutions.
+</p>
+</div>
+
+<div id="outline-container-org527e724" class="outline-3">
+<h3 id="org527e724"><span class="section-number-3">3.1</span> Detecting external dependencies</h3>
+</div>
+</div>
+
+<div id="outline-container-org6c9d962" class="outline-2">
+<h2 id="org6c9d962"><span class="section-number-2">4</span> Conclusion</h2>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Evgeny Posenitskiy, Anthony Scemama</p>
-<p class="date">Created: 2021-10-26 Tue 17:15</p>
+<p class="date">Created: 2021-10-27 Wed 12:11</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
