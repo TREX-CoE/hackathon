@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-10-27 Wed 14:12 -->
+<!-- 2021-10-28 Thu 15:27 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Autoconf</title>
@@ -240,14 +240,15 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org222e965">1. Introduction</a></li>
-<li><a href="#orgc854eea">2. Makefile</a></li>
-<li><a href="#orgf1dd345">3. configure</a>
+<li><a href="#org0e2e5ab">1. Introduction</a></li>
+<li><a href="#org9bc37a3">2. Makefile</a></li>
+<li><a href="#org480adef">3. configure</a>
 <ul>
-<li><a href="#orgfdceafa">3.1. Detecting external dependencies</a></li>
+<li><a href="#orgfae5cd7">3.1. Detecting external dependencies</a></li>
+<li><a href="#orgd65455f">3.2. pkg-config</a></li>
 </ul>
 </li>
-<li><a href="#orgea109e9">4. Conclusion</a></li>
+<li><a href="#org2f9e1e1">4. Conclusion</a></li>
 </ul>
 </div>
 </div>
@@ -255,8 +256,8 @@ for the JavaScript code in this tag.
 This page contains the <a href="https://www.gnu.org/software/autoconf/">GNU Autoconf</a> tutorial, which is the first part of the Autotools tutorial.
 </p>
 
-<div id="outline-container-org222e965" class="outline-2">
-<h2 id="org222e965"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-org0e2e5ab" class="outline-2">
+<h2 id="org0e2e5ab"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Building software on different platforms is a challenging task.
@@ -273,10 +274,11 @@ However, the installation paths are likely to be different on another machine an
 </p>
 
 <p>
-In this tutorial, we will learn how to configure a particular project using Autoconf.
+In this tutorial, we will learn how to configure a particular project using <b>Autoconf</b>.
 This project consists of several <code>C++</code> source files, which are compiled into a single program using custom <code>Makefile</code>.
 We will learn how to configure and test the <code>C++</code> compiler before building the project.
 The source files depend on the <a href="https://portal.hdfgroup.org/display/HDF5/HDF5">HDF5 library</a>, which is a good example of external dependency.
+HDF5 is a binary file format, which is designed for high-performance data input/output.
 We will learn how to automatically locate the HDF5 library using macros.
 </p>
 
@@ -288,12 +290,12 @@ The <code>tests/</code> directory contains the <code>test_h5.cpp</code> and <cod
 <p>
 For this tutorial, the contents of the source and header files are not important.
 However, it is worth mentioning that they depend on the HDF5 library, which is not included in the source tree.
-The goal is to demonstrate how cumbersome configuration/compilation steps can be facilitated by the use of <b><b>Autoconf</b></b>.
+The goal is to demonstrate how cumbersome configuration/compilation steps can be facilitated by the use of <b>Autoconf</b>.
 </p>
-
 
 <div class="org-src-container">
 <pre class="src src-text">Sherman-Morrison/
+&#9500;&#9472; bin/
 &#9500;&#9472; include/
 &#9474;  &#9500;&#9472; Helpers.hpp
 &#9474;  &#9500;&#9472; SMWB.hpp
@@ -309,7 +311,7 @@ The goal is to demonstrate how cumbersome configuration/compilation steps can be
 &#9500;&#9472; tests/
 &#9474;  &#9500;&#9472; test_h5.cpp
 &#9474;  &#9500;&#9472; dataset.hdf5
-&#9500;&#9472; bin/
+&#9500;&#9472; LICENSE
 &#9500;&#9472; Makefile
 &#9500;&#9472; README.md
 </pre>
@@ -317,8 +319,8 @@ The goal is to demonstrate how cumbersome configuration/compilation steps can be
 </div>
 </div>
 
-<div id="outline-container-orgc854eea" class="outline-2">
-<h2 id="orgc854eea"><span class="section-number-2">2</span> Makefile</h2>
+<div id="outline-container-org9bc37a3" class="outline-2">
+<h2 id="org9bc37a3"><span class="section-number-2">2</span> Makefile</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 Below is the <code>Makefile</code> of our project:
@@ -369,6 +371,8 @@ Let's execute <b><b>make</b></b> command and examine the output:
 </p>
 
 <pre class="example">
+$ make
+
 g++ -g -O2 -std=c++11 -I./include/ -I/usr/include/hdf5/serial   -c -o src/SM_Maponi.o src/SM_Maponi.cpp
 g++ -g -O2 -std=c++11 -I./include/ -I/usr/include/hdf5/serial   -c -o src/SM_Standard.o src/SM_Standard.cpp
 g++ -g -O2 -std=c++11 -I./include/ -I/usr/include/hdf5/serial   -c -o src/Woodbury.o src/Woodbury.cpp
@@ -415,8 +419,8 @@ Wouldn't it be nice if we could automatize this process? Well, this is where <b>
 </div>
 </div>
 
-<div id="outline-container-orgf1dd345" class="outline-2">
-<h2 id="orgf1dd345"><span class="section-number-2">3</span> configure</h2>
+<div id="outline-container-org480adef" class="outline-2">
+<h2 id="org480adef"><span class="section-number-2">3</span> configure</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 In this section, we will talk about several files:
@@ -430,9 +434,9 @@ In this section, we will talk about several files:
 </ul>
 
 <p>
-The ultimate goal of the <b><b>Autoconf</b></b> is to produce the <b><b>configure</b></b> script based on the <b>configure.ac</b> file.
-The <b><b>configure</b></b> script then detects the <b><b>Makefile.in</b></b> file and replaces some variables there to produce
-the final <b><b>Makefile</b></b>, which is used to build a project.  
+The ultimate goal of the <b>Autoconf</b> is to produce the <code>configure</code> script based on the <code>configure.ac</code> file.
+The <code>configure</code> script then detects the <code>Makefile.in</code> file and replaces some variables there to produce
+the final <code>Makefile</code>, which is used to build a project.  
 </p>
 
 <p>
@@ -440,11 +444,8 @@ TODO: PICTURE HERE
 </p>
 
 <p>
-Confused? Don't worry, we will start from the minimal example.
-</p>
-
-<p>
-Let's create the <code>configure.ac</code> file with the following contents:
+This might be confusing at the beginning. 
+Let's create the simplest <code>configure.ac</code> file for our project with the following contents:
 </p>
 
 <div class="org-src-container">
@@ -466,9 +467,9 @@ For more information, see the <a href="https://www.gnu.org/software/autoconf/man
 </p>
 
 <p>
-We know the the source code is written in <code>C++</code>. 
-Thus, we would like the Autoconf to find and possibly run some checks 
-using the~C++~ compiler that is available on the current machine.
+We know that the source code is written in <code>C++</code> programming language (it can also be guessed from the <code>.cpp</code> extension). 
+Thus, we would like the <b>Autoconf</b> to find and possibly run some checks 
+using the <code>C++</code> compiler that is available on the current machine.
 </p>
 
 <p>
@@ -508,48 +509,48 @@ The contents of the current directory should be as follows:
 </p>
 
 <p>
-<code>bin/  configure.ac  include/  Makefile  README.md  src/  tests/</code>
+<code>bin/  configure.ac  include/  LICENSE  Makefile  README.md  src/  tests/</code>
 </p>
 
 <p>
-Now run <code>autoreconf</code> command in your terminal and examine the directory again.
-After succesfull exection, a <b><b>configure</b></b> shell script should appear.
+Now run <b>autoreconf</b> command in your terminal and examine the directory again.
+After succesfull execution, a <code>configure</code> shell script should appear.
 </p>
 
 <p>
 Let's run it by calling <code>./configure</code>. 
-Several checks have been performed by <b><b>Autoconf</b></b> and in the end one might get the following:
+Several checks have been performed by <b>Autoconf</b> and in the end one might get the following 
+(the output may differ depending on the detected <code>C++</code> compiler):
 </p>
 
-<div class="org-src-container">
-<pre class="src src-makefile">-------------------------------------------------
+<pre class="example">
+-------------------------------------------------
 
 sherman-morrison Version 0.0.1
 
-<span style="color: #0000ff;">CXX ...........</span>:  g++
-<span style="color: #0000ff;">CXXFLAGS ......</span>:  -g -O2
+CXX ...........:  g++
+CXXFLAGS ......:  -g -O2
 
 --------------------------------------------------
 </pre>
-</div>
 
 <p>
-In the example of output above, the <b><b>configure</b></b> script has detected <code>g++</code> compiler and expanded the
-<code>${CXX}</code> variable with the corresponding compiler name. 
-Moreover, the script detects the defaul <code>C++</code> compiler flags of <code>g++</code> and adds them to <code>${CXXFLAGS}</code>.
+In the example above, the <code>configure</code> script has detected the GNU <code>C++</code> compiler and expanded the
+<code>${CXX}</code> variable with the corresponding name. 
+Moreover, the script detects the default <code>C++</code> flags of <code>g++</code> and adds them to <code>${CXXFLAGS}</code>.
 </p>
 
 <p>
-From now on we will work mostly with shell variables and call to the Autoconf macros.
+From now on we will focus mainly on <code>$</code>-prefixed variables and calls to the <b>Autoconf</b> macros.
 </p>
 
 <p>
-<i>Note</i>: whenever you make a change in <code>configure.ac</code>, 
+<b><b>Note:</b></b> whenever you make a change in <code>configure.ac</code>, 
 execute <code>autoreconf -i</code> to update the generated <code>configure</code> script.
 </p>
 
 <p>
-The <b><b>configure</b></b> script can also define its own variables (e.g. <code>$PACKAGE_NAME</code> above) and pass them to other files.
+The <code>configure</code> script can also define its own variables (e.g. <code>$PACKAGE_NAME</code> above) and pass them to other files.
 To benefit from the previously detected <code>C++</code> compiler and its flags, let's propagate them to <code>Makefile</code>.
 </p>
 
@@ -558,8 +559,8 @@ This requires 2 actions:
 </p>
 
 <ul class="org-ul">
-<li>Move <code>Makefile</code> to <code>Makefile.in</code> (this is the standard naming convention in Autotools) and replace the hard-coded variables with the ones defined by <b><b>configure</b></b>. For example, <code>CXX = g++</code> should be replaced by <code>CXX = @CXX@</code>. Variables in between <code>@</code> signs are called substitutation variables.</li>
-<li>Indicate to Autoconf that <code>Makefile</code> is now its responsibility (due to the variables that will be substituted by <code>./configure</code> call) by adding <code>AC_CONFIG_FILES([Makefile])</code>.</li>
+<li>Move <code>Makefile</code> to <code>Makefile.in</code> (this is the standard naming convention in <b>Autotools</b>) and replace the hard-coded variables with the ones defined by the <code>configure</code> script. For demonstration purposes, we only replace <code>CXX</code> and <code>CXXFLAGS</code> at the moment.</li>
+<li>Indicate to <b>Autoconf</b> that <code>Makefile</code> is now its responsibility (due to the variables that will be substituted by <code>./configure</code> call) by adding <code>AC_CONFIG_FILES([Makefile])</code>.</li>
 </ul>
 
 <p>
@@ -609,12 +610,16 @@ echo \
 </div>
 
 <p>
+Variables in between <code>@</code> signs are called substitutation variables and are important part of the <b>Autotools</b> toolkit.
+</p>
+
+<p>
 Let's reconfigure (<code>autoreconf -i &amp;&amp; ./configure</code>) and examine the changes between the input
 <code>Makefile.in</code> and output <code>Makefile</code> (you can use <code>diff</code> or <code>vimdiff</code> for example):
 </p>
 
-<div class="org-src-container">
-<pre class="src src-shell">$ diff Makefile.in Makefile
+<pre class="example">
+$ diff Makefile.in Makefile
 
 &lt; CXX      = @CXX@
 &lt; CXXFLAGS = @CXXFLAGS@ -std=c++11
@@ -622,7 +627,6 @@ Let's reconfigure (<code>autoreconf -i &amp;&amp; ./configure</code>) and examin
 &gt; CXX      = g++
 &gt; CXXFLAGS = -g -O2 -std=c++11
 </pre>
-</div>
 
 <p>
 This tells us that the substitution variables <code>@CXX@</code> and <code>@CXXFLAGS@</code> have been replaced 
@@ -631,24 +635,40 @@ by <code>g++</code> and <code>-g -O2</code>, respectively.
 
 <p>
 Good, but we still have these hard-coded paths to HDF5 library in <code>CPPFLAGS</code> and <code>LDFLAGS</code>.
-Let's try to find this library using Autoconf solutions.
+Let's try to find this library using <b>Autoconf</b> functionality.
 </p>
 </div>
 
-<div id="outline-container-orgfdceafa" class="outline-3">
-<h3 id="orgfdceafa"><span class="section-number-3">3.1</span> Detecting external dependencies</h3>
+<div id="outline-container-orgfae5cd7" class="outline-3">
+<h3 id="orgfae5cd7"><span class="section-number-3">3.1</span> Detecting external dependencies</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 It is possible to write your our own macros to detect an external dependency.
-However, in this example we will try to locate HDF5, which is quite commonly used.
-Luckily for us, the GNU website has an <a href="https://www.gnu.org/software/autoconf-archive/The-Macros.html">archive of Autoconf macros</a> for commonly used programs, including HDF5.
-The <code>ax_lib_hdf5.m4</code> file can be downloaded from the aforementioned page. 
-Autoconf can locate external macros in the root directory of the project or in the <code>m4</code> directory.
-The description of this macro can be found <a href="https://www.gnu.org/software/autoconf-archive/ax_lib_hdf5.html">here</a>. Notably, it says:
+However, in this example we will try to locate the HDF5 library, which is widely used nowadays.
+Luckily for us, the GNU website has an <a href="https://www.gnu.org/software/autoconf-archive/The-Macros.html">archive of Autoconf macros</a> for many packages, including HDF5.
+It is considered good practice to put <b>Autoconf</b> macros in the <code>m4</code> directory of your project.
+The <code>ax_lib_hdf5.m4</code> file can be downloaded from the aforementioned page.
+</p>
+
+<p>
+Once the file is in the <code>m4</code> directory, one can add the following lines to <code>configure.ac</code>
+in order to locate and call the <code>ax_lib_hdf5.m4</code> macro:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-text">If HDF5 is successfully found, this macro calls 
+<pre class="src src-makefile"># <span style="color: #b22222;">tell Autoconf the name of directory with external M4 macros</span>
+AC_CONFIG_MACRO_DIR([m4])
+# <span style="color: #b22222;">call the m4 macro to locate the HDF5 library</span>
+AX_LIB_HDF5()
+</pre>
+</div>
+
+<p>
+The description of this macro can be found <a href="https://www.gnu.org/software/autoconf-archive/ax_lib_hdf5.html">here</a>. Notably, it says:
+</p>
+
+<pre class="example">
+If HDF5 is successfully found, this macro calls 
 
   AC_SUBST(HDF5_VERSION)
   AC_SUBST(HDF5_CC)
@@ -664,7 +684,6 @@ The description of this macro can be found <a href="https://www.gnu.org/software
 
 and sets with_hdf5="yes". ...
 </pre>
-</div>
 
 <p>
 This means that the macro will define a set of variables that can be either manupulated 
@@ -689,6 +708,8 @@ AC_PROG_CXX
 # <span style="color: #b22222;">check if the C++ compiler accepts -c and -o simultaneously</span>
 AC_PROG_CXX_C_O
 
+# <span style="color: #b22222;">tell Autoconf the name of directory with external M4 macros</span>
+AC_CONFIG_MACRO_DIR([m4])
 # <span style="color: #b22222;">call the m4 macro to locate the HDF5 library</span>
 AX_LIB_HDF5()
 
@@ -735,30 +756,29 @@ echo \
 </div>
 
 <p>
-Now reconfigure and examine the output produced by the <b><b>configure</b></b> script. 
+Now reconfigure and examine the output produced by the <code>configure</code> script. 
 In the end, you will see a more verbose summary of the detected flags and 
 newly added package features. The exact output may differ on your machine depending
 on the detected compiler and/or the HDF5 library.
 </p>
 
-<div class="org-src-container">
-<pre class="src src-makefile">-------------------------------------------------
+<pre class="example">
+-------------------------------------------------
 
 sherman-morrison Version 0.0.1
 
-<span style="color: #0000ff;">CXX ...........</span>:  g++
-<span style="color: #0000ff;">CXXFLAGS ......</span>:   -g -O2 -std=c++11
-<span style="color: #0000ff;">CPPFLAGS ......</span>:  -I/usr/include -I/usr/include/hdf5/serial  -I./include/
-<span style="color: #0000ff;">LDFLAGS .......</span>:   -L/usr/lib/x86_64-linux-gnu/hdf5/serial 
-<span style="color: #0000ff;">LIBS ..........</span>:  -lhdf5_hl -lhdf5  -lpthread -lsz -lz -ldl -lm  -lhdf5_cpp
+CXX ...........:  g++
+CXXFLAGS ......:   -g -O2 -std=c++11
+CPPFLAGS ......:  -I/usr/include -I/usr/include/hdf5/serial  -I./include/
+LDFLAGS .......:   -L/usr/lib/x86_64-linux-gnu/hdf5/serial 
+LIBS ..........:  -lhdf5_hl -lhdf5  -lpthread -lsz -lz -ldl -lm  -lhdf5_cpp
 
-<span style="color: #0000ff;">Package features</span>:
-  <span style="color: #0000ff;">Compilation with HDF5 ..</span>:  yes
-  <span style="color: #0000ff;">HDF5 version ...........</span>:  1.10.4
+Package features:
+  Compilation with HDF5 ..:  yes
+  HDF5 version ...........:  1.10.4
 
 --------------------------------------------------
 </pre>
-</div>
 
 <p>
 You can now see how all the hard-coded HDF5 paths have been detected by the <code>ax_lib_hdf5.m4</code> macro.
@@ -766,8 +786,8 @@ Moreover, all the flags are propagated to the resulting <code>Makefile</code> th
 This can also be checked by visualising differences between <code>Makefile.in</code> and <code>Makefile</code>:
 </p>
 
-<div class="org-src-container">
-<pre class="src src-shell">$ diff Makefile.in Makefile
+<pre class="example">
+$ diff Makefile.in Makefile
 
 &lt; CXX      = @CXX@
 &lt; CXXFLAGS = @CXXFLAGS@
@@ -781,25 +801,124 @@ This can also be checked by visualising differences between <code>Makefile.in</c
 &gt; LIBS     = -lhdf5_hl -lhdf5  -lpthread -lsz -lz -ldl -lm  -lhdf5_cpp
 &gt; LDFLAGS  =  -L/usr/lib/x86_64-linux-gnu/hdf5/serial 
 </pre>
-</div>
 
 
 <p>
 <b><b>Note:</b></b> in the example output demonstated in this tutorial, 
 the environment was Ubuntu 20.04 OS with HDF5 installed via 
-<code>apt-get install libhdf5-dev</code> command.
+<code>sudo apt-get install libhdf5-dev</code> command.
 </p>
+</div>
+</div>
+
+<div id="outline-container-orgd65455f" class="outline-3">
+<h3 id="orgd65455f"><span class="section-number-3">3.2</span> pkg-config</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+The <a href="https://linux.die.net/man/1/pkg-config">pkg-config program</a> is a powerful tool to get information about installed libraries.
+<b>Autoconf</b> incorporates some of the <code>pkg-config</code> functionality.
+</p>
+
+<p>
+The minimal setup consists of calls to the
+initialization macro <code>PKG_PROG_PKG_CONFIG</code> and search macro <code>PKG_CHECK_MODULES</code>.
+The latter can be configured to check the required version of the HDF5 library (see <a href="https://autotools.io/pkgconfig/pkg_check_modules.html">the Autotools Mythbuster website</a> for more details).
+For example, <code>PKG_CHECK_MODULES([HDF5], [hdf5 &gt;= 1.8])</code> verifies that the HDF5 version is not older than <code>1.8</code>.
+</p>
+
+<p>
+<code>configure.ac</code>:
+</p>
+<div class="org-src-container">
+<pre class="src src-makefile">#                                               <span style="color: #b22222;">-*- Autoconf -*-</span>
+# <span style="color: #b22222;">Process this file with autoconf to produce a configure script.</span>
+
+#<span style="color: #b22222;">initialize autoconf</span>
+AC_INIT([sherman-morrison], [0.0.1], [])
+
+# <span style="color: #b22222;">do the tests with C++ flags</span>
+AC_LANG(C++)
+# <span style="color: #b22222;">search for the C++ compiler</span>
+AC_PROG_CXX
+# <span style="color: #b22222;">check if the C++ compiler accepts -c and -o simultaneously</span>
+AC_PROG_CXX_C_O
+
+# <span style="color: #b22222;">tell Autoconf the name of directory with external M4 macros</span>
+AC_CONFIG_MACRO_DIR([m4])
+# <span style="color: #b22222;">call the m4 macro to locate the HDF5 library</span>
+AX_LIB_HDF5()
+
+# <span style="color: #b22222;">prepend compiler and linking flags with that of HDF5</span>
+<span style="color: #a0522d;">CXXFLAGS</span>=<span style="color: #8b2252;">"${</span><span style="color: #a0522d;">HDF5_CFLAGS</span><span style="color: #8b2252;">} ${</span><span style="color: #a0522d;">CXXFLAGS</span><span style="color: #8b2252;">} -std=c++11"</span>
+<span style="color: #a0522d;">CPPFLAGS</span>=<span style="color: #8b2252;">"${</span><span style="color: #a0522d;">HDF5_CPPFLAGS</span><span style="color: #8b2252;">} ${</span><span style="color: #a0522d;">CPPFLAGS</span><span style="color: #8b2252;">} -I./include/"</span>
+<span style="color: #a0522d;">LDFLAGS</span>=<span style="color: #8b2252;">"${</span><span style="color: #a0522d;">HDF5_LDFLAGS</span><span style="color: #8b2252;">} ${</span><span style="color: #a0522d;">LDFLAGS</span><span style="color: #8b2252;">}"</span>
+<span style="color: #a0522d;">LIBS</span>=<span style="color: #8b2252;">"${</span><span style="color: #a0522d;">HDF5_LIBS</span><span style="color: #8b2252;">} ${</span><span style="color: #a0522d;">LIBS</span><span style="color: #8b2252;">} -lhdf5_cpp"</span>
+
+# <span style="color: #b22222;">check for pkg-config</span>
+PKG_PROG_PKG_CONFIG()
+# <span style="color: #b22222;">clean the output of AX_LIB_HDF5 macro since the same variables are substitutted by PKG_CHECK_MODULES</span>
+<span style="color: #a0522d;">HDF5_CFLAGS</span>=<span style="color: #8b2252;">""</span>
+<span style="color: #a0522d;">HDF5_LIBS</span>=<span style="color: #8b2252;">""</span>
+# <span style="color: #b22222;">locate HDF5 with pkg-config</span>
+PKG_CHECK_MODULES([HDF5], [hdf5 &gt;= 1.8])
+
+AC_CONFIG_FILES([Makefile])
+
+AC_OUTPUT
+
+echo \
+<span style="color: #8b2252;">"-------------------------------------------------</span>
+
+<span style="color: #8b2252;">${</span><span style="color: #a0522d;">PACKAGE_NAME</span><span style="color: #8b2252;">} Version ${</span><span style="color: #a0522d;">PACKAGE_VERSION</span><span style="color: #8b2252;">}</span>
+
+<span style="color: #8b2252;">CXX ...........:  ${</span><span style="color: #a0522d;">CXX</span><span style="color: #8b2252;">}</span>
+<span style="color: #8b2252;">CXXFLAGS ......:  ${</span><span style="color: #a0522d;">CXXFLAGS</span><span style="color: #8b2252;">}</span>
+<span style="color: #8b2252;">CPPFLAGS ......:  ${</span><span style="color: #a0522d;">CPPFLAGS</span><span style="color: #8b2252;">}</span>
+<span style="color: #8b2252;">LDFLAGS .......:  ${</span><span style="color: #a0522d;">LDFLAGS</span><span style="color: #8b2252;">}</span>
+<span style="color: #8b2252;">LIBS ..........:  ${</span><span style="color: #a0522d;">LIBS</span><span style="color: #8b2252;">}</span>
+
+<span style="color: #8b2252;">Package features:</span>
+<span style="color: #8b2252;">  Compilation with HDF5 ..:  ${</span><span style="color: #a0522d;">with_hdf5</span><span style="color: #8b2252;">}</span>
+<span style="color: #8b2252;">  HDF5 version ...........:  ${</span><span style="color: #a0522d;">HDF5_VERSION</span><span style="color: #8b2252;">}</span>
+<span style="color: #8b2252;">  .........................</span>
+<span style="color: #8b2252;">  pkg-config CFLAGS ......:  ${</span><span style="color: #a0522d;">HDF5_CFLAGS</span><span style="color: #8b2252;">}</span>
+<span style="color: #8b2252;">  pkg-config LIBS ........:  ${</span><span style="color: #a0522d;">HDF5_LIBS</span><span style="color: #8b2252;">}</span>
+
+<span style="color: #8b2252;">--------------------------------------------------"</span>
+</pre>
+</div>
+
+<p>
+After reconfiguration, the summary contains <code>CFLAGS</code> and <code>LIBS</code> detected by <code>pkg-config</code>:
+</p>
+
+<pre class="example">
+.........................
+pkg-config CFLAGS ......:  -I/usr/include/hdf5/serial
+pkg-config LIBS ........:  -L/usr/lib/x86_64-linux-gnu/hdf5/serial -lhdf5
+.........................
+</pre>
+
+<p>
+These flags can be verified by locating the HDF5 installation with <code>pkg-config</code> directly. For example,
+</p>
+
+<pre class="example">
+$ pkg-config --cflags --libs hdf5
+
+-I/usr/include/hdf5/serial -L/usr/lib/x86_64-linux-gnu/hdf5/serial -lhdf5
+</pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgea109e9" class="outline-2">
-<h2 id="orgea109e9"><span class="section-number-2">4</span> Conclusion</h2>
+<div id="outline-container-org2f9e1e1" class="outline-2">
+<h2 id="org2f9e1e1"><span class="section-number-2">4</span> Conclusion</h2>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Evgeny Posenitskiy, Anthony Scemama</p>
-<p class="date">Created: 2021-10-27 Wed 14:12</p>
+<p class="date">Created: 2021-10-28 Thu 15:27</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
