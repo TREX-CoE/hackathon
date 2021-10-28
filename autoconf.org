@@ -23,7 +23,7 @@ One could then modify the compilation flags to explicitly include installation p
 This approach works fine as long as the code has to be compiled only locally and as long as the dependency is not moved to a different directory.
 However, the installation paths are likely to be different on another machine and the aforementioned build procedure might break.
 
-In this tutorial, we will learn how to configure a particular project using Autoconf.
+In this tutorial, we will learn how to configure a particular project using *Autoconf*.
 This project consists of several ~C++~ source files, which are compiled into a single program using custom ~Makefile~.
 We will learn how to configure and test the ~C++~ compiler before building the project.
 The source files depend on the [[https://portal.hdfgroup.org/display/HDF5/HDF5][HDF5 library]], which is a good example of external dependency.
@@ -35,8 +35,7 @@ The ~tests/~ directory contains the ~test_h5.cpp~ and ~dataset.hdf5~ files neede
 
 For this tutorial, the contents of the source and header files are not important.
 However, it is worth mentioning that they depend on the HDF5 library, which is not included in the source tree.
-The goal is to demonstrate how cumbersome configuration/compilation steps can be facilitated by the use of **Autoconf**.
-
+The goal is to demonstrate how cumbersome configuration/compilation steps can be facilitated by the use of *Autoconf*.
 
 #+begin_src text
 Sherman-Morrison/
@@ -453,5 +452,91 @@ $ diff Makefile.in Makefile
 **Note:** in the example output demonstated in this tutorial, 
 the environment was Ubuntu 20.04 OS with HDF5 installed via 
 ~sudo apt-get install libhdf5-dev~ command.
+
+** pkg-config
+
+The [[https://linux.die.net/man/1/pkg-config][pkg-config program]] is a powerful tool to get information about installed libraries.
+*Autoconf* incorporates some of the ~pkg-config~ functionality.
+
+The minimal setup consists of calls to the
+initialization macro ~PKG_PROG_PKG_CONFIG~ and search macro ~PKG_CHECK_MODULES~.
+The latter can be configured to check the required version of the HDF5 library (see [[https://autotools.io/pkgconfig/pkg_check_modules.html][the Autotools Mythbuster website]] for more details).
+For example, ~PKG_CHECK_MODULES([HDF5], [hdf5 >= 1.8])~ verifies that the HDF5 version is not older than ~1.8~.
+
+~configure.ac~:
+#+begin_src makefile
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+#initialize autoconf
+AC_INIT([sherman-morrison], [0.0.1], [])
+
+# do the tests with C++ flags
+AC_LANG(C++)
+# search for the C++ compiler
+AC_PROG_CXX
+# check if the C++ compiler accepts -c and -o simultaneously
+AC_PROG_CXX_C_O
+
+# tell Autoconf the name of directory with external M4 macros
+AC_CONFIG_MACRO_DIR([m4])
+# call the m4 macro to locate the HDF5 library
+AX_LIB_HDF5()
+
+# prepend compiler and linking flags with that of HDF5
+CXXFLAGS="${HDF5_CFLAGS} ${CXXFLAGS} -std=c++11"
+CPPFLAGS="${HDF5_CPPFLAGS} ${CPPFLAGS} -I./include/"
+LDFLAGS="${HDF5_LDFLAGS} ${LDFLAGS}"
+LIBS="${HDF5_LIBS} ${LIBS} -lhdf5_cpp"
+
+# check for pkg-config
+PKG_PROG_PKG_CONFIG()
+# clean the output of AX_LIB_HDF5 macro since the same variables are substitutted by PKG_CHECK_MODULES
+HDF5_CFLAGS=""
+HDF5_LIBS=""
+# locate HDF5 with pkg-config
+PKG_CHECK_MODULES([HDF5], [hdf5 >= 1.8])
+
+AC_CONFIG_FILES([Makefile])
+
+AC_OUTPUT
+
+echo \
+"-------------------------------------------------
+
+${PACKAGE_NAME} Version ${PACKAGE_VERSION}
+
+CXX ...........:  ${CXX}
+CXXFLAGS ......:  ${CXXFLAGS}
+CPPFLAGS ......:  ${CPPFLAGS}
+LDFLAGS .......:  ${LDFLAGS}
+LIBS ..........:  ${LIBS}
+
+Package features:
+  Compilation with HDF5 ..:  ${with_hdf5}
+  HDF5 version ...........:  ${HDF5_VERSION}
+  .........................
+  pkg-config CFLAGS ......:  ${HDF5_CFLAGS}
+  pkg-config LIBS ........:  ${HDF5_LIBS}
+
+--------------------------------------------------"
+#+end_src
+
+After reconfiguration, the summary contains ~CFLAGS~ and ~LIBS~ detected by ~pkg-config~:
+
+#+begin_src
+  .........................
+  pkg-config CFLAGS ......:  -I/usr/include/hdf5/serial
+  pkg-config LIBS ........:  -L/usr/lib/x86_64-linux-gnu/hdf5/serial -lhdf5
+  .........................
+#+end_src
+
+These flags can be verified by locating the HDF5 installation with ~pkg-config~ directly. For example,
+
+#+begin_src
+$ pkg-config --cflags --libs hdf5
+
+-I/usr/include/hdf5/serial -L/usr/lib/x86_64-linux-gnu/hdf5/serial -lhdf5
+#+end_src
 
 * Conclusion
