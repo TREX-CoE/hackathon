@@ -515,7 +515,7 @@ legend{
     padding:0;
     white-space:normal}
 
-.fa:before,#content .admonition-title:before,#content h1 .headerlink:before,#content h2 .headerlink:before,#content h3 .headerlink:before,#content h4 .headerlink:before,#content h5 .headerlink:before,#content h6 .headerlink:before,#content dl dt .headerlink:before,.icon:before,.wy-dropdown .caret:before,.wy-inline-validate.wy-inline-validate-success .wy-input-context:before,.wy-inline-validate.wy-inline-validate-danger .wy-input-context:before,.wy-inline-validate.wy-inline-validate-warning .wy-input-context:before,.wy-inline-validate.wy-inline-validate-info .wy-input-context:before,.wy-alert,#content .note,#content .attention,#content .caution,#content .danger,#content .error,#content .hint,#content .important,#content .tip,#content .warning,#content .seealso,#content .admonitiontodo,.btn,input[type="text"],input[type="password"],input[type="email"],input[type="url"],input[type="date"],input[type="month"],input[type="time"],input[type="datetime"],input[type="datetime-local"],input[type="week"],input[type="number"],input[type="search"],input[type="tel"],input[type="color"],select,textarea,#table-of-contents li.on a,#table-of-contents li.current>a,.wy-side-nav-search>a,.wy-side-nav-search .wy-dropdown>a,.wy-nav-top a{
+.fa:before,#content .admonition-title:before,#content h1 .headerlink:before,#content h2 .headerlink:before,#content h3 .headerlink:before,#content h4 .headerlink:before,#content h5 .headerlink:before,#content h6 .headerlink:before,#content dl dt .headerlink:before,.icon:before,.wy-dropdown .caret:before,.wy-inline-validate.wy-inline-validate-success .wy-input-context:before,.wy-inline-validate.wy-inline-validate-danger .wy-input-context:before,.wy-inline-validate.wy-inline-validate-question .wy-input-context:before,.wy-inline-validate.wy-inline-validate-warning .wy-input-context:before,.wy-inline-validate.wy-inline-validate-info .wy-input-context:before,.wy-alert,#content .note,#content .attention,#content .caution,#content .danger,#content .question,#content .error,#content .hint,#content .important,#content .tip,#content .warning,#content .seealso,#content .admonitiontodo,.btn,input[type="text"],input[type="password"],input[type="email"],input[type="url"],input[type="date"],input[type="month"],input[type="time"],input[type="datetime"],input[type="datetime-local"],input[type="week"],input[type="number"],input[type="search"],input[type="tel"],input[type="color"],select,textarea,#table-of-contents li.on a,#table-of-contents li.current>a,.wy-side-nav-search>a,.wy-side-nav-search .wy-dropdown>a,.wy-nav-top a{
     -webkit-font-smoothing:antialiased}
 
 /*!
@@ -578,7 +578,7 @@ a .fa,a #content .admonition-title,#content a .admonition-title{
 .nav #content .admonition-title,#content .nav .admonition-title,.nav .icon{
     display:inline}
 
-.wy-alert,#content .note,#content .attention,#content .caution,#content .danger,#content .error,#content .hint,#content .important,#content .tip,#content .warning,#content .seealso,#content .admonitiontodo{
+.wy-alert,#content .note,#content .attention,#content .caution,#content .danger,#content .question,#content .error,#content .hint,#content .important,#content .tip,#content .warning,#content .seealso,#content .admonitiontodo{
     padding:12px;
     line-height:24px;
     margin-bottom:24px;
@@ -595,8 +595,9 @@ a .fa,a #content .admonition-title,#content a .admonition-title{
     padding:6px 12px;
     margin-bottom:0px}
 
-#content .danger,#content .error{
+#content .danger,#content .error,#content .question{
     background:#fdf3f2}
+
 
 .wy-alert.wy-alert-warning,#content .wy-alert-warning.note,#content .attention,#content .caution,#content .wy-alert-warning.danger,#content .wy-alert-warning.error,#content .wy-alert-warning.hint,#content .wy-alert-warning.important,#content .wy-alert-warning.tip,#content .warning,#content .wy-alert-warning.seealso,#content .admonitiontodo{
     background:#ffedcc}
@@ -606,14 +607,14 @@ a .fa,a #content .admonition-title,#content a .admonition-title{
 #content .admonition-title.attention:before,
 #content .admonition-title.tip:before, #content .admonition-title.hint:before,
 #content .admonition-title.important:before,
-#content .admonition-title.error:before, #content .admonition-title.danger:before{
+#content .admonition-title.error:before, #content .admonition-title.danger:before, #content .admonition-title.question:before{
     font-family:FontAwesome;
     content: "";}
 
 #content .note,#content .seealso{
     background:#e7f2fa}
 
-.wy-alert p:last-child,#content .note p:last-child,#content .attention p:last-child,#content .caution p:last-child,#content .danger p:last-child,#content .error p:last-child,#content .hint p:last-child,#content .important p:last-child,#content .tip p:last-child,#content .warning p:last-child,#content .seealso p:last-child,#content .admonitiontodo p:last-child{
+.wy-alert p:last-child,#content .note p:last-child,#content .attention p:last-child,#content .caution p:last-child,#content .danger p:last-child,#content .question p:last-child,#content .error p:last-child,#content .hint p:last-child,#content .important p:last-child,#content .tip p:last-child,#content .warning p:last-child,#content .seealso p:last-child,#content .admonitiontodo p:last-child{
     margin-bottom:0}
 
 #content .admonition-title.tip,#content .admonition-title.important,#content .admonition-title.hint{
@@ -631,7 +632,7 @@ a .fa,a #content .admonition-title,#content a .admonition-title{
     line-height: 1;
     background:#F0B37E}
 
-#content .admonition-title.error,#content .admonition-title.danger{
+#content .admonition-title.error,#content .admonition-title.danger,#content .admonition-title.question{
     line-height: 1;
     background:#f29f97}
 
@@ -768,7 +769,6 @@ hr{
 }
 
 #table-of-contents a:hover{
-	color: #ffffff !important;
     background-color:#4e4a4a;
     cursor:pointer}
 
@@ -802,114 +802,75 @@ hr{
     font-size: 100%;
     margin-bottom:0.809em}
 
-ul.nav > li ul {
-	display: none;
+ul.nav li ul li {
+    display: none;
 }
 
-li.active {
-	background-color: #e3e3e3;
+ul.nav li ul li ul li {
+    display: none;
 }
 
-li.active>a {
-	color: black !important;
+ul.nav li.active ul li {
+    display: inline;
 }
 
-ul.nav>li.active a {
-	color: #404040 !important;
+ul.nav li.active ul li ul li {
+    display: inline;
 }
 
-ul.nav>li.active li.active {
-	background-color: #c9c9c9;
-}
-
-ul.nav>li.active li.active>a {
-	color: black !important;
+ul.nav li.active ul li a {
+    background-color: #E3E3E3;
+    color: #8099B0;
     border-right:solid 1px #c9c9c9 !important;
+}
+
+ul.nav li.active ul li.active a {
+    background-color: #C9C9C9;
+    color: black !important;
+    font-weight: bold !important;
+}
+
+ul.nav li.active ul li.active ul li.active a {
+    color: black !important;
     font-weight: bold !important;
     display: block !important;
 }
 
-ul.nav>li.active>a {
-	background-color: #fcfcfc;
-	color: black !important;
+ul.nav li.active ul li.active ul li a {
+    color: #808080 !important;
+    font-weight: normal !important;
+    display: block !important;
+}
+
+ul.nav li.active ul li ul li a {
+    display: none !important;
+}
+
+/* ul.nav li ul li ul li { */
+/*     display: none !important; /\* as long as nav is on multiple levels of ul *\/ */
+/*     /\* display: none; /\* as long as nav is on multiple levels of ul *\\/ *\/ */
+/* } */
+
+ul.nav li ul li ul li ul li {
+    display: none !important; /* as long as nav is on multiple levels of ul */
+    /* display: none; /* as long as nav is on multiple levels of ul *\/ */
+}
+
+ul.nav li.active > a {
     border-bottom:solid 1px #c9c9c9 !important; /* XXX Restrict it to 2nd level */
     border-right:solid 1px #c9c9c9 !important;
-    font-weight: bold !important;
-    display: block !important;
 }
 
-li.active>ul {
-	display: inline !important;
+ul.nav li.active a {
+    color: gray !important;
+    font-weight:bold;
+    background-color: white;
+    border-right:solid 0px white !important;
 }
-/* ul.nav li ul li { */
-/*     display: none; */
-/* } */
 
-/* ul.nav li ul li ul li { */
-/*     display: none; */
-/* } */
-
-/* ul.nav li.active ul li { */
-/*     display: inline; */
-/* } */
-
-/* ul.nav li.active ul li ul li { */
-/*     display: inline; */
-/* } */
-
-/* ul.nav li.active ul li a { */
-/*     background-color: #E3E3E3; */
-/*     color: #8099B0; */
-/*     border-right:solid 1px #c9c9c9 !important; */
-/* } */
-
-/* ul.nav li.active ul li.active a { */
-/*     background-color: #C9C9C9; */
-/*     color: black !important; */
-/*     font-weight: bold !important; */
-/* } */
-
-/* ul.nav li.active ul li.active ul li.active a { */
-    /* color: black !important; */
-    /* font-weight: bold !important; */
-    /* display: block !important; */
-/* } */
-
-/* ul.nav li.active ul li.active ul li a { */
-/*     color: #808080 !important; */
-/*     font-weight: normal !important; */
-/*     display: block !important; */
-/* } */
-
-/* ul.nav li.active ul li ul li a { */
-/*     display: none !important; */
-/* } */
-
-/* ul.nav li ul li ul li { */
-/*     display: none !important; /\* as long as nav is on multiple levels of ul *\/ */
-/*     /\* display: none; /\* as long as nav is on multiple levels of ul *\\/ *\/ */
-/* } */
-
-/* ul.nav li ul li ul li ul li { */
-/*     display: none !important; /\* as long as nav is on multiple levels of ul *\/ */
-/*     /\* display: none; /\* as long as nav is on multiple levels of ul *\\/ *\/ */
-/* } */
-
-/* ul.nav li.active > a { */
-    /* border-bottom:solid 1px #c9c9c9 !important; /\* XXX Restrict it to 2nd level *\/ */
-    /* border-right:solid 1px #c9c9c9 !important; */
-/* } */
-
-/* ul.nav li.active a { */
-/*     color: gray !important; */
-/*     font-weight:bold; */
-/*     background-color: white; */
-/*     border-right:solid 0px white !important; */
-/* } */
-
-/* ul.nav > li.active > a { */
-/*     color: black !important; */
-/* } */
+ul.nav > li.active > a {
+    color: black !important;
+}
 
 footer{
     color:#999}
@@ -980,7 +941,7 @@ footer p{
     font-style:italic;
 }
 
-#content .note .last,#content .attention .last,#content .caution .last,#content .danger .last,#content .error .last,#content .hint .last,#content .important .last,#content .tip .last,#content .warning .last,#content .seealso .last,#content .admonitiontodo .last{
+#content .note .last,#content .attention .last,#content .caution .last,#content .question .last,#content .danger .last,#content .error .last,#content .hint .last,#content .important .last,#content .tip .last,#content .warning .last,#content .seealso .last,#content .admonitiontodo .last{
     margin-bottom:0}
 
 #content .admonition-title:before{
