@@ -151,10 +151,10 @@ Wouldn't it be nice if we could automatize this process? Well, this is where **A
 
 In this section, we will talk about several files:
 
-- configure.ac
-- configure
-- Makefile.in
-- Makefile
+- =configure.ac=
+- =configure=
+- =Makefile.in=
+- =Makefile=
 
 The ultimate goal of the *Autoconf* is to produce the ~configure~ script based on the ~configure.ac~ file.
 The ~configure~ script then detects the ~Makefile.in~ file and replaces some variables there to produce
@@ -558,4 +558,5 @@ $ pkg-config --cflags --libs hdf5
 * TODO Improvements
 
   - Add the link to the repository where to get the Sherman-Morrison code
+  - Picture in section 3
 
