@@ -9,7 +9,11 @@
 # Read the org
 #+SETUPFILE: org-html-themes/org/theme-readtheorg-local.setup
 
+
+
+
 This page contains the [[https://www.gnu.org/software/autoconf/][GNU Autoconf]] tutorial, which is the first part of the Autotools tutorial.
+
 
 * Introduction
 
@@ -25,6 +29,7 @@ However, the installation paths are likely to be different on another machine an
 
 In this tutorial, we will learn how to configure a particular project using *Autoconf*.
 This project consists of several ~C++~ source files, which are compiled into a single program using custom ~Makefile~.
+It is worth mentioning that you don't need to be a ~C++~ programmer to be able to do this tutorial.
 We will learn how to configure and test the ~C++~ compiler before building the project.
 The source files depend on the [[https://portal.hdfgroup.org/display/HDF5/HDF5][HDF5 library]], which is a good example of external dependency.
 HDF5 is a binary file format, which is designed for high-performance data input/output.
@@ -59,6 +64,7 @@ Sherman-Morrison/
 ├─ Makefile
 ├─ README.md
 #+end_src
+
 
 * Makefile
 
@@ -130,7 +136,9 @@ LDFLAGS  = -L/usr/lib/x86_64-linux-gnu/hdf5/serial
 LIBS     = -lhdf5 -lhdf5_cpp -lpthread -lz
 #+end_src
 
-**Question:** What are advantages and disadvantages of specifying compiler flags as above? 
+#+begin_question
+What are advantages and disadvantages of specifying compiler flags as above? 
+#+end_question
 
 Among other things, the crucial issue here is the portability of the hard-coded paths to HDF5 (see ~CPPFLAGS~ and ~LDFLAGS~).
 
@@ -540,3 +548,14 @@ $ pkg-config --cflags --libs hdf5
 #+end_src
 
 * Conclusion
+
+
+
+
+
+
+
+* TODO Improvements
+
+  - Add the link to the repository where to get the Sherman-Morrison code
+

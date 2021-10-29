@@ -13,7 +13,7 @@
 
 This page contains tutorial on the usage
 [[http://www.gnu.org/software/automake/][GNU Automake]].  This is the second
-part of the Autotools tutorial.
+part of the [[./Autotools.html][Autotools tutorial]].
 
 * Introduction
 
