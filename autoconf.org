@@ -12,7 +12,7 @@
 
 
 
-This page contains the [[https://www.gnu.org/software/autoconf/][GNU Autoconf]] tutorial, which is the first part of the Autotools tutorial.
+This page contains the [[https://www.gnu.org/software/autoconf/][GNU Autoconf]] tutorial, which is the first part of the [[./Autotools.html][Autotools tutorial]].
 
 
 * Introduction
@@ -26,6 +26,12 @@ Such dependencies can be located with some built-in tools like ~pkg-config~.
 One could then modify the compilation flags to explicitly include installation paths, thus making the code compile on the current machine.
 This approach works fine as long as the code has to be compiled only locally and as long as the dependency is not moved to a different directory.
 However, the installation paths are likely to be different on another machine and the aforementioned build procedure might break.
+
+*Autoconf* was designed to solve this problem by creating
+configuration scripts that work correctly on most systems, even on
+systems not initially considered by the developer. As opposed to
+=CMake=, all the burden is put on the shoulders of the developer to
+make the life simpler for the end user.
 
 In this tutorial, we will learn how to configure a particular project using *Autoconf*.
 This project consists of several ~C++~ source files, which are compiled into a single program using custom ~Makefile~.
@@ -559,4 +565,3 @@ $ pkg-config --cflags --libs hdf5
 
   - Add the link to the repository where to get the Sherman-Morrison code
   - Picture in section 3
-

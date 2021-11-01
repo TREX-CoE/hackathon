@@ -10,33 +10,41 @@
 # Read the org
 #+SETUPFILE: org-html-themes/org/theme-readtheorg-local.setup
 
+#+PROPERTY: header-args  :exports code
 
-This page contains tutorial on the usage
-[[http://www.gnu.org/software/automake/][GNU Automake]].  This is the second
-part of the [[./Autotools.html][Autotools tutorial]].
+
+This page contains a tutorial on the usage [[http://www.gnu.org/software/automake/][GNU Automake]].  This is the
+second part of the [[./Autotools.html][Autotools tutorial]].
 
 * Introduction
 
-Automake produces Makefiles that respect the GNU coding standards. This implies using
-standardized file names (=README=, =COPYING=, ...), build targets
-(~make install~, ~make clean~, ~make dist~, ...), and installation paths
-(=/usr/bin=, =/usr/share/=, =/usr/include=, =/usr/man=, ...).
+Using a simplified syntax, *Automake* produces functional Makefiles
+which are consistent with the GNU coding standards. This implies that
+the Makefiles use standard build targets
+(src_bash{make install}, src_bash{make clean}, src_bash{make dist},
+...) and standard installation paths (=/usr/bin=, =/usr/share/=,
+=/usr/include=, =/usr/man=, ...). To avoid struggling too much with
+*Automake*, it is important to understand the usual build, test and
+install philosophies common to GNU projects, as well as the underlying
+infrastructure managed by *Autotools*.
 
-#The =Makefiles= produced by Automake are made to be portable
 
-# Maintainer mode 
+* GNU standards
+* Writing portable Makefiles
 
-* Making Makefiles portable
+The Makefiles produced by *Automake* are made to be portable among
+Linux and Unix systems. Before diving into *Automake*, we will present
+a few techniques to write portable Makefiles.
 
-The most popular implementation of =make= is =GNU Make=. =GNU Make= is much more
-evolved than the POSIX standard, so Makefiles designed for =GNU Make= are not
+The most popular implementation of =make= is GNU Make. GNU Make is much more
+evolved than the POSIX standard, so Makefiles designed for GNU Make are not
 guaranteed to work with alternate implementations of =make=, such as BSD make for
 instance. If you want your software to be /really/ portable, you should stick to the
-POSIX standard in your =Makefile= by including the line
+POSIX standard in your Makefile by including the line
 #+BEGIN_SRC makefile
 .POSIX
 #+END_SRC
-at the top of your =Makefile=.
+at the top of your Makefile.
 
 ** What you will lose by sticking to the POSIX standard
 
@@ -47,19 +55,145 @@ at the top of your =Makefile=.
           $(CC) $< -o $@
   #+END_SRC
 
-- Special functions ~$(wildcard *.c)~, ~$(patsubst %.f, %.o, $(SRC))~, ...
+- Special functions src_makefile{$(wildcard *.c)}, src_makefile{$(patsubst %.f, %.o, $(SRC))}, ...
 
 ** Rules that will make everything simpler
 
-- Use ~/bin/sh~ instead of ~/bin/bash~
+- Use src_bash{/bin/sh} instead of src_bash{/bin/bash}
 - Don't put your compiled files (=.o=) in a separate location than the source files
-- Give up writing your =Makefiles= by hand. Write *scripts* (Bash, Python) to
+- Give up writing your Makefiles by hand. Write *scripts* (Bash, Python) to
   write them for you.
-- Install =bmake= as an alternative to =GNU make= to check the portability of
-  your =Makefiles=.
+- Install =bmake= as an alternative to GNU make to check the portability of
+  your Makefiles.
 
 ** Useful links
 
 - [[http://gnu.ist.utl.pt/software/autoconf/manual/autoconf-2.57/html_chapter/autoconf_10.html][Portable shell programming]]
+- [[https://www.oreilly.com/library/view/managing-projects-with/0596006101/ch07.html][Portable Makefiles]]
+
+* Creating a distributed tarball
+  
+  There are two types of people who will try to compile the source
+  code:
+  1. The end-users having downloaded a tarball with sources
+  2. The developers of the code, who produce the source distribution
+     of the code
+
+  These two profiles should be differentiated, because their system
+  requirements are usually different. The first difference is that the
+  code developers will need to install *Autotools* as they will
+  produce the =configure= script, but *Autotools* will not be needed
+  by the end-users.
+
+  A more critical example is when complex Makefiles are produced by a
+  script. The script generating the Makefiles should be stored in the
+  version control system for developers, as opposed to the generated
+  Makefiles. For the end-user's point of view, only the generated
+  Makefiles are needed for the compilation of the sources, and the
+  script should not be present in the source distribution.
+
+  To handle these two types of profiles, *Autotools* provides the
+  /maintainer mode/. For instance, in maintainer mode the =configure=
+  script is re-generated when =configure.ac= has changed, as opposed
+  to standard mode. All these rules are activated in the generated
+  Makefiles by running
+
+  #+BEGIN_SRC bash
+./configure --enable-maintainer-mode
+  #+END_SRC
+  
+  
+
+  
+** Useful links
+
+   - [[https://autotools.io/automake/maintainer.html][Maintainer mode and the =missing= script]]
+  
+* Unit testing
+* Using pkg-config
+
+  When your software depends on external libraries and you try to
+  compile it on an unknown system, you need to figure out what are the
+  correct flags to access the include files of the library and how to
+  link it. `configure` will try to find the libraries in the standard
+  locations, but if the configuration is a bit exotic, this will
+  require some extra knowledge.
+  
+  At the moment you install a library on a a system, you have all the
+  knowledge required to use this library in other software: what
+  compiler options to add. All this information can be saved in a
+  file with the suffix =.pc= stored in a standard location such as
+  =/usr/lib/pkgconfig=, and this information can be retrieved later on
+  with the =pkg-config= command.
+
+  Let's assume you have compiled and installed the /QMCkl/
+  library. The library will produce the system-specific file
+  =/usr/local/lib/pkgconfig/qmckl.pc=:
+
+  #+BEGIN_SRC bash
+prefix=/usr/local
+exec_prefix=${prefix}
+includedir=${prefix}/include
+libdir=${exec_prefix}/lib
 
 
+Name: qmckl
+Description: Quantum Monte Carlo kernel library
+URL: https://github.com/trex-coe/qmckl
+Version: 0.1.1
+Cflags:  -I${includedir}
+Libs: -L${libdir} -lqmckl
+Libs.private:  -L/home/scemama/TREX/trexio/_install/lib -L/usr/lib/x86_64-linux-gnu/hdf5/serial -ltrexio -lhdf5 -lpthread -lm 
+  #+END_SRC 
+  
+  This file tells you that you need to include the flag
+  ~-I/usr/local/include~ to the C preprocessor (the ~CPPFLAGS~
+  variable), and the ~-L/usr/local/lib -lqmckl~ flag at the link stage
+  (the ~LDFLAGS~ variable) if you want to use the dynamically linked library.
+# It also tells you the more complicated chain of dependencies
+# required to link the library statically (the ~Libs.private~ entry).
+
+  This information can be accessed using the ~pkg-config~ command:
+  #+BEGIN_SRC bash
+$ pkg-config --cflags qmckl
+-I/usr/local/include/
+
+$ pkg-config --libs qmckl
+-L/usr/local/lib -lqmckl
+  #+END_SRC
+
+  In your =configure.ac= file, you can simply use
+
+#+BEGIN_SRC bash
+PKG_CHECK_MODULES([qmckl])
+CFLAGS="${CFLAGS} `pkg-config --cflags qmckl`"
+LDFLAGS="${LDFLAGS} `pkg-config --libs qmckl`"
+#+END_SRC
+
+to include the appropriate flags. The ~PKG_CHECK_MODULE~ macro
+will fail if pkg-config is not installed on the system, or if the
+=qmckl.pc= file is not found.
+  
+  #+BEGIN_NOTE
+  The pkg-config files are searched in the directories defined by the
+  src_bash{PKG_CONFIG_PATH} environment variable.
+  #+END_NOTE
+
+** Useful Links
+
+   - [[https://people.freedesktop.org/~dbn/pkg-config-guide.html][Guide to pkg-config]]
+   - [[https://autotools.io/pkgconfig/index.html][Dependency discovery — pkg-config]]
+
+* TODO Improvements
+  
+ - Libtool?
+
+* No export                                                        :noexport:
+  #+BEGIN_SRC bash
+./create.sh
+  #+END_SRC
+
+  #+RESULTS:
+  | HTMLIZE: | Autotools.org |
+  | HTMLIZE: | autoconf.org  |
+  | HTMLIZE: | automake.org  |
