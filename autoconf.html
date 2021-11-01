@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-11-01 Mon 10:39 -->
+<!-- 2021-11-01 Mon 15:23 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Autoconf</title>
@@ -240,26 +240,26 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org6504914">1. Introduction</a></li>
-<li><a href="#org93b6c6b">2. Makefile</a></li>
-<li><a href="#org063b1c0">3. configure</a>
+<li><a href="#org85d18a7">1. Introduction</a></li>
+<li><a href="#orge6bdced">2. Makefile</a></li>
+<li><a href="#orgac5ea19">3. configure</a>
 <ul>
-<li><a href="#orgbc54743">3.1. Detecting external dependencies</a></li>
-<li><a href="#orgddb4089">3.2. pkg-config</a></li>
+<li><a href="#orgebe64a1">3.1. Detecting external dependencies</a></li>
+<li><a href="#org8d44872">3.2. pkg-config</a></li>
 </ul>
 </li>
-<li><a href="#org99a4277">4. Conclusion</a></li>
-<li><a href="#orgb71d635">5. <span class="todo TODO">TODO</span> Improvements</a></li>
+<li><a href="#org23c29ef">4. Conclusion</a></li>
+<li><a href="#org46dc76c">5. <span class="todo TODO">TODO</span> Improvements</a></li>
 </ul>
 </div>
 </div>
 <p>
-This page contains the <a href="https://www.gnu.org/software/autoconf/">GNU Autoconf</a> tutorial, which is the first part of the <a href="./Autotools.html">Autotools tutorial</a>.
+This page contains the <a href="https://www.gnu.org/software/autoconf/">GNU Autoconf</a> tutorial, which is the first part of the <a href="./index.html">Autotools tutorial</a>.
 </p>
 
 
-<div id="outline-container-org6504914" class="outline-2">
-<h2 id="org6504914"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-org85d18a7" class="outline-2">
+<h2 id="org85d18a7"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Building software on different platforms is a challenging task.
@@ -331,8 +331,8 @@ The goal is to demonstrate how cumbersome configuration/compilation steps can be
 </div>
 
 
-<div id="outline-container-org93b6c6b" class="outline-2">
-<h2 id="org93b6c6b"><span class="section-number-2">2</span> Makefile</h2>
+<div id="outline-container-orge6bdced" class="outline-2">
+<h2 id="orge6bdced"><span class="section-number-2">2</span> Makefile</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 Below is the <code>Makefile</code> of our project:
@@ -434,8 +434,8 @@ Wouldn't it be nice if we could automatize this process? Well, this is where <b>
 </div>
 </div>
 
-<div id="outline-container-org063b1c0" class="outline-2">
-<h2 id="org063b1c0"><span class="section-number-2">3</span> configure</h2>
+<div id="outline-container-orgac5ea19" class="outline-2">
+<h2 id="orgac5ea19"><span class="section-number-2">3</span> configure</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 In this section, we will talk about several files:
@@ -654,8 +654,8 @@ Let's try to find this library using <b>Autoconf</b> functionality.
 </p>
 </div>
 
-<div id="outline-container-orgbc54743" class="outline-3">
-<h3 id="orgbc54743"><span class="section-number-3">3.1</span> Detecting external dependencies</h3>
+<div id="outline-container-orgebe64a1" class="outline-3">
+<h3 id="orgebe64a1"><span class="section-number-3">3.1</span> Detecting external dependencies</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 It is possible to write your our own macros to detect an external dependency.
@@ -826,8 +826,8 @@ the environment was Ubuntu 20.04 OS with HDF5 installed via
 </div>
 </div>
 
-<div id="outline-container-orgddb4089" class="outline-3">
-<h3 id="orgddb4089"><span class="section-number-3">3.2</span> pkg-config</h3>
+<div id="outline-container-org8d44872" class="outline-3">
+<h3 id="org8d44872"><span class="section-number-3">3.2</span> pkg-config</h3>
 <div class="outline-text-3" id="text-3-2">
 <p>
 The <a href="https://linux.die.net/man/1/pkg-config">pkg-config program</a> is a powerful tool to get information about installed libraries.
@@ -927,8 +927,8 @@ $ pkg-config --cflags --libs hdf5
 </div>
 </div>
 
-<div id="outline-container-org99a4277" class="outline-2">
-<h2 id="org99a4277"><span class="section-number-2">4</span> Conclusion</h2>
+<div id="outline-container-org23c29ef" class="outline-2">
+<h2 id="org23c29ef"><span class="section-number-2">4</span> Conclusion</h2>
 </div>
 
 
@@ -936,9 +936,8 @@ $ pkg-config --cflags --libs hdf5
 
 
 
-
-<div id="outline-container-orgb71d635" class="outline-2">
-<h2 id="orgb71d635"><span class="section-number-2">5</span> <span class="todo TODO">TODO</span> Improvements</h2>
+<div id="outline-container-org46dc76c" class="outline-2">
+<h2 id="org46dc76c"><span class="section-number-2">5</span> <span class="todo TODO">TODO</span> Improvements</h2>
 <div class="outline-text-2" id="text-5">
 <ul class="org-ul">
 <li>Add the link to the repository where to get the Sherman-Morrison code</li>
@@ -949,7 +948,7 @@ $ pkg-config --cflags --libs hdf5
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Evgeny Posenitskiy, Anthony Scemama</p>
-<p class="date">Created: 2021-11-01 Mon 10:39</p>
+<p class="date">Created: 2021-11-01 Mon 15:23</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
