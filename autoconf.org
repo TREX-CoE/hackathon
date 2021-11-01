@@ -169,13 +169,13 @@ Let's create the simplest ~configure.ac~ file for our project with the following
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-#initialize autoconf
+# Initialize autoconf
 AC_INIT([sherman-morrison], [0.0.1], [])
 
 AC_OUTPUT
 #+end_src
 
-Here we provided the name of our project [sherman-morrison] and the current version [0.0.1] to the ~AC_INIT~ macro.
+Here we provided the name of our project ~[sherman-morrison]~ and the current version ~[0.0.1]~ to the ~AC_INIT~ macro.
 These are now stored in the ~$PACKAGE_NAME~ and ~$PACKAGE_VERSION~ variables, respectively.
 We will not cover the details of the M4 syntax that is used internally by the Autoconf.
 For more information, see the [[https://www.gnu.org/software/autoconf/manual/autoconf-2.69/html_node/index.html][Autoconf documentation page]].
@@ -190,7 +190,7 @@ Let's add a few additional macros for that and examine their output:
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-#initialize autoconf
+# Initialize autoconf
 AC_INIT([sherman-morrison], [0.0.1], [])
 
 # do the tests with C++ flags
