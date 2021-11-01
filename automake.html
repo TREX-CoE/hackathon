@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-11-01 Mon 07:11 -->
+<!-- 2021-11-01 Mon 10:39 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Autoconf</title>
@@ -240,61 +240,84 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orge8f2732">1. Introduction</a></li>
-<li><a href="#org0b362cc">2. Making Makefiles portable</a>
+<li><a href="#org5f4f0e1">1. Introduction</a></li>
+<li><a href="#org4e6777e">2. GNU standards</a></li>
+<li><a href="#org217fd78">3. Writing portable Makefiles</a>
 <ul>
-<li><a href="#org3baad29">2.1. What you will lose by sticking to the POSIX standard</a></li>
-<li><a href="#orgb536a5c">2.2. Rules that will make everything simpler</a></li>
-<li><a href="#orgc7bc476">2.3. Useful links</a></li>
+<li><a href="#org2c04bb5">3.1. What you will lose by sticking to the POSIX standard</a></li>
+<li><a href="#org537bf6a">3.2. Rules that will make everything simpler</a></li>
+<li><a href="#org1dcbb21">3.3. Useful links</a></li>
 </ul>
 </li>
+<li><a href="#orgda36e33">4. Creating a distributed tarball</a>
+<ul>
+<li><a href="#orgbb8fee6">4.1. Useful links</a></li>
+</ul>
+</li>
+<li><a href="#org9aa94c7">5. Unit testing</a></li>
+<li><a href="#org855b879">6. Using pkg-config</a>
+<ul>
+<li><a href="#org92bf14c">6.1. Useful Links</a></li>
+</ul>
+</li>
+<li><a href="#org58c1d82">7. <span class="todo TODO">TODO</span> Improvements</a></li>
 </ul>
 </div>
 </div>
 <p>
-This page contains tutorial on the usage
-<a href="http://www.gnu.org/software/automake/">GNU Automake</a>.  This is the second
-part of the <a href="./Autotools.html">Autotools tutorial</a>.
+This page contains a tutorial on the usage <a href="http://www.gnu.org/software/automake/">GNU Automake</a>.  This is the
+second part of the <a href="./Autotools.html">Autotools tutorial</a>.
 </p>
 
-<div id="outline-container-orge8f2732" class="outline-2">
-<h2 id="orge8f2732"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-org5f4f0e1" class="outline-2">
+<h2 id="org5f4f0e1"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
-Automake produces Makefiles that respect the GNU coding standards. This implies using
-standardized file names (<code>README</code>, <code>COPYING</code>, &#x2026;), build targets
-(<code>make install</code>, <code>make clean</code>, <code>make dist</code>, &#x2026;), and installation paths
-(<code>/usr/bin</code>, <code>/usr/share/</code>, <code>/usr/include</code>, <code>/usr/man</code>, &#x2026;).
-</p>
-
-<p>
-#The <code>Makefiles</code> produced by Automake are made to be portable
+Using a simplified syntax, <b>Automake</b> produces functional Makefiles
+which are consistent with the GNU coding standards. This implies that
+the Makefiles use standard build targets
+(<code class="src src-bash">make install</code>, <code class="src src-bash">make clean</code>, <code class="src src-bash">make dist</code>,
+&#x2026;) and standard installation paths (<code>/usr/bin</code>, <code>/usr/share/</code>,
+<code>/usr/include</code>, <code>/usr/man</code>, &#x2026;). To avoid struggling too much with
+<b>Automake</b>, it is important to understand the usual build, test and
+install philosophies common to GNU projects, as well as the underlying
+infrastructure managed by <b>Autotools</b>.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org0b362cc" class="outline-2">
-<h2 id="org0b362cc"><span class="section-number-2">2</span> Making Makefiles portable</h2>
-<div class="outline-text-2" id="text-2">
+
+<div id="outline-container-org4e6777e" class="outline-2">
+<h2 id="org4e6777e"><span class="section-number-2">2</span> GNU standards</h2>
+</div>
+<div id="outline-container-org217fd78" class="outline-2">
+<h2 id="org217fd78"><span class="section-number-2">3</span> Writing portable Makefiles</h2>
+<div class="outline-text-2" id="text-3">
 <p>
-The most popular implementation of <code>make</code> is <code>GNU Make</code>. <code>GNU Make</code> is much more
-evolved than the POSIX standard, so Makefiles designed for <code>GNU Make</code> are not
+The Makefiles produced by <b>Automake</b> are made to be portable among
+Linux and Unix systems. Before diving into <b>Automake</b>, we will present
+a few techniques to write portable Makefiles.
+</p>
+
+<p>
+The most popular implementation of <code>make</code> is GNU Make. GNU Make is much more
+evolved than the POSIX standard, so Makefiles designed for GNU Make are not
 guaranteed to work with alternate implementations of <code>make</code>, such as BSD make for
 instance. If you want your software to be <i>really</i> portable, you should stick to the
-POSIX standard in your <code>Makefile</code> by including the line
+POSIX standard in your Makefile by including the line
 </p>
 <div class="org-src-container">
 <pre class="src src-makefile">.POSIX
 </pre>
 </div>
 <p>
-at the top of your <code>Makefile</code>.
+at the top of your Makefile.
 </p>
 </div>
 
-<div id="outline-container-org3baad29" class="outline-3">
-<h3 id="org3baad29"><span class="section-number-3">2.1</span> What you will lose by sticking to the POSIX standard</h3>
-<div class="outline-text-3" id="text-2-1">
+<div id="outline-container-org2c04bb5" class="outline-3">
+<h3 id="org2c04bb5"><span class="section-number-3">3.1</span> What you will lose by sticking to the POSIX standard</h3>
+<div class="outline-text-3" id="text-3-1">
 <ul class="org-ul">
 <li><p>
 Pattern rules, such as
@@ -306,38 +329,208 @@ Pattern rules, such as
 </pre>
 </div></li>
 
-<li>Special functions <code>$(wildcard *.c)</code>, <code>$(patsubst %.f, %.o, $(SRC))</code>, &#x2026;</li>
+<li>Special functions <code class="src src-makefile">$(wildcard *.c)</code>, <code class="src src-makefile">$(patsubst %.f, %.o, $(<span style="color: #a0522d;">SRC</span>))</code>, &#x2026;</li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgb536a5c" class="outline-3">
-<h3 id="orgb536a5c"><span class="section-number-3">2.2</span> Rules that will make everything simpler</h3>
-<div class="outline-text-3" id="text-2-2">
+<div id="outline-container-org537bf6a" class="outline-3">
+<h3 id="org537bf6a"><span class="section-number-3">3.2</span> Rules that will make everything simpler</h3>
+<div class="outline-text-3" id="text-3-2">
 <ul class="org-ul">
-<li>Use <code>/bin/sh</code> instead of <code>/bin/bash</code></li>
+<li>Use <code class="src src-bash">/bin/sh</code> instead of <code class="src src-bash">/bin/bash</code></li>
 <li>Don't put your compiled files (<code>.o</code>) in a separate location than the source files</li>
-<li>Give up writing your <code>Makefiles</code> by hand. Write <b>scripts</b> (Bash, Python) to
+<li>Give up writing your Makefiles by hand. Write <b>scripts</b> (Bash, Python) to
 write them for you.</li>
-<li>Install <code>bmake</code> as an alternative to <code>GNU make</code> to check the portability of
-your <code>Makefiles</code>.</li>
+<li>Install <code>bmake</code> as an alternative to GNU make to check the portability of
+your Makefiles.</li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgc7bc476" class="outline-3">
-<h3 id="orgc7bc476"><span class="section-number-3">2.3</span> Useful links</h3>
-<div class="outline-text-3" id="text-2-3">
+<div id="outline-container-org1dcbb21" class="outline-3">
+<h3 id="org1dcbb21"><span class="section-number-3">3.3</span> Useful links</h3>
+<div class="outline-text-3" id="text-3-3">
 <ul class="org-ul">
 <li><a href="http://gnu.ist.utl.pt/software/autoconf/manual/autoconf-2.57/html_chapter/autoconf_10.html">Portable shell programming</a></li>
+<li><a href="https://www.oreilly.com/library/view/managing-projects-with/0596006101/ch07.html">Portable Makefiles</a></li>
 </ul>
 </div>
+</div>
+</div>
+
+<div id="outline-container-orgda36e33" class="outline-2">
+<h2 id="orgda36e33"><span class="section-number-2">4</span> Creating a distributed tarball</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+There are two types of people who will try to compile the source
+code:
+</p>
+<ol class="org-ol">
+<li>The end-users having downloaded a tarball with sources</li>
+<li>The developers of the code, who produce the source distribution
+of the code</li>
+</ol>
+
+<p>
+These two profiles should be differentiated, because their system
+requirements are usually different. The first difference is that the
+code developers will need to install <b>Autotools</b> as they will
+produce the <code>configure</code> script, but <b>Autotools</b> will not be needed
+by the end-users.
+</p>
+
+<p>
+A more critical example is when complex Makefiles are produced by a
+script. The script generating the Makefiles should be stored in the
+version control system for developers, as opposed to the generated
+Makefiles. For the end-user's point of view, only the generated
+Makefiles are needed for the compilation of the sources, and the
+script should not be present in the source distribution.
+</p>
+
+<p>
+To handle these two types of profiles, <b>Autotools</b> provides the
+<i>maintainer mode</i>. For instance, in maintainer mode the <code>configure</code>
+script is re-generated when <code>configure.ac</code> has changed, as opposed
+to standard mode. All these rules are activated in the generated
+Makefiles by running
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">./configure --enable-maintainer-mode
+</pre>
+</div>
+</div>
+
+
+
+
+<div id="outline-container-orgbb8fee6" class="outline-3">
+<h3 id="orgbb8fee6"><span class="section-number-3">4.1</span> Useful links</h3>
+<div class="outline-text-3" id="text-4-1">
+<ul class="org-ul">
+<li><a href="https://autotools.io/automake/maintainer.html">Maintainer mode and the <code>missing</code> script</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9aa94c7" class="outline-2">
+<h2 id="org9aa94c7"><span class="section-number-2">5</span> Unit testing</h2>
+</div>
+<div id="outline-container-org855b879" class="outline-2">
+<h2 id="org855b879"><span class="section-number-2">6</span> Using pkg-config</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+When your software depends on external libraries and you try to
+compile it on an unknown system, you need to figure out what are the
+correct flags to access the include files of the library and how to
+link it. `configure` will try to find the libraries in the standard
+locations, but if the configuration is a bit exotic, this will
+require some extra knowledge.
+</p>
+
+<p>
+At the moment you install a library on a a system, you have all the
+knowledge required to use this library in other software: what
+compiler options to add. All this information can be saved in a
+file with the suffix <code>.pc</code> stored in a standard location such as
+<code>/usr/lib/pkgconfig</code>, and this information can be retrieved later on
+with the <code>pkg-config</code> command.
+</p>
+
+<p>
+Let's assume you have compiled and installed the <i>QMCkl</i>
+library. The library will produce the system-specific file
+<code>/usr/local/lib/pkgconfig/qmckl.pc</code>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash"><span style="color: #a0522d;">prefix</span>=/usr/local
+<span style="color: #a0522d;">exec_prefix</span>=${<span style="color: #a0522d;">prefix</span>}
+<span style="color: #a0522d;">includedir</span>=${<span style="color: #a0522d;">prefix</span>}/include
+<span style="color: #a0522d;">libdir</span>=${<span style="color: #a0522d;">exec_prefix</span>}/lib
+
+
+Name: qmckl
+Description: Quantum Monte Carlo kernel library
+URL: https://github.com/trex-coe/qmckl
+Version: 0.1.1
+Cflags:  -I${<span style="color: #a0522d;">includedir</span>}
+Libs: -L${<span style="color: #a0522d;">libdir</span>} -lqmckl
+Libs.private:  -L/home/scemama/TREX/trexio/_install/lib -L/usr/lib/x86_64-linux-gnu/hdf5/serial -ltrexio -lhdf5 -lpthread -lm 
+</pre>
+</div>
+
+<p>
+This file tells you that you need to include the flag
+<code>-I/usr/local/include</code> to the C preprocessor (the <code>CPPFLAGS</code>
+variable), and the <code>-L/usr/local/lib -lqmckl</code> flag at the link stage
+(the <code>LDFLAGS</code> variable) if you want to use the dynamically linked library.
+</p>
+
+<p>
+This information can be accessed using the <code>pkg-config</code> command:
+</p>
+<div class="org-src-container">
+<pre class="src src-bash">$ pkg-config --cflags qmckl
+-I/usr/local/include/
+
+$ pkg-config --libs qmckl
+-L/usr/local/lib -lqmckl
+</pre>
+</div>
+
+<p>
+In your <code>configure.ac</code> file, you can simply use
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash"><span style="color: #0000ff;">PKG_CHECK_MODULES</span>([qmckl])
+<span style="color: #a0522d;">CFLAGS</span>=<span style="color: #8b2252;">"${CFLAGS} `pkg-config --cflags qmckl`"</span>
+<span style="color: #a0522d;">LDFLAGS</span>=<span style="color: #8b2252;">"${LDFLAGS} `pkg-config --libs qmckl`"</span>
+</pre>
+</div>
+
+<p>
+to include the appropriate flags. The <code>PKG_CHECK_MODULE</code> macro
+will fail if pkg-config is not installed on the system, or if the
+<code>qmckl.pc</code> file is not found.
+</p>
+
+<div class="NOTE">
+<p>
+The pkg-config files are searched in the directories defined by the
+<code class="src src-bash">PKG_CONFIG_PATH</code> environment variable.
+</p>
+
+</div>
+</div>
+
+<div id="outline-container-org92bf14c" class="outline-3">
+<h3 id="org92bf14c"><span class="section-number-3">6.1</span> Useful Links</h3>
+<div class="outline-text-3" id="text-6-1">
+<ul class="org-ul">
+<li><a href="https://people.freedesktop.org/~dbn/pkg-config-guide.html">Guide to pkg-config</a></li>
+<li><a href="https://autotools.io/pkgconfig/index.html">Dependency discovery — pkg-config</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org58c1d82" class="outline-2">
+<h2 id="org58c1d82"><span class="section-number-2">7</span> <span class="todo TODO">TODO</span> Improvements</h2>
+<div class="outline-text-2" id="text-7">
+<ul class="org-ul">
+<li>Libtool?</li>
+</ul>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Evgeny Posenitskiy, Anthony Scemama</p>
-<p class="date">Created: 2021-11-01 Mon 07:11</p>
+<p class="date">Created: 2021-11-01 Mon 10:39</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
