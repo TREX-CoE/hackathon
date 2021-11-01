@@ -47,8 +47,15 @@
    - [[./autoconf.html][Autoconf]]
    - [[./automake.html][Automake]]
 
-  If you want to go deeper into Autotools, we recommend the book
-  [[https://nostarch.com/autotools.htm][A Practitioner's Guide to GNU Autoconf, Automake, and Libtool]] by John Calcote.
+  If you want to go deeper into Autotools, we recommend:
+  - [[https://devmanual.gentoo.org/general-concepts/autotools/index.html][The Basics of Autotools]], an online introduction
+  - the book
+    [[https://nostarch.com/autotools.htm][A Practitioner's Guide to GNU Autoconf, Automake, and Libtool]]
+    by John Calcote,
+  - the "Autobook" by Gary V. Vaughan, Ben Elliston, Tom Tromey and Ian Lance
+    Taylor, which is available
+    [[https://sourceware.org/autobook/index.html][online]] or as a
+    [[http://mdcc.cx/pub/autobook/autobook-latest/autobook.pdf][PDF document]].
 
 --------------------------------
 

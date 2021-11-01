@@ -12,7 +12,7 @@
 
 
 
-This page contains the [[https://www.gnu.org/software/autoconf/][GNU Autoconf]] tutorial, which is the first part of the [[./Autotools.html][Autotools tutorial]].
+This page contains the [[https://www.gnu.org/software/autoconf/][GNU Autoconf]] tutorial, which is the first part of the [[./index.html][Autotools tutorial]].
 
 
 * Introduction
@@ -560,8 +560,8 @@ $ pkg-config --cflags --libs hdf5
 
 
 
-
 * TODO Improvements
 
   - Add the link to the repository where to get the Sherman-Morrison code
   - Picture in section 3
+

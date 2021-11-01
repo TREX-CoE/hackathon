@@ -14,7 +14,7 @@
 
 
 This page contains a tutorial on the usage [[http://www.gnu.org/software/automake/][GNU Automake]].  This is the
-second part of the [[./Autotools.html][Autotools tutorial]].
+second part of the [[./index.html][Autotools tutorial]].
 
 * Introduction
 
@@ -28,8 +28,25 @@ the Makefiles use standard build targets
 install philosophies common to GNU projects, as well as the underlying
 infrastructure managed by *Autotools*.
 
+#+CAPTION[The Basics of Autotools (Gentoo)]: Figure from [[https://devmanual.gentoo.org/general-concepts/autotools/index.html][The Basics of Autotools]]
+[[https://devmanual.gentoo.org/general-concepts/autotools/diagram.png]]
 
 * GNU standards
+
+** Standard targets
+
+make all
+    Builds all the targets sufficient to declare the package built.
+
+make check
+    Runs unit tests provided by the package.
+
+make install
+    Installs the package
+
+make clean
+    Removes all derived files.
+
 * Writing portable Makefiles
 
 The Makefiles produced by *Automake* are made to be portable among
@@ -71,45 +88,60 @@ at the top of your Makefile.
 - [[http://gnu.ist.utl.pt/software/autoconf/manual/autoconf-2.57/html_chapter/autoconf_10.html][Portable shell programming]]
 - [[https://www.oreilly.com/library/view/managing-projects-with/0596006101/ch07.html][Portable Makefiles]]
 
+* Automake basics  
+* Unit testing
 * Creating a distributed tarball
   
-  There are two types of people who will try to compile the source
-  code:
-  1. The end-users having downloaded a tarball with sources
-  2. The developers of the code, who produce the source distribution
-     of the code
+** Source distribution targets
 
-  These two profiles should be differentiated, because their system
-  requirements are usually different. The first difference is that the
-  code developers will need to install *Autotools* as they will
-  produce the =configure= script, but *Autotools* will not be needed
-  by the end-users.
+   *Automake* provides the ~dist~ and ~distcheck~ targets:
+   
+   #+BEGIN_SRC bash
+$ make dist
+$ make distcheck
+   #+END_SRC
+  
+   src_bash{make dist} creates a =.tar.gz= file which contains all the
+   files necessary to install the package: installation instructions,
+   =configure= script, source code, documentation, man pages, unit
+   tests, etc.
+   
+** Maintainer mode
+   There are two types of people who will try to compile the source
+   code:
+   1. The end-users having downloaded a tarball with sources
+   2. The developers of the code, who produce the source distribution
+      of the code
 
-  A more critical example is when complex Makefiles are produced by a
-  script. The script generating the Makefiles should be stored in the
-  version control system for developers, as opposed to the generated
-  Makefiles. For the end-user's point of view, only the generated
-  Makefiles are needed for the compilation of the sources, and the
-  script should not be present in the source distribution.
+   These two profiles should be differentiated, because their system
+   requirements are usually different. The first difference is that the
+   code developers will need to install *Autotools* as they will
+   produce the =configure= script, but *Autotools* will not be needed
+   by the end-users.
 
-  To handle these two types of profiles, *Autotools* provides the
-  /maintainer mode/. For instance, in maintainer mode the =configure=
-  script is re-generated when =configure.ac= has changed, as opposed
-  to standard mode. All these rules are activated in the generated
-  Makefiles by running
+   A more critical example is when complex Makefiles are produced by a
+   script. The script generating the Makefiles should be stored in the
+   version control system for developers, as opposed to the generated
+   Makefiles. For the end-user's point of view, only the generated
+   Makefiles are needed for the compilation of the sources, and the
+   script should not be present in the source distribution.
 
-  #+BEGIN_SRC bash
+   To handle these two types of profiles, *Autotools* provides the
+   /maintainer mode/. For instance, in maintainer mode the =configure=
+   script is re-generated when =configure.ac= has changed, as opposed
+   to standard mode. All these rules are activated in the generated
+   Makefiles by running
+
+   #+BEGIN_SRC bash
 ./configure --enable-maintainer-mode
-  #+END_SRC
+   #+END_SRC
   
   
 
-  
 ** Useful links
 
    - [[https://autotools.io/automake/maintainer.html][Maintainer mode and the =missing= script]]
   
-* Unit testing
 * Using pkg-config
 
   When your software depends on external libraries and you try to
@@ -174,10 +206,10 @@ to include the appropriate flags. The ~PKG_CHECK_MODULE~ macro
 will fail if pkg-config is not installed on the system, or if the
 =qmckl.pc= file is not found.
   
-  #+BEGIN_NOTE
+  #+begin_tip 
   The pkg-config files are searched in the directories defined by the
   src_bash{PKG_CONFIG_PATH} environment variable.
-  #+END_NOTE
+  #+end_tip 
 
 ** Useful Links
 
