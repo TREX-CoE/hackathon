@@ -98,9 +98,9 @@ Below is the ~Makefile~ of our project:
 ## Specify the C++ compiler as well as preprocessor, compiler and linking flags
 CXX      = g++
 CXXFLAGS = -g -O2 -std=c++11
-CPPFLAGS = -I./include/ -I/usr/include/hdf5/serial
+CPPFLAGS = -I/usr/include -I/usr/include/hdf5/serial  -I./include/
+LIBS     = -lhdf5_hl -lhdf5  -lpthread -lsz -lz -ldl -lm  -lhdf5_cpp
 LDFLAGS  = -L/usr/lib/x86_64-linux-gnu/hdf5/serial
-LIBS     = -lhdf5 -lhdf5_cpp -lpthread -lz
 
 ## Directory structure
 SRC_DIR := src
@@ -157,10 +157,10 @@ make: *** [<builtin>: src/SM_Maponi.o] Error 1
 
 #+begin_src makefile
 ## Specify the C++ compiler as well as preprocessor, compiler and linking flags
-CXX      = g++
-CXXFLAGS = -g -O2 -std=c++11
-CPPFLAGS +=  -I./include/
-LIBS     = -lhdf5_hl -lhdf5  -lpthread -lz -ldl -lm  -lhdf5_cpp
+CXX       = g++
+CXXFLAGS  = -g -O2 -std=c++11
+CPPFLAGS += -I./include/
+LIBS      = -lhdf5_cpp -lhdf5
 #+end_src
 
 
@@ -172,7 +172,7 @@ g++ -g -O2 -std=c++11 -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/test/.cond
 g++ -g -O2 -std=c++11 -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/test/.conda/envs/trex-hackathon/include -I./include/  -c -o src/SMWB.o src/SMWB.cpp
 g++ -g -O2 -std=c++11 -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/test/.conda/envs/trex-hackathon/include -I./include/  -c -o src/Helpers.o src/Helpers.cpp
 g++ -g -O2 -std=c++11 -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/test/.conda/envs/trex-hackathon/include -I./include/  -c -o tests/test_h5.o tests/test_h5.cpp
-g++ -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/test/.conda/envs/trex-hackathon/include -I./include/ -g -O2 -std=c++11 tests/test_h5.o src/SM_Maponi.o src/SM_Standard.o src/Woodbury.o src/SMWB.o src/Helpers.o -o bin/test_h5  -Wl,-O2 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,--disable-new-dtags -Wl,--gc-sections -Wl,-rpath,/home/test/.conda/envs/trex-hackathon/lib -Wl,-rpath-link,/home/test/.conda/envs/trex-hackathon/lib -L/home/test/.conda/envs/trex-hackathon/lib -lhdf5_hl -lhdf5  -lpthread -lz -ldl -lm  -lhdf5_cpp
+g++ -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/test/.conda/envs/trex-hackathon/include -I./include/ -g -O2 -std=c++11 tests/test_h5.o src/SM_Maponi.o src/SM_Standard.o src/Woodbury.o src/SMWB.o src/Helpers.o -o bin/test_h5  -Wl,-O2 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,--disable-new-dtags -Wl,--gc-sections -Wl,-rpath,/home/test/.conda/envs/trex-hackathon/lib -Wl,-rpath-link,/home/test/.conda/envs/trex-hackathon/lib -L/home/test/.conda/envs/trex-hackathon/lib -lhdf5_cpp -lhdf5
 #+end_src
 
 
@@ -286,8 +286,8 @@ Several checks have been performed by *Autoconf* and in the end one might get th
 
 sherman-morrison Version 0.0.1
 
-CXX ...........:  g++
-CXXFLAGS ......:  -g -O2
+CXX ...........:  /home/test/.conda/envs/trex-hackathon/bin/x86_64-conda-linux-gnu-c++
+CXXFLAGS ......:  -fvisibility-inlines-hidden -std=c++17 -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/test/.conda/envs/trex-hackathon/include
 
 --------------------------------------------------
 #+end_src
@@ -345,9 +345,9 @@ CXXFLAGS ......:  ${CXXFLAGS}
 #+begin_src makefile
 CXX      = @CXX@
 CXXFLAGS = @CXXFLAGS@ -std=c++11
-CPPFLAGS = -I./include/ -I/usr/include/hdf5/serial
-LDFLAGS  = -L/usr/lib/x86_64-linux-gnu/hdf5/serial
-LIBS     = -lhdf5 -lhdf5_cpp -lpthread -lz
+CPPFLAGS += -I./include/
+LIBS     = -lhdf5_cpp -lhdf5
+
 ...........
 #+end_src
 
@@ -364,8 +364,8 @@ $ diff Makefile.in Makefile
 < CXX      = @CXX@
 < CXXFLAGS = @CXXFLAGS@ -std=c++11
 ---
-> CXX      = g++
-> CXXFLAGS = -g -O2 -std=c++11
+> CXX      = /home/test/.conda/envs/trex-hackathon/bin/x86_64-conda-linux-gnu-c++
+> CXXFLAGS = -fvisibility-inlines-hidden -std=c++17 -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/test/.conda/envs/trex-hackathon/include -std=c++11
 #+end_src
 
 This tells us that the substitution variables ~@CXX@~ and ~@CXXFLAGS@~ have been replaced
@@ -487,15 +487,15 @@ on the detected compiler and/or the HDF5 library.
 
 sherman-morrison Version 0.0.1
 
-CXX ...........:  g++
-CXXFLAGS ......:   -g -O2 -std=c++11
-CPPFLAGS ......:  -I/usr/include -I/usr/include/hdf5/serial  -I./include/
-LDFLAGS .......:   -L/usr/lib/x86_64-linux-gnu/hdf5/serial
-LIBS ..........:  -lhdf5_hl -lhdf5  -lpthread -lsz -lz -ldl -lm  -lhdf5_cpp
+CXX ...........:  /home/test/.conda/envs/trex-hackathon/bin/x86_64-conda-linux-gnu-c++
+CXXFLAGS ......:   -fvisibility-inlines-hidden -std=c++17 -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/test/.conda/envs/trex-hackathon/include -std=c++11
+CPPFLAGS ......:  -I/home/test/.conda/envs/trex-hackathon/include -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/test/.conda/envs/trex-hackathon/include -I./include/
+LDFLAGS .......:   -L/home/test/.conda/envs/trex-hackathon/lib -Wl,-O2 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,--disable-new-dtags -Wl,--gc-sections -Wl,-rpath,/home/test/.conda/envs/trex-hackathon/lib -Wl,-rpath-link,/home/test/.conda/envs/trex-hackathon/lib -L/home/test/.conda/envs/trex-hackathon/lib
+LIBS ..........:  -lhdf5_hl -lhdf5  -lcrypto -lcurl -lrt -lpthread -lz -ldl -lm  -lhdf5_cpp
 
 Package features:
   Compilation with HDF5 ..:  yes
-  HDF5 version ...........:  1.10.4
+  HDF5 version ...........:  1.12.1
 
 --------------------------------------------------
 #+end_src
@@ -516,11 +516,12 @@ $ diff Makefile.in Makefile
 < LIBS     = @LIBS@
 < LDFLAGS  = @LDFLAGS@
 ---
-> CXX      = g++
-> CXXFLAGS =  -g -O2 -std=c++11
-> CPPFLAGS = -I/usr/include -I/usr/include/hdf5/serial  -I./include/
-> LIBS     = -lhdf5_hl -lhdf5  -lpthread -lsz -lz -ldl -lm  -lhdf5_cpp
-> LDFLAGS  =  -L/usr/lib/x86_64-linux-gnu/hdf5/serial
+> CXX      = /home/test/.conda/envs/trex-hackathon/bin/x86_64-conda-linux-gnu-c++
+> CXXFLAGS =  -fvisibility-inlines-hidden -std=c++17 -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/test/.conda/envs/trex-hackathon/include -std=c++11
+> CPPFLAGS = -I/home/test/.conda/envs/trex-hackathon/include -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/test/.conda/envs/trex-hackathon/include -I./include/
+> LIBS     = -lhdf5_hl -lhdf5  -lcrypto -lcurl -lrt -lpthread -lz -ldl -lm  -lhdf5_cpp
+> LDFLAGS  =  -L/home/test/.conda/envs/trex-hackathon/lib -Wl,-O2 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,--disable-new-dtags -Wl,--gc-sections -Wl,-rpath,/home/test/.conda/envs/trex-hackathon/lib -Wl,-rpath-link,/home/test/.conda/envs/trex-hackathon/lib -L/home/test/.conda/envs/trex-hackathon/lib
+
 #+end_src
 
 * pkg-config
