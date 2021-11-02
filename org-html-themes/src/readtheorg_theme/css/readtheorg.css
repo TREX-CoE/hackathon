@@ -515,7 +515,7 @@ legend{
     padding:0;
     white-space:normal}
 
-.fa:before,#content .admonition-title:before,#content h1 .headerlink:before,#content h2 .headerlink:before,#content h3 .headerlink:before,#content h4 .headerlink:before,#content h5 .headerlink:before,#content h6 .headerlink:before,#content dl dt .headerlink:before,.icon:before,.wy-dropdown .caret:before,.wy-inline-validate.wy-inline-validate-success .wy-input-context:before,.wy-inline-validate.wy-inline-validate-danger .wy-input-context:before,.wy-inline-validate.wy-inline-validate-question .wy-input-context:before,.wy-inline-validate.wy-inline-validate-warning .wy-input-context:before,.wy-inline-validate.wy-inline-validate-info .wy-input-context:before,.wy-alert,#content .note,#content .attention,#content .caution,#content .danger,#content .question,#content .error,#content .hint,#content .important,#content .tip,#content .warning,#content .seealso,#content .admonitiontodo,.btn,input[type="text"],input[type="password"],input[type="email"],input[type="url"],input[type="date"],input[type="month"],input[type="time"],input[type="datetime"],input[type="datetime-local"],input[type="week"],input[type="number"],input[type="search"],input[type="tel"],input[type="color"],select,textarea,#table-of-contents li.on a,#table-of-contents li.current>a,.wy-side-nav-search>a,.wy-side-nav-search .wy-dropdown>a,.wy-nav-top a{
+.fa:before,#content .admonition-title:before,#content h1 .headerlink:before,#content h2 .headerlink:before,#content h3 .headerlink:before,#content h4 .headerlink:before,#content h5 .headerlink:before,#content h6 .headerlink:before,#content dl dt .headerlink:before,.icon:before,.wy-dropdown .caret:before,.wy-inline-validate.wy-inline-validate-success .wy-input-context:before,.wy-inline-validate.wy-inline-validate-danger .wy-input-context:before,.wy-inline-validate.wy-inline-validate-question .wy-input-context:before,.wy-inline-validate.wy-inline-validate-exercise .wy-input-context:before,.wy-inline-validate.wy-inline-validate-warning .wy-input-context:before,.wy-inline-validate.wy-inline-validate-info .wy-input-context:before,.wy-alert,#content .note,#content .attention,#content .caution,#content .danger,#content .exercise,#content .question,#content .error,#content .hint,#content .important,#content .tip,#content .warning,#content .seealso,#content .admonitiontodo,.btn,input[type="text"],input[type="password"],input[type="email"],input[type="url"],input[type="date"],input[type="month"],input[type="time"],input[type="datetime"],input[type="datetime-local"],input[type="week"],input[type="number"],input[type="search"],input[type="tel"],input[type="color"],select,textarea,#table-of-contents li.on a,#table-of-contents li.current>a,.wy-side-nav-search>a,.wy-side-nav-search .wy-dropdown>a,.wy-nav-top a{
     -webkit-font-smoothing:antialiased}
 
 /*!
@@ -578,7 +578,7 @@ a .fa,a #content .admonition-title,#content a .admonition-title{
 .nav #content .admonition-title,#content .nav .admonition-title,.nav .icon{
     display:inline}
 
-.wy-alert,#content .note,#content .attention,#content .caution,#content .danger,#content .question,#content .error,#content .hint,#content .important,#content .tip,#content .warning,#content .seealso,#content .admonitiontodo{
+.wy-alert,#content .note,#content .attention,#content .caution,#content .danger,#content .exercise,#content .question,#content .error,#content .hint,#content .important,#content .tip,#content .warning,#content .seealso,#content .admonitiontodo{
     padding:12px;
     line-height:24px;
     margin-bottom:24px;
@@ -595,7 +595,7 @@ a .fa,a #content .admonition-title,#content a .admonition-title{
     padding:6px 12px;
     margin-bottom:0px}
 
-#content .danger,#content .error,#content .question{
+#content .danger,#content .error,#content .exercise,#content .question{
     background:#fdf3f2}
 
 
@@ -607,14 +607,14 @@ a .fa,a #content .admonition-title,#content a .admonition-title{
 #content .admonition-title.attention:before,
 #content .admonition-title.tip:before, #content .admonition-title.hint:before,
 #content .admonition-title.important:before,
-#content .admonition-title.error:before, #content .admonition-title.danger:before, #content .admonition-title.question:before{
+#content .admonition-title.error:before, #content .admonition-title.danger:before, #content .admonition-title.exercise:before, #content .admonition-title.question:before{
     font-family:FontAwesome;
     content: "";}
 
 #content .note,#content .seealso{
     background:#e7f2fa}
 
-.wy-alert p:last-child,#content .note p:last-child,#content .attention p:last-child,#content .caution p:last-child,#content .danger p:last-child,#content .question p:last-child,#content .error p:last-child,#content .hint p:last-child,#content .important p:last-child,#content .tip p:last-child,#content .warning p:last-child,#content .seealso p:last-child,#content .admonitiontodo p:last-child{
+.wy-alert p:last-child,#content .note p:last-child,#content .attention p:last-child,#content .caution p:last-child,#content .danger p:last-child,#content .exercise p:last-child,#content .question p:last-child,#content .error p:last-child,#content .hint p:last-child,#content .important p:last-child,#content .tip p:last-child,#content .warning p:last-child,#content .seealso p:last-child,#content .admonitiontodo p:last-child{
     margin-bottom:0}
 
 #content .admonition-title.tip,#content .admonition-title.important,#content .admonition-title.hint{
@@ -632,7 +632,7 @@ a .fa,a #content .admonition-title,#content a .admonition-title{
     line-height: 1;
     background:#F0B37E}
 
-#content .admonition-title.error,#content .admonition-title.danger,#content .admonition-title.question{
+#content .admonition-title.error,#content .admonition-title.danger,#content .admonition-title.exercise,#content .admonition-title.question{
     line-height: 1;
     background:#f29f97}
 
@@ -941,7 +941,7 @@ footer p{
     font-style:italic;
 }
 
-#content .note .last,#content .attention .last,#content .caution .last,#content .question .last,#content .danger .last,#content .error .last,#content .hint .last,#content .important .last,#content .tip .last,#content .warning .last,#content .seealso .last,#content .admonitiontodo .last{
+#content .note .last,#content .attention .last,#content .caution .last,#content .exercise .last,#content .question .last,#content .danger .last,#content .error .last,#content .hint .last,#content .important .last,#content .tip .last,#content .warning .last,#content .seealso .last,#content .admonitiontodo .last{
     margin-bottom:0}
 
 #content .admonition-title:before{

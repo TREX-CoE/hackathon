@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-11-02 Tue 22:07 -->
+<!-- 2021-11-02 Tue 22:25 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Autoconf</title>
@@ -244,12 +244,12 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org0a027cd">1. Introduction</a></li>
-<li><a href="#orgab2953a">2. Makefile</a></li>
-<li><a href="#org531edff">3. Autoconf</a></li>
-<li><a href="#org557b400">4. Detecting external dependencies</a></li>
-<li><a href="#orgdd1cc09">5. pkg-config</a></li>
-<li><a href="#org4db8320">6. Conclusion</a></li>
+<li><a href="#org1db3371">1. Introduction</a></li>
+<li><a href="#orgd668fe1">2. Makefile</a></li>
+<li><a href="#org7f3de96">3. Autoconf</a></li>
+<li><a href="#orga83014c">4. Detecting external dependencies</a></li>
+<li><a href="#org2e1dedf">5. pkg-config</a></li>
+<li><a href="#orgfa02dda">6. Conclusion</a></li>
 </ul>
 </div>
 </div>
@@ -269,8 +269,8 @@ Before you proceed to the tutorial, download the example project called <b>Sherm
 
 </div>
 
-<div id="outline-container-org0a027cd" class="outline-2">
-<h2 id="org0a027cd"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-org1db3371" class="outline-2">
+<h2 id="org1db3371"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Building software on different platforms is a challenging task.
@@ -352,8 +352,8 @@ Our goal is to demonstrate how cumbersome configuration/compilation steps can be
 </div>
 </div>
 
-<div id="outline-container-orgab2953a" class="outline-2">
-<h2 id="orgab2953a"><span class="section-number-2">2</span> Makefile</h2>
+<div id="outline-container-orgd668fe1" class="outline-2">
+<h2 id="orgd668fe1"><span class="section-number-2">2</span> Makefile</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 Below is the <code>Makefile</code> of our project:
@@ -487,8 +487,8 @@ Wouldn't it be nice if we could automatize this process? Well, this is where <b>
 </div>
 </div>
 
-<div id="outline-container-org531edff" class="outline-2">
-<h2 id="org531edff"><span class="section-number-2">3</span> Autoconf</h2>
+<div id="outline-container-org7f3de96" class="outline-2">
+<h2 id="org7f3de96"><span class="section-number-2">3</span> Autoconf</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 In this section, we will talk about several files:
@@ -730,8 +730,8 @@ just run <code>./config.status</code> and the options of the previous
 </div>
 </div>
 
-<div id="outline-container-org557b400" class="outline-2">
-<h2 id="org557b400"><span class="section-number-2">4</span> Detecting external dependencies</h2>
+<div id="outline-container-orga83014c" class="outline-2">
+<h2 id="orga83014c"><span class="section-number-2">4</span> Detecting external dependencies</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 It is possible to write your our own macros to detect an external dependency.
@@ -908,8 +908,8 @@ $ diff Makefile.in Makefile
 </div>
 </div>
 
-<div id="outline-container-orgdd1cc09" class="outline-2">
-<h2 id="orgdd1cc09"><span class="section-number-2">5</span> pkg-config</h2>
+<div id="outline-container-org2e1dedf" class="outline-2">
+<h2 id="org2e1dedf"><span class="section-number-2">5</span> pkg-config</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 The <a href="https://linux.die.net/man/1/pkg-config">pkg-config program</a> is a powerful tool to get information about installed libraries.
@@ -1014,8 +1014,8 @@ $ pkg-config --cflags --libs hdf5
 </div>
 </div>
 
-<div id="outline-container-org4db8320" class="outline-2">
-<h2 id="org4db8320"><span class="section-number-2">6</span> Conclusion</h2>
+<div id="outline-container-orgfa02dda" class="outline-2">
+<h2 id="orgfa02dda"><span class="section-number-2">6</span> Conclusion</h2>
 <div class="outline-text-2" id="text-6">
 <p>
 In this Tutorial you have learned how to make your in-house <code>Makefile</code> compatible with <b>Autoconf</b>.
@@ -1029,7 +1029,7 @@ Finally, you used the <b>Autoconf</b> macro from the GNU archive to configure th
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Evgeny Posenitskiy, Anthony Scemama</p>
-<p class="date">Created: 2021-11-02 Tue 22:07</p>
+<p class="date">Created: 2021-11-02 Tue 22:25</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
