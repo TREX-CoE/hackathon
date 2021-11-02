@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-11-02 Tue 13:10 -->
+<!-- 2021-11-02 Tue 14:53 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Autoconf</title>
@@ -234,18 +234,22 @@ for the JavaScript code in this tag.
 </script>
 </head>
 <body>
-<div id="content">
+<div id="org-div-home-and-up">
+ <a accesskey="h" href="index.html"> UP </a>
+ |
+ <a accesskey="H" href="index.html"> HOME </a>
+</div><div id="content">
 <h1 class="title">Autoconf</h1>
 <div id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org6071797">1. Introduction</a></li>
-<li><a href="#org32ee1fb">2. Makefile</a></li>
-<li><a href="#orgd28b42f">3. Autoconf</a></li>
-<li><a href="#org78b9470">4. Detecting external dependencies</a></li>
-<li><a href="#org7242742">5. pkg-config</a></li>
-<li><a href="#org32ba27c">6. Conclusion</a></li>
+<li><a href="#orgaea0eea">1. Introduction</a></li>
+<li><a href="#org7b82940">2. Makefile</a></li>
+<li><a href="#orgffcd3b3">3. Autoconf</a></li>
+<li><a href="#org0336f3d">4. Detecting external dependencies</a></li>
+<li><a href="#org71bfb0b">5. pkg-config</a></li>
+<li><a href="#org4297120">6. Conclusion</a></li>
 </ul>
 </div>
 </div>
@@ -260,13 +264,13 @@ Before you proceed to the tutorial, download the example project called <b>Sherm
 
 <ul class="org-ul">
 <li>using <b>Git</b> if you are familiar with it: <code>git clone https://github.com/q-posev/Sherman-Morrison.git</code></li>
-<li>by downloading the project from the <b>Assets</b> section (either <code>.zip</code> or <code>.tar.gz</code>) on the following webpage: <a href="https://github.com/q-posev/Sherman-Morrison/releases/tag/v0.1-demo">https://github.com/q-posev/Sherman-Morrison/releases/tag/v0.1-demo</a>. Make sure to extract the files from the archive before starting the tutorial.</li>
+<li>by downloading the project from the <b>Assets</b> section (either <code>.zip</code> or <code>.tar.gz</code>) on the following webpage: <a href="https://github.com/q-posev/Sherman-Morrison/archive/refs/tags/v0.1-demo.tar.gz">https://github.com/q-posev/Sherman-Morrison/archive/refs/tags/v0.1-demo.tar.gz</a> . Make sure to extract the files from the archive before starting the tutorial.</li>
 </ul>
 
 </div>
 
-<div id="outline-container-org6071797" class="outline-2">
-<h2 id="org6071797"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-orgaea0eea" class="outline-2">
+<h2 id="orgaea0eea"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Building software on different platforms is a challenging task.
@@ -302,7 +306,7 @@ We will learn how to automatically locate the HDF5 library using macros.
 
 <div class="tip">
 <p>
-In the examples demonstated in this tutorial, 
+In the examples demonstated in this tutorial,
 the OS is Ubuntu with the default GNU compilers <code>gcc/g++ 9.3.0</code>
 and with the HDF5 library installed via <code>sudo apt-get install libhdf5-dev</code> command.
 </p>
@@ -348,8 +352,8 @@ Our goal is to demonstrate how cumbersome configuration/compilation steps can be
 </div>
 </div>
 
-<div id="outline-container-org32ee1fb" class="outline-2">
-<h2 id="org32ee1fb"><span class="section-number-2">2</span> Makefile</h2>
+<div id="outline-container-org7b82940" class="outline-2">
+<h2 id="org7b82940"><span class="section-number-2">2</span> Makefile</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 Below is the <code>Makefile</code> of our project:
@@ -359,9 +363,9 @@ Below is the <code>Makefile</code> of our project:
 <pre class="src src-makefile">## <span style="color: #b22222;">Specify the C++ compiler as well as preprocessor, compiler and linking flags</span>
 <span style="color: #a0522d;">CXX</span>      = g++
 <span style="color: #a0522d;">CXXFLAGS</span> = -g -O2 -std=c++11
-<span style="color: #a0522d;">CPPFLAGS</span> = -I./include/ -I/usr/include/hdf5/serial
+<span style="color: #a0522d;">CPPFLAGS</span> = -I/usr/include -I/usr/include/hdf5/serial  -I./include/
+<span style="color: #a0522d;">LIBS</span>     = -lhdf5_hl -lhdf5  -lpthread -lsz -lz -ldl -lm  -lhdf5_cpp
 <span style="color: #a0522d;">LDFLAGS</span>  = -L/usr/lib/x86_64-linux-gnu/hdf5/serial
-<span style="color: #a0522d;">LIBS</span>     = -lhdf5 -lhdf5_cpp -lpthread -lz
 
 ## <span style="color: #b22222;">Directory structure</span>
 <span style="color: #a0522d;">SRC_DIR</span> := src
@@ -401,15 +405,47 @@ Let's execute <code>make</code> command and examine the output:
 
 <pre class="example">
 $ make
-
-g++ -g -O2 -std=c++11 -I./include/ -I/usr/include/hdf5/serial   -c -o src/SM_Maponi.o src/SM_Maponi.cpp
-g++ -g -O2 -std=c++11 -I./include/ -I/usr/include/hdf5/serial   -c -o src/SM_Standard.o src/SM_Standard.cpp
-g++ -g -O2 -std=c++11 -I./include/ -I/usr/include/hdf5/serial   -c -o src/Woodbury.o src/Woodbury.cpp
-g++ -g -O2 -std=c++11 -I./include/ -I/usr/include/hdf5/serial   -c -o src/SMWB.o src/SMWB.cpp
-g++ -g -O2 -std=c++11 -I./include/ -I/usr/include/hdf5/serial   -c -o src/Helpers.o src/Helpers.cpp
-g++ -g -O2 -std=c++11 -I./include/ -I/usr/include/hdf5/serial   -c -o tests/test_h5.o tests/test_h5.cpp
-g++ -I./include/ -I/usr/include/hdf5/serial  -g -O2 -std=c++11 tests/test_h5.o src/SM_Maponi.o src/SM_Standard.o src/Woodbury.o src/SMWB.o src/Helpers.o -o bin/test_h5  -L/usr/lib/x86_64-linux-gnu/hdf5/serial -lhdf5 -lhdf5_cpp -lpthread -lz 
+g++ -g -O2 -std=c++11 -I/usr/include -I/usr/include/hdf5/serial  -I./include/  -c -o src/SM_Maponi.o src/SM_Maponi.cpp
+In file included from /home/test/.conda/envs/trex-hackathon/x86_64-conda-linux-gnu/sysroot/usr/include/sys/types.h:136,
+		 from /home/test/.conda/envs/trex-hackathon/x86_64-conda-linux-gnu/sysroot/usr/include/stdlib.h:320,
+		 from /home/test/.conda/envs/trex-hackathon/x86_64-conda-linux-gnu/include/c++/9.4.0/bits/std_abs.h:38,
+		 from /home/test/.conda/envs/trex-hackathon/x86_64-conda-linux-gnu/include/c++/9.4.0/cmath:47,
+		 from ./include/Helpers.hpp:3,
+		 from src/SM_Maponi.cpp:5:
+/usr/include/time.h:37:10: fatal error: bits/types/clock_t.h: No such file or directory
+   37 | #include &lt;bits/types/clock_t.h&gt;
+      |          ^~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make: *** [&lt;builtin&gt;: src/SM_Maponi.o] Error 1
 </pre>
+
+<ul class="org-ul">
+<li>Remove paths related to <code>/usr/local/</code></li>
+<li>Remove `-lsz`, specific to HDF5 installation on the developer's platform</li>
+<li>Insert <code>CPPFLAGS</code> coming from the environment</li>
+</ul>
+
+<div class="org-src-container">
+<pre class="src src-makefile">## <span style="color: #b22222;">Specify the C++ compiler as well as preprocessor, compiler and linking flags</span>
+<span style="color: #a0522d;">CXX</span>       = g++
+<span style="color: #a0522d;">CXXFLAGS</span>  = -g -O2 -std=c++11
+<span style="color: #a0522d;">CPPFLAGS</span> += -I./include/
+<span style="color: #a0522d;">LIBS</span>      = -lhdf5_cpp -lhdf5
+</pre>
+</div>
+
+
+<pre class="example">
+$ make
+g++ -g -O2 -std=c++11 -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/test/.conda/envs/trex-hackathon/include -I./include/  -c -o src/SM_Maponi.o src/SM_Maponi.cpp
+g++ -g -O2 -std=c++11 -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/test/.conda/envs/trex-hackathon/include -I./include/  -c -o src/SM_Standard.o src/SM_Standard.cpp
+g++ -g -O2 -std=c++11 -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/test/.conda/envs/trex-hackathon/include -I./include/  -c -o src/Woodbury.o src/Woodbury.cpp
+g++ -g -O2 -std=c++11 -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/test/.conda/envs/trex-hackathon/include -I./include/  -c -o src/SMWB.o src/SMWB.cpp
+g++ -g -O2 -std=c++11 -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/test/.conda/envs/trex-hackathon/include -I./include/  -c -o src/Helpers.o src/Helpers.cpp
+g++ -g -O2 -std=c++11 -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/test/.conda/envs/trex-hackathon/include -I./include/  -c -o tests/test_h5.o tests/test_h5.cpp
+g++ -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/test/.conda/envs/trex-hackathon/include -I./include/ -g -O2 -std=c++11 tests/test_h5.o src/SM_Maponi.o src/SM_Standard.o src/Woodbury.o src/SMWB.o src/Helpers.o -o bin/test_h5  -Wl,-O2 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,--disable-new-dtags -Wl,--gc-sections -Wl,-rpath,/home/test/.conda/envs/trex-hackathon/lib -Wl,-rpath-link,/home/test/.conda/envs/trex-hackathon/lib -L/home/test/.conda/envs/trex-hackathon/lib -lhdf5_cpp -lhdf5
+</pre>
+
 
 <p>
 So it works. We can already see that <code>.o</code> object files are compiled first since they are indicated as dependencies
@@ -431,7 +467,7 @@ Let's have a look at the following part of our <code>Makefile</code>:
 
 <div class="question">
 <p>
-What are advantages and disadvantages of specifying compiler flags as above? 
+What are advantages and disadvantages of specifying compiler flags as above?
 </p>
 
 </div>
@@ -441,7 +477,7 @@ Among other things, the crucial issue here is the portability of the hard-coded 
 </p>
 
 <p>
-Moreover, in this example, we provide all the flags already. 
+Moreover, in this example, we provide all the flags already.
 However, in real life, defining them is challenging, especially for programs with external dependencies.
 </p>
 
@@ -451,8 +487,8 @@ Wouldn't it be nice if we could automatize this process? Well, this is where <b>
 </div>
 </div>
 
-<div id="outline-container-orgd28b42f" class="outline-2">
-<h2 id="orgd28b42f"><span class="section-number-2">3</span> Autoconf</h2>
+<div id="outline-container-orgffcd3b3" class="outline-2">
+<h2 id="orgffcd3b3"><span class="section-number-2">3</span> Autoconf</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 In this section, we will talk about several files:
@@ -469,7 +505,7 @@ In this section, we will talk about several files:
 <p>
 The ultimate goal of the <b>Autoconf</b> is to produce the <code>configure</code> script based on the <code>configure.ac</code> file.
 The <code>configure</code> script then detects the <code>Makefile.in</code> file and replaces some variables there to produce
-the final <code>Makefile</code>, which is used to build a project.  
+the final <code>Makefile</code>, which is used to build a project.
 </p>
 
 </div>
@@ -483,7 +519,7 @@ the final <code>Makefile</code>, which is used to build a project.
 
 
 <p>
-This might be confusing at the beginning. 
+This might be confusing at the beginning.
 Let's create the simplest <code>configure.ac</code> file for our project with the following contents:
 </p>
 
@@ -506,8 +542,8 @@ For more information, see the <a href="https://www.gnu.org/software/autoconf/man
 </p>
 
 <p>
-We know that the source code is written in <code>C++</code> programming language (it can also be guessed from the <code>.cpp</code> extension). 
-Thus, we would like the <b>Autoconf</b> to find and possibly run some checks 
+We know that the source code is written in <code>C++</code> programming language (it can also be guessed from the <code>.cpp</code> extension).
+Thus, we would like the <b>Autoconf</b> to find and possibly run some checks
 using the <code>C++</code> compiler that is available on the current machine.
 </p>
 
@@ -557,8 +593,8 @@ After succesfull execution, a <code>configure</code> shell script should appear.
 </p>
 
 <p>
-Let's run it by calling <code>./configure</code>. 
-Several checks have been performed by <b>Autoconf</b> and in the end one might get the following 
+Let's run it by calling <code>./configure</code>.
+Several checks have been performed by <b>Autoconf</b> and in the end one might get the following
 (the output may differ depending on the detected <code>C++</code> compiler):
 </p>
 
@@ -567,15 +603,15 @@ Several checks have been performed by <b>Autoconf</b> and in the end one might g
 
 sherman-morrison Version 0.0.1
 
-CXX ...........:  g++
-CXXFLAGS ......:  -g -O2
+CXX ...........:  /home/test/.conda/envs/trex-hackathon/bin/x86_64-conda-linux-gnu-c++
+CXXFLAGS ......:  -fvisibility-inlines-hidden -std=c++17 -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/test/.conda/envs/trex-hackathon/include
 
 --------------------------------------------------
 </pre>
 
 <p>
 In the example above, the <code>configure</code> script has detected the GNU <code>C++</code> compiler and expanded the
-<code>${CXX}</code> variable with the corresponding name. 
+<code>${CXX}</code> variable with the corresponding name.
 Moreover, the script detects the default <code>C++</code> flags of <code>g++</code> and adds them to <code>${CXXFLAGS}</code>.
 </p>
 
@@ -644,9 +680,9 @@ echo \
 <div class="org-src-container">
 <pre class="src src-makefile"><span style="color: #a0522d;">CXX</span>      = @CXX@
 <span style="color: #a0522d;">CXXFLAGS</span> = @CXXFLAGS@ -std=c++11
-<span style="color: #a0522d;">CPPFLAGS</span> = -I./include/ -I/usr/include/hdf5/serial
-<span style="color: #a0522d;">LDFLAGS</span>  = -L/usr/lib/x86_64-linux-gnu/hdf5/serial
-<span style="color: #a0522d;">LIBS</span>     = -lhdf5 -lhdf5_cpp -lpthread -lz
+<span style="color: #a0522d;">CPPFLAGS</span> += -I./include/
+<span style="color: #a0522d;">LIBS</span>     = -lhdf5_cpp -lhdf5
+
 ...........
 </pre>
 </div>
@@ -669,12 +705,12 @@ $ diff Makefile.in Makefile
 &lt; CXX      = @CXX@
 &lt; CXXFLAGS = @CXXFLAGS@ -std=c++11
 ---
-&gt; CXX      = g++
-&gt; CXXFLAGS = -g -O2 -std=c++11
+&gt; CXX      = /home/test/.conda/envs/trex-hackathon/bin/x86_64-conda-linux-gnu-c++
+&gt; CXXFLAGS = -fvisibility-inlines-hidden -std=c++17 -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/test/.conda/envs/trex-hackathon/include -std=c++11
 </pre>
 
 <p>
-This tells us that the substitution variables <code>@CXX@</code> and <code>@CXXFLAGS@</code> have been replaced 
+This tells us that the substitution variables <code>@CXX@</code> and <code>@CXXFLAGS@</code> have been replaced
 by <code>g++</code> and <code>-g -O2</code>, respectively.
 </p>
 
@@ -685,8 +721,8 @@ Let's try to find this library using <b>Autoconf</b> functionality.
 </div>
 </div>
 
-<div id="outline-container-org78b9470" class="outline-2">
-<h2 id="org78b9470"><span class="section-number-2">4</span> Detecting external dependencies</h2>
+<div id="outline-container-org0336f3d" class="outline-2">
+<h2 id="org0336f3d"><span class="section-number-2">4</span> Detecting external dependencies</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 It is possible to write your our own macros to detect an external dependency.
@@ -720,7 +756,7 @@ The description of this macro can be found <a href="https://www.gnu.org/software
 </p>
 
 <pre class="example">
-If HDF5 is successfully found, this macro calls 
+If HDF5 is successfully found, this macro calls
 
   AC_SUBST(HDF5_VERSION)
   AC_SUBST(HDF5_CC)
@@ -738,8 +774,8 @@ and sets with_hdf5="yes". ...
 </pre>
 
 <p>
-This means that the macro will define a set of variables that can be manupulated 
-within <code>configure.ac</code> and/or <code>Makefile.in</code> files. 
+This means that the macro will define a set of variables that can be manupulated
+within <code>configure.ac</code> and/or <code>Makefile.in</code> files.
 In this example, we choose the former and will append the necessary flags with the <code>HDF5_</code> ones.
 </p>
 
@@ -808,8 +844,8 @@ echo \
 </div>
 
 <p>
-Now reconfigure and examine the output produced by the <code>configure</code> script. 
-In the end, you will see a more verbose summary of the detected flags and 
+Now reconfigure and examine the output produced by the <code>configure</code> script.
+In the end, you will see a more verbose summary of the detected flags and
 newly added package features. The exact output may differ on your machine depending
 on the detected compiler and/or the HDF5 library.
 </p>
@@ -819,15 +855,15 @@ on the detected compiler and/or the HDF5 library.
 
 sherman-morrison Version 0.0.1
 
-CXX ...........:  g++
-CXXFLAGS ......:   -g -O2 -std=c++11
-CPPFLAGS ......:  -I/usr/include -I/usr/include/hdf5/serial  -I./include/
-LDFLAGS .......:   -L/usr/lib/x86_64-linux-gnu/hdf5/serial 
-LIBS ..........:  -lhdf5_hl -lhdf5  -lpthread -lsz -lz -ldl -lm  -lhdf5_cpp
+CXX ...........:  /home/test/.conda/envs/trex-hackathon/bin/x86_64-conda-linux-gnu-c++
+CXXFLAGS ......:   -fvisibility-inlines-hidden -std=c++17 -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/test/.conda/envs/trex-hackathon/include -std=c++11
+CPPFLAGS ......:  -I/home/test/.conda/envs/trex-hackathon/include -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/test/.conda/envs/trex-hackathon/include -I./include/
+LDFLAGS .......:   -L/home/test/.conda/envs/trex-hackathon/lib -Wl,-O2 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,--disable-new-dtags -Wl,--gc-sections -Wl,-rpath,/home/test/.conda/envs/trex-hackathon/lib -Wl,-rpath-link,/home/test/.conda/envs/trex-hackathon/lib -L/home/test/.conda/envs/trex-hackathon/lib
+LIBS ..........:  -lhdf5_hl -lhdf5  -lcrypto -lcurl -lrt -lpthread -lz -ldl -lm  -lhdf5_cpp
 
 Package features:
   Compilation with HDF5 ..:  yes
-  HDF5 version ...........:  1.10.4
+  HDF5 version ...........:  1.12.1
 
 --------------------------------------------------
 </pre>
@@ -853,17 +889,18 @@ $ diff Makefile.in Makefile
 &lt; LIBS     = @LIBS@
 &lt; LDFLAGS  = @LDFLAGS@
 ---
-&gt; CXX      = g++
-&gt; CXXFLAGS =  -g -O2 -std=c++11
-&gt; CPPFLAGS = -I/usr/include -I/usr/include/hdf5/serial  -I./include/
-&gt; LIBS     = -lhdf5_hl -lhdf5  -lpthread -lsz -lz -ldl -lm  -lhdf5_cpp
-&gt; LDFLAGS  =  -L/usr/lib/x86_64-linux-gnu/hdf5/serial 
+&gt; CXX      = /home/test/.conda/envs/trex-hackathon/bin/x86_64-conda-linux-gnu-c++
+&gt; CXXFLAGS =  -fvisibility-inlines-hidden -std=c++17 -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/test/.conda/envs/trex-hackathon/include -std=c++11
+&gt; CPPFLAGS = -I/home/test/.conda/envs/trex-hackathon/include -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/test/.conda/envs/trex-hackathon/include -I./include/
+&gt; LIBS     = -lhdf5_hl -lhdf5  -lcrypto -lcurl -lrt -lpthread -lz -ldl -lm  -lhdf5_cpp
+&gt; LDFLAGS  =  -L/home/test/.conda/envs/trex-hackathon/lib -Wl,-O2 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,--disable-new-dtags -Wl,--gc-sections -Wl,-rpath,/home/test/.conda/envs/trex-hackathon/lib -Wl,-rpath-link,/home/test/.conda/envs/trex-hackathon/lib -L/home/test/.conda/envs/trex-hackathon/lib
+
 </pre>
 </div>
 </div>
 
-<div id="outline-container-org7242742" class="outline-2">
-<h2 id="org7242742"><span class="section-number-2">5</span> pkg-config</h2>
+<div id="outline-container-org71bfb0b" class="outline-2">
+<h2 id="org71bfb0b"><span class="section-number-2">5</span> pkg-config</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 The <a href="https://linux.die.net/man/1/pkg-config">pkg-config program</a> is a powerful tool to get information about installed libraries.
@@ -968,11 +1005,11 @@ $ pkg-config --cflags --libs hdf5
 </div>
 </div>
 
-<div id="outline-container-org32ba27c" class="outline-2">
-<h2 id="org32ba27c"><span class="section-number-2">6</span> Conclusion</h2>
+<div id="outline-container-org4297120" class="outline-2">
+<h2 id="org4297120"><span class="section-number-2">6</span> Conclusion</h2>
 <div class="outline-text-2" id="text-6">
 <p>
-In this Tutorial you have learned how to make your in-house <code>Makefile</code> compatible with <b>Autoconf</b>. 
+In this Tutorial you have learned how to make your in-house <code>Makefile</code> compatible with <b>Autoconf</b>.
 This is achieved by converting <code>Makefile</code> into <code>Makefile.in</code> and introducing substitution variables.
 You have also learned how to use <b>Autoconf</b> to create the <code>configure</code> script, which sets up and checks programs and libraries on the host machine.
 The <code>configure</code> script is also responsible for producing the final <code>Makefile</code>, which is used to build the project.
@@ -983,7 +1020,7 @@ Finally, you used the <b>Autoconf</b> macro from the GNU archive to configure th
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Evgeny Posenitskiy, Anthony Scemama</p>
-<p class="date">Created: 2021-11-02 Tue 13:10</p>
+<p class="date">Created: 2021-11-02 Tue 14:53</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
