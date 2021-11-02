@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-11-02 Tue 12:44 -->
+<!-- 2021-11-02 Tue 13:10 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Autoconf</title>
@@ -240,12 +240,12 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org2ea14a7">1. Introduction</a></li>
-<li><a href="#org236cbbf">2. Makefile</a></li>
-<li><a href="#org3ac6514">3. Autoconf</a></li>
-<li><a href="#orgd122695">4. Detecting external dependencies</a></li>
-<li><a href="#org8d536db">5. pkg-config</a></li>
-<li><a href="#org991d7a6">6. Conclusion</a></li>
+<li><a href="#org6071797">1. Introduction</a></li>
+<li><a href="#org32ee1fb">2. Makefile</a></li>
+<li><a href="#orgd28b42f">3. Autoconf</a></li>
+<li><a href="#org78b9470">4. Detecting external dependencies</a></li>
+<li><a href="#org7242742">5. pkg-config</a></li>
+<li><a href="#org32ba27c">6. Conclusion</a></li>
 </ul>
 </div>
 </div>
@@ -253,8 +253,9 @@ for the JavaScript code in this tag.
 This page contains the <a href="https://www.gnu.org/software/autoconf/">GNU Autoconf</a> tutorial, which is the first part of the <a href="./index.html">Autotools tutorial</a>.
 </p>
 
+<div class="tip">
 <p>
-Before you proceed to the tutorial, download the example project called Sherman-Morrison. This can be done in 2 ways:
+Before you proceed to the tutorial, download the example project called <b>Sherman-Morrison</b>. This can be done in 2 ways:
 </p>
 
 <ul class="org-ul">
@@ -262,9 +263,10 @@ Before you proceed to the tutorial, download the example project called Sherman-
 <li>by downloading the project from the <b>Assets</b> section (either <code>.zip</code> or <code>.tar.gz</code>) on the following webpage: <a href="https://github.com/q-posev/Sherman-Morrison/releases/tag/v0.1-demo">https://github.com/q-posev/Sherman-Morrison/releases/tag/v0.1-demo</a>. Make sure to extract the files from the archive before starting the tutorial.</li>
 </ul>
 
+</div>
 
-<div id="outline-container-org2ea14a7" class="outline-2">
-<h2 id="org2ea14a7"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-org6071797" class="outline-2">
+<h2 id="org6071797"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Building software on different platforms is a challenging task.
@@ -298,11 +300,14 @@ HDF5 is a binary file format, which is designed for high-performance data input/
 We will learn how to automatically locate the HDF5 library using macros.
 </p>
 
+<div class="tip">
 <p>
-<b><b>Note:</b></b> in the examples demonstated in this tutorial, 
-the OS is Ubuntu 20.04 with default GNU compilers (<code>gcc/g++ version 9.3.0</code>) 
+In the examples demonstated in this tutorial, 
+the OS is Ubuntu with the default GNU compilers <code>gcc/g++ 9.3.0</code>
 and with the HDF5 library installed via <code>sudo apt-get install libhdf5-dev</code> command.
 </p>
+
+</div>
 
 <p>
 Below is a source tree of our project. Header and source files can be found in the <code>include/</code> and <code>src/</code> directories, respectively.
@@ -312,9 +317,6 @@ The <code>tests/</code> directory contains the <code>test_h5.cpp</code> and <cod
 <p>
 For this tutorial, the contents of the source and header files are not important.
 However, it is worth mentioning that they depend on the HDF5 library, which is not included in the source tree.
-</p>
-
-<p>
 Our goal is to demonstrate how cumbersome configuration/compilation steps can be facilitated by the use of <b>Autoconf</b>.
 </p>
 
@@ -346,8 +348,8 @@ Our goal is to demonstrate how cumbersome configuration/compilation steps can be
 </div>
 </div>
 
-<div id="outline-container-org236cbbf" class="outline-2">
-<h2 id="org236cbbf"><span class="section-number-2">2</span> Makefile</h2>
+<div id="outline-container-org32ee1fb" class="outline-2">
+<h2 id="org32ee1fb"><span class="section-number-2">2</span> Makefile</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 Below is the <code>Makefile</code> of our project:
@@ -449,8 +451,8 @@ Wouldn't it be nice if we could automatize this process? Well, this is where <b>
 </div>
 </div>
 
-<div id="outline-container-org3ac6514" class="outline-2">
-<h2 id="org3ac6514"><span class="section-number-2">3</span> Autoconf</h2>
+<div id="outline-container-orgd28b42f" class="outline-2">
+<h2 id="orgd28b42f"><span class="section-number-2">3</span> Autoconf</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 In this section, we will talk about several files:
@@ -463,11 +465,14 @@ In this section, we will talk about several files:
 <li><code>Makefile</code></li>
 </ul>
 
+<div class="tip">
 <p>
 The ultimate goal of the <b>Autoconf</b> is to produce the <code>configure</code> script based on the <code>configure.ac</code> file.
 The <code>configure</code> script then detects the <code>Makefile.in</code> file and replaces some variables there to produce
 the final <code>Makefile</code>, which is used to build a project.  
 </p>
+
+</div>
 
 
 <div class="figure">
@@ -578,10 +583,13 @@ Moreover, the script detects the default <code>C++</code> flags of <code>g++</co
 From now on we will focus mainly on <code>$</code>-prefixed variables and calls to the <b>Autoconf</b> macros.
 </p>
 
+<div class="tip">
 <p>
-<b><b>Note:</b></b> whenever you make a change in <code>configure.ac</code>, 
+Whenever you make a change in the <code>configure.ac</code> file, do not forget to
 execute <code>autoreconf -i</code> to update the generated <code>configure</code> script.
 </p>
+
+</div>
 
 <p>
 The <code>configure</code> script can also define its own variables (e.g. <code>$PACKAGE_NAME</code> above) and pass them to other files.
@@ -643,9 +651,12 @@ echo \
 </pre>
 </div>
 
+<div class="tip">
 <p>
 Variables in between <code>@</code> signs are called substitutation variables and are important part of the <b>Autotools</b> toolkit.
 </p>
+
+</div>
 
 <p>
 Let's reconfigure (<code>autoreconf -i &amp;&amp; ./configure</code>) and examine the changes between the input
@@ -674,16 +685,22 @@ Let's try to find this library using <b>Autoconf</b> functionality.
 </div>
 </div>
 
-<div id="outline-container-orgd122695" class="outline-2">
-<h2 id="orgd122695"><span class="section-number-2">4</span> Detecting external dependencies</h2>
+<div id="outline-container-org78b9470" class="outline-2">
+<h2 id="org78b9470"><span class="section-number-2">4</span> Detecting external dependencies</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 It is possible to write your our own macros to detect an external dependency.
 However, in this example we will try to locate the HDF5 library, which is widely used nowadays.
 Luckily for us, the GNU website has an <a href="https://www.gnu.org/software/autoconf-archive/The-Macros.html">archive of Autoconf macros</a> for many packages, including HDF5.
-It is considered good practice to put <b>Autoconf</b> macros in the <code>m4</code> directory of your project.
 The <code>ax_lib_hdf5.m4</code> file can be downloaded from the aforementioned page.
 </p>
+
+<div class="tip">
+<p>
+It is considered good practice to put <b>Autoconf</b> macros in the <code>m4</code> directory of your project.
+</p>
+
+</div>
 
 <p>
 Once the file is in the <code>m4</code> directory, one can add the following lines to <code>configure.ac</code>
@@ -815,9 +832,15 @@ Package features:
 --------------------------------------------------
 </pre>
 
+<div class="tip">
 <p>
-You can now see how all the hard-coded HDF5 paths have been detected by the <code>ax_lib_hdf5.m4</code> macro.
-Moreover, all the flags are propagated to the resulting <code>Makefile</code> thanks to the use of substitution variables.
+You can now see how all hard-coded HDF5 paths have been detected by the <code>ax_lib_hdf5.m4</code> macro.
+Moreover, all flags are propagated to the resulting <code>Makefile</code> due to the use of substitution variables.
+</p>
+
+</div>
+
+<p>
 This can also be checked by visualising differences between <code>Makefile.in</code> and <code>Makefile</code>:
 </p>
 
@@ -839,18 +862,24 @@ $ diff Makefile.in Makefile
 </div>
 </div>
 
-<div id="outline-container-org8d536db" class="outline-2">
-<h2 id="org8d536db"><span class="section-number-2">5</span> pkg-config</h2>
+<div id="outline-container-org7242742" class="outline-2">
+<h2 id="org7242742"><span class="section-number-2">5</span> pkg-config</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 The <a href="https://linux.die.net/man/1/pkg-config">pkg-config program</a> is a powerful tool to get information about installed libraries.
 <b>Autoconf</b> incorporates some of the <code>pkg-config</code> functionality.
 </p>
 
+<div class="tip">
 <p>
-The minimal setup consists of calls to the
-initialization macro <code>PKG_PROG_PKG_CONFIG</code> and search macro <code>PKG_CHECK_MODULES</code>.
-The latter can be configured to check the required version of the HDF5 library (see <a href="https://autotools.io/pkgconfig/pkg_check_modules.html">the Autotools Mythbuster website</a> for more details).
+The minimal setup of <code>pkg-config</code> consists of calls to the
+initialization macro <code>PKG_PROG_PKG_CONFIG</code> and the search macro <code>PKG_CHECK_MODULES</code>.
+</p>
+
+</div>
+
+<p>
+The <code>PKG_CHECK_MODULES</code> can be configured to check the required version of the HDF5 library (see <a href="https://autotools.io/pkgconfig/pkg_check_modules.html">the Autotools Mythbuster website</a> for more details).
 For example, <code>PKG_CHECK_MODULES([HDF5], [hdf5 &gt;= 1.8])</code> verifies that the HDF5 version is not older than <code>1.8</code>.
 </p>
 
@@ -939,8 +968,8 @@ $ pkg-config --cflags --libs hdf5
 </div>
 </div>
 
-<div id="outline-container-org991d7a6" class="outline-2">
-<h2 id="org991d7a6"><span class="section-number-2">6</span> Conclusion</h2>
+<div id="outline-container-org32ba27c" class="outline-2">
+<h2 id="org32ba27c"><span class="section-number-2">6</span> Conclusion</h2>
 <div class="outline-text-2" id="text-6">
 <p>
 In this Tutorial you have learned how to make your in-house <code>Makefile</code> compatible with <b>Autoconf</b>. 
@@ -954,7 +983,7 @@ Finally, you used the <b>Autoconf</b> macro from the GNU archive to configure th
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Evgeny Posenitskiy, Anthony Scemama</p>
-<p class="date">Created: 2021-11-02 Tue 12:44</p>
+<p class="date">Created: 2021-11-02 Tue 13:10</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
