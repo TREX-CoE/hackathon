@@ -1,6 +1,8 @@
 #+TITLE: Autotools
 #+AUTHOR: Evgeny Posenitskiy, Anthony Scemama
 #+LANGUAGE:  en
+#+HTML_LINK_HOME: index.html
+
 #+STARTUP: latexpreview
 #+LATEX_CLASS: report
 #+LATEX_HEADER_EXTRA: \usepackage{minted}

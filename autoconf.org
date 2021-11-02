@@ -1,6 +1,9 @@
 #+TITLE: Autoconf
 #+AUTHOR: Evgeny Posenitskiy, Anthony Scemama
 #+LANGUAGE:  en
+#+HTML_LINK_HOME: index.html
+#+HTML_LINK_UP: index.html
+
 
 # OLD STYLE
 # #+HTML_HEAD: <link rel="stylesheet" title="Standard" href="worg.css" type="text/css" />

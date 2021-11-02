@@ -1,7 +1,10 @@
-#+TITLE: Autoconf
+#+TITLE: Automake
 #+AUTHOR: Evgeny Posenitskiy, Anthony Scemama
 #+LANGUAGE:  en
 #+STARTUP: latexpreview
+#+HTML_LINK_HOME: index.html
+#+HTML_LINK_UP: index.html
+
 
 # OLD STYLE
 # #+HTML_HEAD: <link rel="stylesheet" title="Standard" href="worg.css" type="text/css" />
@@ -30,6 +33,10 @@ infrastructure managed by *Autotools*.
 
 #+CAPTION[The Basics of Autotools (Gentoo)]: Figure from [[https://devmanual.gentoo.org/general-concepts/autotools/index.html][The Basics of Autotools]]
 [[https://devmanual.gentoo.org/general-concepts/autotools/diagram.png]]
+
+You have seen in the *Autoconf* tutorial how to write =configure.ac= and =Makefile.in=.
+Here, we introduce *Automake* which will produce the =Makefile.in= from a simplified file =Makefile.am=.
+The produced file 
 
 * GNU standards
 
