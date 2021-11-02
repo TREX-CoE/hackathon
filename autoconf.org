@@ -13,10 +13,15 @@
 #+SETUPFILE: org-html-themes/org/theme-readtheorg-local.setup
 
 
-
-
 This page contains the [[https://www.gnu.org/software/autoconf/][GNU Autoconf]] tutorial, which is the first part of the [[./index.html][Autotools tutorial]].
 
+  #+begin_tip 
+Before you proceed to the tutorial, download the example project called *Sherman-Morrison*. This can be done in 2 ways:
+  
+- using *Git* if you are familiar with it: ~git clone https://github.com/q-posev/Sherman-Morrison.git~
+- by downloading the project from the *Assets* section (either ~.zip~ or ~.tar.gz~) on the following webpage: https://github.com/q-posev/Sherman-Morrison/releases/tag/v0.1-demo. Make sure to extract the files from the archive before starting the tutorial.
+ 
+  #+end_tip
 
 * Introduction
 
@@ -44,16 +49,23 @@ The source files depend on the [[https://portal.hdfgroup.org/display/HDF5/HDF5][
 HDF5 is a binary file format, which is designed for high-performance data input/output.
 We will learn how to automatically locate the HDF5 library using macros.
 
+  #+begin_tip 
+In the examples demonstated in this tutorial, 
+the OS is Ubuntu with the default GNU compilers ~gcc/g++ 9.3.0~
+and with the HDF5 library installed via ~sudo apt-get install libhdf5-dev~ command.
+  #+end_tip 
+
 Below is a source tree of our project. Header and source files can be found in the ~include/~ and ~src/~ directories, respectively.
-The ~tests/~ directory contains the ~test_h5.cpp~ and ~dataset.hdf5~ files needed to test compilation of the aforementioned source code.
+The ~tests/~ directory contains the ~test_h5.cpp~ and ~dataset.hdf5~ files needed to test compilation of the aforementioned source codes.
 
 For this tutorial, the contents of the source and header files are not important.
 However, it is worth mentioning that they depend on the HDF5 library, which is not included in the source tree.
-The goal is to demonstrate how cumbersome configuration/compilation steps can be facilitated by the use of *Autoconf*.
+Our goal is to demonstrate how cumbersome configuration/compilation steps can be facilitated by the use of *Autoconf*.
 
 #+begin_src text
 Sherman-Morrison/
 ├─ bin/
+│  ├─ .gitignore
 ├─ include/
 │  ├─ Helpers.hpp
 │  ├─ SMWB.hpp
@@ -72,8 +84,8 @@ Sherman-Morrison/
 ├─ LICENSE
 ├─ Makefile
 ├─ README.md
+├─ .gitignore
 #+end_src
-
 
 * Makefile
 
@@ -82,8 +94,8 @@ Below is the ~Makefile~ of our project:
 #+begin_src makefile
 ## Specify the C++ compiler as well as preprocessor, compiler and linking flags
 CXX      = g++
-CPPFLAGS = -I./include/ -I/usr/include/hdf5/serial
 CXXFLAGS = -g -O2 -std=c++11
+CPPFLAGS = -I./include/ -I/usr/include/hdf5/serial
 LDFLAGS  = -L/usr/lib/x86_64-linux-gnu/hdf5/serial
 LIBS     = -lhdf5 -lhdf5_cpp -lpthread -lz
 
@@ -118,7 +130,7 @@ $(BIN_DIR)/test_h5: $(DEPS_CXX) $(TST_DIR)/test_h5.o
         $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(TST_DIR)/test_h5.o $(DEPS_CXX) -o $(EXEC) $(LDFLAGS) $(LIBS)
 #+end_src
 
-Let's execute **make** command and examine the output:
+Let's execute ~make~ command and examine the output:
 
 #+begin_src
 $ make
@@ -156,7 +168,7 @@ However, in real life, defining them is challenging, especially for programs wit
 
 Wouldn't it be nice if we could automatize this process? Well, this is where **Autoconf** comes into play.
 
-* configure
+* Autoconf
 
 In this section, we will talk about several files:
 
@@ -165,11 +177,15 @@ In this section, we will talk about several files:
 - =Makefile.in=
 - =Makefile=
 
+#+begin_tip 
 The ultimate goal of the *Autoconf* is to produce the ~configure~ script based on the ~configure.ac~ file.
 The ~configure~ script then detects the ~Makefile.in~ file and replaces some variables there to produce
 the final ~Makefile~, which is used to build a project.  
+#+end_tip
 
-TODO: PICTURE HERE
+#+CAPTION[The Basics of Autotools (Gentoo)]: Figure from [[https://devmanual.gentoo.org/general-concepts/autotools/index.html][The Basics of Autotools]]
+[[https://devmanual.gentoo.org/general-concepts/autotools/diagram.png]]
+
 
 This might be confusing at the beginning. 
 Let's create the simplest ~configure.ac~ file for our project with the following contents:
@@ -226,7 +242,7 @@ The contents of the current directory should be as follows:
 
 ~bin/  configure.ac  include/  LICENSE  Makefile  README.md  src/  tests/~
 
-Now run *autoreconf* command in your terminal and examine the directory again.
+Now run ~autoreconf~ command in your terminal and examine the directory again.
 After succesfull execution, a ~configure~ shell script should appear.
 
 Let's run it by calling ~./configure~. 
@@ -250,8 +266,10 @@ Moreover, the script detects the default ~C++~ flags of ~g++~ and adds them to ~
 
 From now on we will focus mainly on ~$~-prefixed variables and calls to the *Autoconf* macros.
 
-**Note:** whenever you make a change in ~configure.ac~, 
+#+begin_tip 
+Whenever you make a change in the ~configure.ac~ file, do not forget to
 execute ~autoreconf -i~ to update the generated ~configure~ script.
+#+end_tip
 
 The ~configure~ script can also define its own variables (e.g. ~$PACKAGE_NAME~ above) and pass them to other files.
 To benefit from the previously detected ~C++~ compiler and its flags, let's propagate them to ~Makefile~.
@@ -259,7 +277,7 @@ To benefit from the previously detected ~C++~ compiler and its flags, let's prop
 This requires 2 actions:
 
 - Move ~Makefile~ to ~Makefile.in~ (this is the standard naming convention in *Autotools*) and replace the hard-coded variables with the ones defined by the ~configure~ script. For demonstration purposes, we only replace ~CXX~ and ~CXXFLAGS~ at the moment.
-- Indicate to *Autoconf* that ~Makefile~ is now its responsibility (due to the variables that will be substituted by ~./configure~ call) by adding ~AC_CONFIG_FILES([Makefile])~.
+- Indicate to *Autoconf* that producing ~Makefile~ is now its responsibility (due to the variables that will be substituted by ~./configure~ call). This can be achieved by adding ~AC_CONFIG_FILES([Makefile])~.
 
 ~configure.ac~:
 #+begin_src makefile
@@ -301,7 +319,9 @@ LIBS     = -lhdf5 -lhdf5_cpp -lpthread -lz
 ...........
 #+end_src
   
+#+begin_tip 
 Variables in between ~@~ signs are called substitutation variables and are important part of the *Autotools* toolkit.
+#+end_tip
 
 Let's reconfigure (~autoreconf -i && ./configure~) and examine the changes between the input
 ~Makefile.in~ and output ~Makefile~ (you can use ~diff~ or ~vimdiff~ for example):
@@ -322,13 +342,16 @@ by ~g++~ and ~-g -O2~, respectively.
 Good, but we still have these hard-coded paths to HDF5 library in ~CPPFLAGS~ and ~LDFLAGS~.
 Let's try to find this library using *Autoconf* functionality.
 
-** Detecting external dependencies
+* Detecting external dependencies
 
 It is possible to write your our own macros to detect an external dependency.
 However, in this example we will try to locate the HDF5 library, which is widely used nowadays.
 Luckily for us, the GNU website has an [[https://www.gnu.org/software/autoconf-archive/The-Macros.html][archive of Autoconf macros]] for many packages, including HDF5.
-It is considered good practice to put *Autoconf* macros in the ~m4~ directory of your project.
 The ~ax_lib_hdf5.m4~ file can be downloaded from the aforementioned page.
+
+#+begin_tip
+It is considered good practice to put *Autoconf* macros in the ~m4~ directory of your project.
+#+end_tip
 
 Once the file is in the ~m4~ directory, one can add the following lines to ~configure.ac~
 in order to locate and call the ~ax_lib_hdf5.m4~ macro:
@@ -360,8 +383,8 @@ If HDF5 is successfully found, this macro calls
 and sets with_hdf5="yes". ...
 #+end_src
 
-This means that the macro will define a set of variables that can be either manupulated 
-within the ~configure.ac~ or passed to the ~Makefile.in~ via substitution variables. 
+This means that the macro will define a set of variables that can be manupulated 
+within ~configure.ac~ and/or ~Makefile.in~ files. 
 In this example, we choose the former and will append the necessary flags with the ~HDF5_~ ones.
 
 ~configure.ac~:
@@ -445,8 +468,11 @@ Package features:
 --------------------------------------------------
 #+end_src
 
-You can now see how all the hard-coded HDF5 paths have been detected by the ~ax_lib_hdf5.m4~ macro.
-Moreover, all the flags are propagated to the resulting ~Makefile~ thanks to the use of substitution variables.
+#+begin_tip
+You can now see how all hard-coded HDF5 paths have been detected by the ~ax_lib_hdf5.m4~ macro.
+Moreover, all flags are propagated to the resulting ~Makefile~ due to the use of substitution variables.
+#+end_tip
+
 This can also be checked by visualising differences between ~Makefile.in~ and ~Makefile~:
 
 #+begin_src
@@ -465,19 +491,17 @@ $ diff Makefile.in Makefile
 > LDFLAGS  =  -L/usr/lib/x86_64-linux-gnu/hdf5/serial 
 #+end_src
  
-
-**Note:** in the example output demonstated in this tutorial, 
-the environment was Ubuntu 20.04 OS with HDF5 installed via 
-~sudo apt-get install libhdf5-dev~ command.
-
-** pkg-config
+* pkg-config
 
 The [[https://linux.die.net/man/1/pkg-config][pkg-config program]] is a powerful tool to get information about installed libraries.
 *Autoconf* incorporates some of the ~pkg-config~ functionality.
 
-The minimal setup consists of calls to the
-initialization macro ~PKG_PROG_PKG_CONFIG~ and search macro ~PKG_CHECK_MODULES~.
-The latter can be configured to check the required version of the HDF5 library (see [[https://autotools.io/pkgconfig/pkg_check_modules.html][the Autotools Mythbuster website]] for more details).
+#+begin_tip
+The minimal setup of ~pkg-config~ consists of calls to the
+initialization macro ~PKG_PROG_PKG_CONFIG~ and the search macro ~PKG_CHECK_MODULES~.
+#+end_tip
+
+The ~PKG_CHECK_MODULES~ can be configured to check the required version of the HDF5 library (see [[https://autotools.io/pkgconfig/pkg_check_modules.html][the Autotools Mythbuster website]] for more details).
 For example, ~PKG_CHECK_MODULES([HDF5], [hdf5 >= 1.8])~ verifies that the HDF5 version is not older than ~1.8~.
 
 ~configure.ac~:
@@ -558,13 +582,8 @@ $ pkg-config --cflags --libs hdf5
 
 * Conclusion
 
-
-
-
-
-
-* TODO Improvements
-
-  - Add the link to the repository where to get the Sherman-Morrison code
-  - Picture in section 3
-
+In this Tutorial you have learned how to make your in-house ~Makefile~ compatible with *Autoconf*. 
+This is achieved by converting ~Makefile~ into ~Makefile.in~ and introducing substitution variables.
+You have also learned how to use *Autoconf* to create the ~configure~ script, which sets up and checks programs and libraries on the host machine.
+The ~configure~ script is also responsible for producing the final ~Makefile~, which is used to build the project.
+Finally, you used the *Autoconf* macro from the GNU archive to configure the project, which has an external dependency (i.e. the HDF5 library).
