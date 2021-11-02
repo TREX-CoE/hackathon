@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-11-02 Tue 14:53 -->
+<!-- 2021-11-02 Tue 22:07 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Automake</title>
@@ -244,34 +244,29 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org461d37a">1. Introduction</a></li>
-<li><a href="#org2bfe306">2. GNU standards</a>
+<li><a href="#org3bbce49">1. Introduction</a></li>
+<li><a href="#org3284f63">2. GNU standards</a>
 <ul>
-<li><a href="#org15c6de4">2.1. Standard targets</a></li>
+<li><a href="#orgd0dc7a1">2.1. Standard targets</a></li>
+<li><a href="#orgf69e152">2.2. Filesystem Hierarchy Standard (FHS)</a></li>
+<li><a href="#org6d48bd2">2.3. Standard variables</a></li>
 </ul>
 </li>
-<li><a href="#orgd653c91">3. Writing portable Makefiles</a>
+<li><a href="#org26df474">3. Writing portable Makefiles</a>
 <ul>
-<li><a href="#org79dc770">3.1. What you will lose by sticking to the POSIX standard</a></li>
-<li><a href="#org45e7270">3.2. Rules that will make everything simpler</a></li>
-<li><a href="#org56a986b">3.3. Useful links</a></li>
+<li><a href="#org5034cc8">3.1. What you will lose by sticking to the POSIX standard</a></li>
+<li><a href="#org21ed8c2">3.2. Rules that will make everything simpler</a></li>
 </ul>
 </li>
-<li><a href="#org00f098b">4. Automake basics</a></li>
-<li><a href="#org307e793">5. Unit testing</a></li>
-<li><a href="#org9cfddf3">6. Creating a distributed tarball</a>
+<li><a href="#org6487cc6">4. Automake basics</a></li>
+<li><a href="#org2de7b5b">5. Unit testing</a></li>
+<li><a href="#org2e0e502">6. Creating a distributed tarball</a>
 <ul>
-<li><a href="#org0b0cc22">6.1. Source distribution targets</a></li>
-<li><a href="#org0c42c20">6.2. Maintainer mode</a></li>
-<li><a href="#org461631b">6.3. Useful links</a></li>
+<li><a href="#org6282fe7">6.1. Source distribution targets</a></li>
+<li><a href="#org104f3b6">6.2. Maintainer mode</a></li>
 </ul>
 </li>
-<li><a href="#orgc61aeef">7. Using pkg-config</a>
-<ul>
-<li><a href="#org8045015">7.1. Useful Links</a></li>
-</ul>
-</li>
-<li><a href="#org3f977c0">8. <span class="todo TODO">TODO</span> Improvements</a></li>
+<li><a href="#org984b246">7. Using pkg-config</a></li>
 </ul>
 </div>
 </div>
@@ -280,8 +275,8 @@ This page contains a tutorial on the usage <a href="http://www.gnu.org/software/
 second part of the <a href="./index.html">Autotools tutorial</a>.
 </p>
 
-<div id="outline-container-org461d37a" class="outline-2">
-<h2 id="org461d37a"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-org3bbce49" class="outline-2">
+<h2 id="org3bbce49"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Using a simplified syntax, <b>Automake</b> produces functional Makefiles
@@ -303,45 +298,239 @@ infrastructure managed by <b>Autotools</b>.
 </div>
 
 <p>
-You have seen in the <b>Autoconf</b> tutorial how to write <code>configure.ac</code> and <code>Makefile.in</code>.
-Here, we introduce <b>Automake</b> which will produce the <code>Makefile.in</code> from a simplified file <code>Makefile.am</code>.
-The produced file 
+You have seen in the <b>Autoconf</b> tutorial how to write <code>configure.ac</code>
+and <code>Makefile.in</code>.  Here, we introduce <b>Automake</b> which will produce
+the <code>Makefile.in</code> from a high-level specification file <code>Makefile.am</code>.
+The produced file will automatically add extra functionalities to the
+Makefile, using standard target names.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org2bfe306" class="outline-2">
-<h2 id="org2bfe306"><span class="section-number-2">2</span> GNU standards</h2>
+<div id="outline-container-org3284f63" class="outline-2">
+<h2 id="org3284f63"><span class="section-number-2">2</span> GNU standards</h2>
 <div class="outline-text-2" id="text-2">
+<p>
+GNU standards are well known to users. If you use them, your users
+will be grateful because it will avoid them to read your installation
+instructions.
+In addition, it will make the packaging of your code much simpler if
+you want to make it available as as Linux distribution package
+(<code>.deb</code>, <code>.rpm</code>, &#x2026;), or as a package for
+<a href="https://brew.sh/">Homebrew</a>,
+<a href="http://guix.gnu.org/">Guix</a>,
+<a href="https://conda.io/">Conda</a>,
+<a href="https://spack.io/">Spack</a>,
+<a href="https://easybuild.io/">EasyBuild</a>, &#x2026;
+</p>
+
+<div class="seealso">
+<ul class="org-ul">
+<li><a href="https://www.gnu.org/prep/standards/html_node/index.html">GNU coding standards</a></li>
+<li><a href="https://coderwall.com/p/urkybq/how-to-create-debian-package-from-source">How to create Debian package from source</a></li>
+<li><a href="https://rpm-packaging-guide.github.io/">RPM packaging guide</a></li>
+</ul>
+
 </div>
-<div id="outline-container-org15c6de4" class="outline-3">
-<h3 id="org15c6de4"><span class="section-number-3">2.1</span> Standard targets</h3>
+</div>
+
+<div id="outline-container-orgd0dc7a1" class="outline-3">
+<h3 id="orgd0dc7a1"><span class="section-number-3">2.1</span> Standard targets</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
-make all
-    Builds all the targets sufficient to declare the package built.
+The GNU standards define standard target names to be included in
+Makefiles, such that the behavior of make becomes uniform among
+multiple packages. Here is a short list of the main targets:
 </p>
 
-<p>
-make check
-    Runs unit tests provided by the package.
-</p>
+<dl class="org-dl">
+<dt><code>make all</code></dt><dd>Builds all the targets sufficient to declare the package built.</dd>
+<dt><code>make clean</code></dt><dd>Removes all derived files.</dd>
+<dt><code>make check</code></dt><dd>Runs unit tests provided by the package.</dd>
+<dt><code>make install</code></dt><dd>Installs the package</dd>
+<dt><code>make uninstall</code></dt><dd>Uninstalls the package</dd>
+<dt><code>make html</code></dt><dd>Builds the documentation in HTML format</dd>
+<dt><code>make check</code></dt><dd>Performs self-tests</dd>
+</dl>
 
-<p>
-make install
-    Installs the package
-</p>
+<div class="seealso">
+<ul class="org-ul">
+<li><a href="https://www.gnu.org/prep/standards/html_node/Standard-Targets.html#Standard-Targets">Standard targets for users</a></li>
+</ul>
 
-<p>
-make clean
-    Removes all derived files.
-</p>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgd653c91" class="outline-2">
-<h2 id="orgd653c91"><span class="section-number-2">3</span> Writing portable Makefiles</h2>
+<div id="outline-container-orgf69e152" class="outline-3">
+<h3 id="orgf69e152"><span class="section-number-3">2.2</span> Filesystem Hierarchy Standard (FHS)</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+The FHS defines the directory structure and contents in Linux
+distributions. All Unix-like systems follow the FHS, which defines
+standard places for files like:
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Path</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><code>/bin</code></td>
+<td class="org-left">Essential binaries</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>/lib</code></td>
+<td class="org-left">Essential libraries</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>/etc</code></td>
+<td class="org-left">Editable Text Configuration files</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>/sbin</code></td>
+<td class="org-left">Essential system binaries</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>/tmp</code></td>
+<td class="org-left">Directory for temporary files</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>/usr</code></td>
+<td class="org-left">Secondary hierarchy for user data</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>/usr/bin</code></td>
+<td class="org-left">Non-essential binaries</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>/usr/lib</code></td>
+<td class="org-left">Libraries for non-essential binaries</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>/usr/include</code></td>
+<td class="org-left">Standard include files</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>/usr/local</code></td>
+<td class="org-left">Tertiary hierarchy for local data</td>
+</tr>
+</tbody>
+</table>
+
+<div class="seealso">
+<ul class="org-ul">
+<li><a href="https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard">FHS on Wikipedia</a></li>
+<li><a href="https://refspecs.linuxfoundation.org/FHS_3.0/fhs-3.0.pdf">FHS specification</a></li>
+</ul>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6d48bd2" class="outline-3">
+<h3 id="org6d48bd2"><span class="section-number-3">2.3</span> Standard variables</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+Installation directories are named by standard variables, so it is
+easy to install the package in a non-standard place.
+The main variables are:
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Variable</th>
+<th scope="col" class="org-left">Default</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><code>prefix</code></td>
+<td class="org-left"><code>/usr/local</code></td>
+<td class="org-left">Root of the hierarchy</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>bindir</code></td>
+<td class="org-left"><code>/usr/local/bin</code></td>
+<td class="org-left">Where to install the binaries</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>sysconfdir</code></td>
+<td class="org-left"><code>/usr/local/etc</code></td>
+<td class="org-left">Where to install configuration files</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>includedir</code></td>
+<td class="org-left"><code>/usr/local/lib</code></td>
+<td class="org-left">Where to install the libraries</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>includedir</code></td>
+<td class="org-left"><code>/usr/local/include</code></td>
+<td class="org-left">Where to install include files</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>docdir</code></td>
+<td class="org-left"><code>/usr/local/share/doc/&lt;package&gt;</code></td>
+<td class="org-left">Where to install the documentation</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>srcdir</code></td>
+<td class="org-left">Set by <code>configure</code></td>
+<td class="org-left">The directory of the sources being compiled</td>
+</tr>
+</tbody>
+</table>
+
+<div class="seealso">
+<ul class="org-ul">
+<li><a href="https://www.gnu.org/prep/standards/html_node/Directory-Variables.html#Directory-Variables">Directory variables</a></li>
+</ul>
+
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org26df474" class="outline-2">
+<h2 id="org26df474"><span class="section-number-2">3</span> Writing portable Makefiles</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 The Makefiles produced by <b>Automake</b> are made to be portable among
@@ -356,17 +545,19 @@ guaranteed to work with alternate implementations of <code>make</code>, such as 
 instance. If you want your software to be <i>really</i> portable, you should stick to the
 POSIX standard in your Makefile by including the line
 </p>
+
 <div class="org-src-container">
 <pre class="src src-makefile">.POSIX
 </pre>
 </div>
+
 <p>
 at the top of your Makefile.
 </p>
 </div>
 
-<div id="outline-container-org79dc770" class="outline-3">
-<h3 id="org79dc770"><span class="section-number-3">3.1</span> What you will lose by sticking to the POSIX standard</h3>
+<div id="outline-container-org5034cc8" class="outline-3">
+<h3 id="org5034cc8"><span class="section-number-3">3.1</span> What you will lose by sticking to the POSIX standard</h3>
 <div class="outline-text-3" id="text-3-1">
 <ul class="org-ul">
 <li><p>
@@ -375,7 +566,7 @@ Pattern rules, such as
 
 <div class="org-src-container">
 <pre class="src src-makefile"><span style="color: #0000ff;">%_test.o</span>: %_test.c
-        $(<span style="color: #a0522d;">CC</span>) $<span style="color: #008b8b;">&lt;</span> -o <span style="color: #0000ff;">$</span><span style="color: #008b8b;">@</span>
+$(<span style="color: #a0522d;">CC</span>) $<span style="color: #008b8b;">&lt;</span> -o <span style="color: #0000ff;">$</span><span style="color: #008b8b;">@</span>
 </pre>
 </div></li>
 
@@ -384,10 +575,11 @@ Pattern rules, such as
 </div>
 </div>
 
-<div id="outline-container-org45e7270" class="outline-3">
-<h3 id="org45e7270"><span class="section-number-3">3.2</span> Rules that will make everything simpler</h3>
+<div id="outline-container-org21ed8c2" class="outline-3">
+<h3 id="org21ed8c2"><span class="section-number-3">3.2</span> Rules that will make everything simpler</h3>
 <div class="outline-text-3" id="text-3-2">
 <ul class="org-ul">
+<li>Don't use any other automatic variable than <code>$@</code> (the name of the current target)</li>
 <li>Use <code class="src src-bash">/bin/sh</code> instead of <code class="src src-bash">/bin/bash</code></li>
 <li>Don't put your compiled files (<code>.o</code>) in a separate location than the source files</li>
 <li>Give up writing your Makefiles by hand. Write <b>scripts</b> (Bash, Python) to
@@ -395,32 +587,44 @@ write them for you.</li>
 <li>Install <code>bmake</code> as an alternative to GNU make to check the portability of
 your Makefiles.</li>
 </ul>
-</div>
-</div>
 
-<div id="outline-container-org56a986b" class="outline-3">
-<h3 id="org56a986b"><span class="section-number-3">3.3</span> Useful links</h3>
-<div class="outline-text-3" id="text-3-3">
+
+<div class="seealso">
 <ul class="org-ul">
 <li><a href="http://gnu.ist.utl.pt/software/autoconf/manual/autoconf-2.57/html_chapter/autoconf_10.html">Portable shell programming</a></li>
 <li><a href="https://www.oreilly.com/library/view/managing-projects-with/0596006101/ch07.html">Portable Makefiles</a></li>
+<li><a href="https://www.gnu.org/savannah-checkouts/gnu/autoconf/manual/autoconf-2.70/html_node/Portable-Make.html#Portable-Make">Portable Make programming</a></li>
 </ul>
+
+</div>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org00f098b" class="outline-2">
-<h2 id="org00f098b"><span class="section-number-2">4</span> Automake basics</h2>
+<div id="outline-container-org6487cc6" class="outline-2">
+<h2 id="org6487cc6"><span class="section-number-2">4</span> Automake basics</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+Automake reads the <code>Makefile.am</code> file and produces the <code>Makefile.in</code>
+file. The produced file may contain thousands of lines, and is
+guaranteed to have the basic functionalities (<code class="src src-bash">make all</code>,
+<code class="src src-bash">make clean</code>, &#x2026;) in a portable Makefile.
+<code>Makefile.am</code> contains regular <code>make</code> syntax, and the code it
+contains will be inserted at the proper location in the <code>Makefil.in</code>
+file. 
+</p>
 </div>
-<div id="outline-container-org307e793" class="outline-2">
-<h2 id="org307e793"><span class="section-number-2">5</span> Unit testing</h2>
 </div>
-<div id="outline-container-org9cfddf3" class="outline-2">
-<h2 id="org9cfddf3"><span class="section-number-2">6</span> Creating a distributed tarball</h2>
+
+<div id="outline-container-org2de7b5b" class="outline-2">
+<h2 id="org2de7b5b"><span class="section-number-2">5</span> Unit testing</h2>
+</div>
+<div id="outline-container-org2e0e502" class="outline-2">
+<h2 id="org2e0e502"><span class="section-number-2">6</span> Creating a distributed tarball</h2>
 <div class="outline-text-2" id="text-6">
 </div>
-<div id="outline-container-org0b0cc22" class="outline-3">
-<h3 id="org0b0cc22"><span class="section-number-3">6.1</span> Source distribution targets</h3>
+<div id="outline-container-org6282fe7" class="outline-3">
+<h3 id="org6282fe7"><span class="section-number-3">6.1</span> Source distribution targets</h3>
 <div class="outline-text-3" id="text-6-1">
 <p>
 <b>Automake</b> provides the <code>dist</code> and <code>distcheck</code> targets:
@@ -441,8 +645,8 @@ tests, etc.
 </div>
 </div>
 
-<div id="outline-container-org0c42c20" class="outline-3">
-<h3 id="org0c42c20"><span class="section-number-3">6.2</span> Maintainer mode</h3>
+<div id="outline-container-org104f3b6" class="outline-3">
+<h3 id="org104f3b6"><span class="section-number-3">6.2</span> Maintainer mode</h3>
 <div class="outline-text-3" id="text-6-2">
 <p>
 There are two types of people who will try to compile the source
@@ -483,23 +687,19 @@ Makefiles by running
 <pre class="src src-bash">./configure --enable-maintainer-mode
 </pre>
 </div>
-</div>
-</div>
 
-
-
-<div id="outline-container-org461631b" class="outline-3">
-<h3 id="org461631b"><span class="section-number-3">6.3</span> Useful links</h3>
-<div class="outline-text-3" id="text-6-3">
+<div class="seealso">
 <ul class="org-ul">
 <li><a href="https://autotools.io/automake/maintainer.html">Maintainer mode and the <code>missing</code> script</a></li>
 </ul>
+
+</div>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgc61aeef" class="outline-2">
-<h2 id="orgc61aeef"><span class="section-number-2">7</span> Using pkg-config</h2>
+<div id="outline-container-org984b246" class="outline-2">
+<h2 id="org984b246"><span class="section-number-2">7</span> Using pkg-config</h2>
 <div class="outline-text-2" id="text-7">
 <p>
 When your software depends on external libraries and you try to
@@ -585,31 +785,20 @@ The pkg-config files are searched in the directories defined by the
 </p>
 
 </div>
-</div>
 
-<div id="outline-container-org8045015" class="outline-3">
-<h3 id="org8045015"><span class="section-number-3">7.1</span> Useful Links</h3>
-<div class="outline-text-3" id="text-7-1">
+<div class="seealso">
 <ul class="org-ul">
 <li><a href="https://people.freedesktop.org/~dbn/pkg-config-guide.html">Guide to pkg-config</a></li>
 <li><a href="https://autotools.io/pkgconfig/index.html">Dependency discovery — pkg-config</a></li>
 </ul>
-</div>
-</div>
-</div>
 
-<div id="outline-container-org3f977c0" class="outline-2">
-<h2 id="org3f977c0"><span class="section-number-2">8</span> <span class="todo TODO">TODO</span> Improvements</h2>
-<div class="outline-text-2" id="text-8">
-<ul class="org-ul">
-<li>Libtool?</li>
-</ul>
+</div>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Evgeny Posenitskiy, Anthony Scemama</p>
-<p class="date">Created: 2021-11-02 Tue 14:53</p>
+<p class="date">Created: 2021-11-02 Tue 22:07</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
