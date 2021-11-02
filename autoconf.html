@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-11-01 Mon 15:23 -->
+<!-- 2021-11-02 Tue 12:44 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Autoconf</title>
@@ -240,16 +240,12 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org85d18a7">1. Introduction</a></li>
-<li><a href="#orge6bdced">2. Makefile</a></li>
-<li><a href="#orgac5ea19">3. configure</a>
-<ul>
-<li><a href="#orgebe64a1">3.1. Detecting external dependencies</a></li>
-<li><a href="#org8d44872">3.2. pkg-config</a></li>
-</ul>
-</li>
-<li><a href="#org23c29ef">4. Conclusion</a></li>
-<li><a href="#org46dc76c">5. <span class="todo TODO">TODO</span> Improvements</a></li>
+<li><a href="#org2ea14a7">1. Introduction</a></li>
+<li><a href="#org236cbbf">2. Makefile</a></li>
+<li><a href="#org3ac6514">3. Autoconf</a></li>
+<li><a href="#orgd122695">4. Detecting external dependencies</a></li>
+<li><a href="#org8d536db">5. pkg-config</a></li>
+<li><a href="#org991d7a6">6. Conclusion</a></li>
 </ul>
 </div>
 </div>
@@ -257,9 +253,18 @@ for the JavaScript code in this tag.
 This page contains the <a href="https://www.gnu.org/software/autoconf/">GNU Autoconf</a> tutorial, which is the first part of the <a href="./index.html">Autotools tutorial</a>.
 </p>
 
+<p>
+Before you proceed to the tutorial, download the example project called Sherman-Morrison. This can be done in 2 ways:
+</p>
 
-<div id="outline-container-org85d18a7" class="outline-2">
-<h2 id="org85d18a7"><span class="section-number-2">1</span> Introduction</h2>
+<ul class="org-ul">
+<li>using <b>Git</b> if you are familiar with it: <code>git clone https://github.com/q-posev/Sherman-Morrison.git</code></li>
+<li>by downloading the project from the <b>Assets</b> section (either <code>.zip</code> or <code>.tar.gz</code>) on the following webpage: <a href="https://github.com/q-posev/Sherman-Morrison/releases/tag/v0.1-demo">https://github.com/q-posev/Sherman-Morrison/releases/tag/v0.1-demo</a>. Make sure to extract the files from the archive before starting the tutorial.</li>
+</ul>
+
+
+<div id="outline-container-org2ea14a7" class="outline-2">
+<h2 id="org2ea14a7"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Building software on different platforms is a challenging task.
@@ -294,19 +299,29 @@ We will learn how to automatically locate the HDF5 library using macros.
 </p>
 
 <p>
+<b><b>Note:</b></b> in the examples demonstated in this tutorial, 
+the OS is Ubuntu 20.04 with default GNU compilers (<code>gcc/g++ version 9.3.0</code>) 
+and with the HDF5 library installed via <code>sudo apt-get install libhdf5-dev</code> command.
+</p>
+
+<p>
 Below is a source tree of our project. Header and source files can be found in the <code>include/</code> and <code>src/</code> directories, respectively.
-The <code>tests/</code> directory contains the <code>test_h5.cpp</code> and <code>dataset.hdf5</code> files needed to test compilation of the aforementioned source code.
+The <code>tests/</code> directory contains the <code>test_h5.cpp</code> and <code>dataset.hdf5</code> files needed to test compilation of the aforementioned source codes.
 </p>
 
 <p>
 For this tutorial, the contents of the source and header files are not important.
 However, it is worth mentioning that they depend on the HDF5 library, which is not included in the source tree.
-The goal is to demonstrate how cumbersome configuration/compilation steps can be facilitated by the use of <b>Autoconf</b>.
+</p>
+
+<p>
+Our goal is to demonstrate how cumbersome configuration/compilation steps can be facilitated by the use of <b>Autoconf</b>.
 </p>
 
 <div class="org-src-container">
 <pre class="src src-text">Sherman-Morrison/
 &#9500;&#9472; bin/
+&#9474;  &#9500;&#9472; .gitignore
 &#9500;&#9472; include/
 &#9474;  &#9500;&#9472; Helpers.hpp
 &#9474;  &#9500;&#9472; SMWB.hpp
@@ -325,14 +340,14 @@ The goal is to demonstrate how cumbersome configuration/compilation steps can be
 &#9500;&#9472; LICENSE
 &#9500;&#9472; Makefile
 &#9500;&#9472; README.md
+&#9500;&#9472; .gitignore
 </pre>
 </div>
 </div>
 </div>
 
-
-<div id="outline-container-orge6bdced" class="outline-2">
-<h2 id="orge6bdced"><span class="section-number-2">2</span> Makefile</h2>
+<div id="outline-container-org236cbbf" class="outline-2">
+<h2 id="org236cbbf"><span class="section-number-2">2</span> Makefile</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 Below is the <code>Makefile</code> of our project:
@@ -341,8 +356,8 @@ Below is the <code>Makefile</code> of our project:
 <div class="org-src-container">
 <pre class="src src-makefile">## <span style="color: #b22222;">Specify the C++ compiler as well as preprocessor, compiler and linking flags</span>
 <span style="color: #a0522d;">CXX</span>      = g++
-<span style="color: #a0522d;">CPPFLAGS</span> = -I./include/ -I/usr/include/hdf5/serial
 <span style="color: #a0522d;">CXXFLAGS</span> = -g -O2 -std=c++11
+<span style="color: #a0522d;">CPPFLAGS</span> = -I./include/ -I/usr/include/hdf5/serial
 <span style="color: #a0522d;">LDFLAGS</span>  = -L/usr/lib/x86_64-linux-gnu/hdf5/serial
 <span style="color: #a0522d;">LIBS</span>     = -lhdf5 -lhdf5_cpp -lpthread -lz
 
@@ -379,7 +394,7 @@ Below is the <code>Makefile</code> of our project:
 </div>
 
 <p>
-Let's execute <b><b>make</b></b> command and examine the output:
+Let's execute <code>make</code> command and examine the output:
 </p>
 
 <pre class="example">
@@ -434,8 +449,8 @@ Wouldn't it be nice if we could automatize this process? Well, this is where <b>
 </div>
 </div>
 
-<div id="outline-container-orgac5ea19" class="outline-2">
-<h2 id="orgac5ea19"><span class="section-number-2">3</span> configure</h2>
+<div id="outline-container-org3ac6514" class="outline-2">
+<h2 id="org3ac6514"><span class="section-number-2">3</span> Autoconf</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 In this section, we will talk about several files:
@@ -454,9 +469,13 @@ The <code>configure</code> script then detects the <code>Makefile.in</code> file
 the final <code>Makefile</code>, which is used to build a project.  
 </p>
 
-<p>
-TODO: PICTURE HERE
+
+<div class="figure">
+<p><img src="https://devmanual.gentoo.org/general-concepts/autotools/diagram.png" alt="diagram.png" />
 </p>
+<p><span class="figure-number">Figure 1: </span>Figure from <a href="https://devmanual.gentoo.org/general-concepts/autotools/index.html">The Basics of Autotools</a></p>
+</div>
+
 
 <p>
 This might be confusing at the beginning. 
@@ -528,7 +547,7 @@ The contents of the current directory should be as follows:
 </p>
 
 <p>
-Now run <b>autoreconf</b> command in your terminal and examine the directory again.
+Now run <code>autoreconf</code> command in your terminal and examine the directory again.
 After succesfull execution, a <code>configure</code> shell script should appear.
 </p>
 
@@ -575,7 +594,7 @@ This requires 2 actions:
 
 <ul class="org-ul">
 <li>Move <code>Makefile</code> to <code>Makefile.in</code> (this is the standard naming convention in <b>Autotools</b>) and replace the hard-coded variables with the ones defined by the <code>configure</code> script. For demonstration purposes, we only replace <code>CXX</code> and <code>CXXFLAGS</code> at the moment.</li>
-<li>Indicate to <b>Autoconf</b> that <code>Makefile</code> is now its responsibility (due to the variables that will be substituted by <code>./configure</code> call) by adding <code>AC_CONFIG_FILES([Makefile])</code>.</li>
+<li>Indicate to <b>Autoconf</b> that producing <code>Makefile</code> is now its responsibility (due to the variables that will be substituted by <code>./configure</code> call). This can be achieved by adding <code>AC_CONFIG_FILES([Makefile])</code>.</li>
 </ul>
 
 <p>
@@ -653,10 +672,11 @@ Good, but we still have these hard-coded paths to HDF5 library in <code>CPPFLAGS
 Let's try to find this library using <b>Autoconf</b> functionality.
 </p>
 </div>
+</div>
 
-<div id="outline-container-orgebe64a1" class="outline-3">
-<h3 id="orgebe64a1"><span class="section-number-3">3.1</span> Detecting external dependencies</h3>
-<div class="outline-text-3" id="text-3-1">
+<div id="outline-container-orgd122695" class="outline-2">
+<h2 id="orgd122695"><span class="section-number-2">4</span> Detecting external dependencies</h2>
+<div class="outline-text-2" id="text-4">
 <p>
 It is possible to write your our own macros to detect an external dependency.
 However, in this example we will try to locate the HDF5 library, which is widely used nowadays.
@@ -701,8 +721,8 @@ and sets with_hdf5="yes". ...
 </pre>
 
 <p>
-This means that the macro will define a set of variables that can be either manupulated 
-within the <code>configure.ac</code> or passed to the <code>Makefile.in</code> via substitution variables. 
+This means that the macro will define a set of variables that can be manupulated 
+within <code>configure.ac</code> and/or <code>Makefile.in</code> files. 
 In this example, we choose the former and will append the necessary flags with the <code>HDF5_</code> ones.
 </p>
 
@@ -816,19 +836,12 @@ $ diff Makefile.in Makefile
 &gt; LIBS     = -lhdf5_hl -lhdf5  -lpthread -lsz -lz -ldl -lm  -lhdf5_cpp
 &gt; LDFLAGS  =  -L/usr/lib/x86_64-linux-gnu/hdf5/serial 
 </pre>
-
-
-<p>
-<b><b>Note:</b></b> in the example output demonstated in this tutorial, 
-the environment was Ubuntu 20.04 OS with HDF5 installed via 
-<code>sudo apt-get install libhdf5-dev</code> command.
-</p>
 </div>
 </div>
 
-<div id="outline-container-org8d44872" class="outline-3">
-<h3 id="org8d44872"><span class="section-number-3">3.2</span> pkg-config</h3>
-<div class="outline-text-3" id="text-3-2">
+<div id="outline-container-org8d536db" class="outline-2">
+<h2 id="org8d536db"><span class="section-number-2">5</span> pkg-config</h2>
+<div class="outline-text-2" id="text-5">
 <p>
 The <a href="https://linux.die.net/man/1/pkg-config">pkg-config program</a> is a powerful tool to get information about installed libraries.
 <b>Autoconf</b> incorporates some of the <code>pkg-config</code> functionality.
@@ -925,30 +938,23 @@ $ pkg-config --cflags --libs hdf5
 </pre>
 </div>
 </div>
-</div>
 
-<div id="outline-container-org23c29ef" class="outline-2">
-<h2 id="org23c29ef"><span class="section-number-2">4</span> Conclusion</h2>
-</div>
-
-
-
-
-
-
-<div id="outline-container-org46dc76c" class="outline-2">
-<h2 id="org46dc76c"><span class="section-number-2">5</span> <span class="todo TODO">TODO</span> Improvements</h2>
-<div class="outline-text-2" id="text-5">
-<ul class="org-ul">
-<li>Add the link to the repository where to get the Sherman-Morrison code</li>
-<li>Picture in section 3</li>
-</ul>
+<div id="outline-container-org991d7a6" class="outline-2">
+<h2 id="org991d7a6"><span class="section-number-2">6</span> Conclusion</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+In this Tutorial you have learned how to make your in-house <code>Makefile</code> compatible with <b>Autoconf</b>. 
+This is achieved by converting <code>Makefile</code> into <code>Makefile.in</code> and introducing substitution variables.
+You have also learned how to use <b>Autoconf</b> to create the <code>configure</code> script, which sets up and checks programs and libraries on the host machine.
+The <code>configure</code> script is also responsible for producing the final <code>Makefile</code>, which is used to build the project.
+Finally, you used the <b>Autoconf</b> macro from the GNU archive to configure the project, which has an external dependency (i.e. the HDF5 library).
+</p>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Evgeny Posenitskiy, Anthony Scemama</p>
-<p class="date">Created: 2021-11-01 Mon 15:23</p>
+<p class="date">Created: 2021-11-02 Tue 12:44</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

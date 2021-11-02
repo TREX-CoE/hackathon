@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-11-01 Mon 15:23 -->
+<!-- 2021-11-02 Tue 12:44 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Autoconf</title>
@@ -240,34 +240,34 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orga73ebba">1. Introduction</a></li>
-<li><a href="#orga3fca2b">2. GNU standards</a>
+<li><a href="#org8d224e3">1. Introduction</a></li>
+<li><a href="#org6ec6f00">2. GNU standards</a>
 <ul>
-<li><a href="#orgf2808c3">2.1. Standard targets</a></li>
+<li><a href="#org57d2d8d">2.1. Standard targets</a></li>
 </ul>
 </li>
-<li><a href="#orgcbee90e">3. Writing portable Makefiles</a>
+<li><a href="#org1053e96">3. Writing portable Makefiles</a>
 <ul>
-<li><a href="#org85ee18d">3.1. What you will lose by sticking to the POSIX standard</a></li>
-<li><a href="#orgce40997">3.2. Rules that will make everything simpler</a></li>
-<li><a href="#org839b299">3.3. Useful links</a></li>
+<li><a href="#orgdea3fa6">3.1. What you will lose by sticking to the POSIX standard</a></li>
+<li><a href="#org5813335">3.2. Rules that will make everything simpler</a></li>
+<li><a href="#org503ed15">3.3. Useful links</a></li>
 </ul>
 </li>
-<li><a href="#org35f2eb8">4. Automake basics</a></li>
-<li><a href="#org0d053b3">5. Unit testing</a></li>
-<li><a href="#org2d08753">6. Creating a distributed tarball</a>
+<li><a href="#org3dca820">4. Automake basics</a></li>
+<li><a href="#orgfc6403e">5. Unit testing</a></li>
+<li><a href="#orga30aced">6. Creating a distributed tarball</a>
 <ul>
-<li><a href="#org7478048">6.1. Source distribution targets</a></li>
-<li><a href="#orgab1c0c3">6.2. Maintainer mode</a></li>
-<li><a href="#org1e42d7c">6.3. Useful links</a></li>
+<li><a href="#org0e7b21c">6.1. Source distribution targets</a></li>
+<li><a href="#org87652c4">6.2. Maintainer mode</a></li>
+<li><a href="#org87ae775">6.3. Useful links</a></li>
 </ul>
 </li>
-<li><a href="#org91a2f72">7. Using pkg-config</a>
+<li><a href="#org8c131aa">7. Using pkg-config</a>
 <ul>
-<li><a href="#org0ad48fd">7.1. Useful Links</a></li>
+<li><a href="#org19ee3e4">7.1. Useful Links</a></li>
 </ul>
 </li>
-<li><a href="#orgd8b77b1">8. <span class="todo TODO">TODO</span> Improvements</a></li>
+<li><a href="#org2a57ec3">8. <span class="todo TODO">TODO</span> Improvements</a></li>
 </ul>
 </div>
 </div>
@@ -276,8 +276,8 @@ This page contains a tutorial on the usage <a href="http://www.gnu.org/software/
 second part of the <a href="./index.html">Autotools tutorial</a>.
 </p>
 
-<div id="outline-container-orga73ebba" class="outline-2">
-<h2 id="orga73ebba"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-org8d224e3" class="outline-2">
+<h2 id="org8d224e3"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Using a simplified syntax, <b>Automake</b> produces functional Makefiles
@@ -300,12 +300,12 @@ infrastructure managed by <b>Autotools</b>.
 </div>
 </div>
 
-<div id="outline-container-orga3fca2b" class="outline-2">
-<h2 id="orga3fca2b"><span class="section-number-2">2</span> GNU standards</h2>
+<div id="outline-container-org6ec6f00" class="outline-2">
+<h2 id="org6ec6f00"><span class="section-number-2">2</span> GNU standards</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-orgf2808c3" class="outline-3">
-<h3 id="orgf2808c3"><span class="section-number-3">2.1</span> Standard targets</h3>
+<div id="outline-container-org57d2d8d" class="outline-3">
+<h3 id="org57d2d8d"><span class="section-number-3">2.1</span> Standard targets</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 make all
@@ -330,8 +330,8 @@ make clean
 </div>
 </div>
 
-<div id="outline-container-orgcbee90e" class="outline-2">
-<h2 id="orgcbee90e"><span class="section-number-2">3</span> Writing portable Makefiles</h2>
+<div id="outline-container-org1053e96" class="outline-2">
+<h2 id="org1053e96"><span class="section-number-2">3</span> Writing portable Makefiles</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 The Makefiles produced by <b>Automake</b> are made to be portable among
@@ -355,8 +355,8 @@ at the top of your Makefile.
 </p>
 </div>
 
-<div id="outline-container-org85ee18d" class="outline-3">
-<h3 id="org85ee18d"><span class="section-number-3">3.1</span> What you will lose by sticking to the POSIX standard</h3>
+<div id="outline-container-orgdea3fa6" class="outline-3">
+<h3 id="orgdea3fa6"><span class="section-number-3">3.1</span> What you will lose by sticking to the POSIX standard</h3>
 <div class="outline-text-3" id="text-3-1">
 <ul class="org-ul">
 <li><p>
@@ -374,8 +374,8 @@ Pattern rules, such as
 </div>
 </div>
 
-<div id="outline-container-orgce40997" class="outline-3">
-<h3 id="orgce40997"><span class="section-number-3">3.2</span> Rules that will make everything simpler</h3>
+<div id="outline-container-org5813335" class="outline-3">
+<h3 id="org5813335"><span class="section-number-3">3.2</span> Rules that will make everything simpler</h3>
 <div class="outline-text-3" id="text-3-2">
 <ul class="org-ul">
 <li>Use <code class="src src-bash">/bin/sh</code> instead of <code class="src src-bash">/bin/bash</code></li>
@@ -388,8 +388,8 @@ your Makefiles.</li>
 </div>
 </div>
 
-<div id="outline-container-org839b299" class="outline-3">
-<h3 id="org839b299"><span class="section-number-3">3.3</span> Useful links</h3>
+<div id="outline-container-org503ed15" class="outline-3">
+<h3 id="org503ed15"><span class="section-number-3">3.3</span> Useful links</h3>
 <div class="outline-text-3" id="text-3-3">
 <ul class="org-ul">
 <li><a href="http://gnu.ist.utl.pt/software/autoconf/manual/autoconf-2.57/html_chapter/autoconf_10.html">Portable shell programming</a></li>
@@ -399,18 +399,18 @@ your Makefiles.</li>
 </div>
 </div>
 
-<div id="outline-container-org35f2eb8" class="outline-2">
-<h2 id="org35f2eb8"><span class="section-number-2">4</span> Automake basics</h2>
+<div id="outline-container-org3dca820" class="outline-2">
+<h2 id="org3dca820"><span class="section-number-2">4</span> Automake basics</h2>
 </div>
-<div id="outline-container-org0d053b3" class="outline-2">
-<h2 id="org0d053b3"><span class="section-number-2">5</span> Unit testing</h2>
+<div id="outline-container-orgfc6403e" class="outline-2">
+<h2 id="orgfc6403e"><span class="section-number-2">5</span> Unit testing</h2>
 </div>
-<div id="outline-container-org2d08753" class="outline-2">
-<h2 id="org2d08753"><span class="section-number-2">6</span> Creating a distributed tarball</h2>
+<div id="outline-container-orga30aced" class="outline-2">
+<h2 id="orga30aced"><span class="section-number-2">6</span> Creating a distributed tarball</h2>
 <div class="outline-text-2" id="text-6">
 </div>
-<div id="outline-container-org7478048" class="outline-3">
-<h3 id="org7478048"><span class="section-number-3">6.1</span> Source distribution targets</h3>
+<div id="outline-container-org0e7b21c" class="outline-3">
+<h3 id="org0e7b21c"><span class="section-number-3">6.1</span> Source distribution targets</h3>
 <div class="outline-text-3" id="text-6-1">
 <p>
 <b>Automake</b> provides the <code>dist</code> and <code>distcheck</code> targets:
@@ -431,8 +431,8 @@ tests, etc.
 </div>
 </div>
 
-<div id="outline-container-orgab1c0c3" class="outline-3">
-<h3 id="orgab1c0c3"><span class="section-number-3">6.2</span> Maintainer mode</h3>
+<div id="outline-container-org87652c4" class="outline-3">
+<h3 id="org87652c4"><span class="section-number-3">6.2</span> Maintainer mode</h3>
 <div class="outline-text-3" id="text-6-2">
 <p>
 There are two types of people who will try to compile the source
@@ -478,8 +478,8 @@ Makefiles by running
 
 
 
-<div id="outline-container-org1e42d7c" class="outline-3">
-<h3 id="org1e42d7c"><span class="section-number-3">6.3</span> Useful links</h3>
+<div id="outline-container-org87ae775" class="outline-3">
+<h3 id="org87ae775"><span class="section-number-3">6.3</span> Useful links</h3>
 <div class="outline-text-3" id="text-6-3">
 <ul class="org-ul">
 <li><a href="https://autotools.io/automake/maintainer.html">Maintainer mode and the <code>missing</code> script</a></li>
@@ -488,8 +488,8 @@ Makefiles by running
 </div>
 </div>
 
-<div id="outline-container-org91a2f72" class="outline-2">
-<h2 id="org91a2f72"><span class="section-number-2">7</span> Using pkg-config</h2>
+<div id="outline-container-org8c131aa" class="outline-2">
+<h2 id="org8c131aa"><span class="section-number-2">7</span> Using pkg-config</h2>
 <div class="outline-text-2" id="text-7">
 <p>
 When your software depends on external libraries and you try to
@@ -577,8 +577,8 @@ The pkg-config files are searched in the directories defined by the
 </div>
 </div>
 
-<div id="outline-container-org0ad48fd" class="outline-3">
-<h3 id="org0ad48fd"><span class="section-number-3">7.1</span> Useful Links</h3>
+<div id="outline-container-org19ee3e4" class="outline-3">
+<h3 id="org19ee3e4"><span class="section-number-3">7.1</span> Useful Links</h3>
 <div class="outline-text-3" id="text-7-1">
 <ul class="org-ul">
 <li><a href="https://people.freedesktop.org/~dbn/pkg-config-guide.html">Guide to pkg-config</a></li>
@@ -588,8 +588,8 @@ The pkg-config files are searched in the directories defined by the
 </div>
 </div>
 
-<div id="outline-container-orgd8b77b1" class="outline-2">
-<h2 id="orgd8b77b1"><span class="section-number-2">8</span> <span class="todo TODO">TODO</span> Improvements</h2>
+<div id="outline-container-org2a57ec3" class="outline-2">
+<h2 id="org2a57ec3"><span class="section-number-2">8</span> <span class="todo TODO">TODO</span> Improvements</h2>
 <div class="outline-text-2" id="text-8">
 <ul class="org-ul">
 <li>Libtool?</li>
@@ -599,7 +599,7 @@ The pkg-config files are searched in the directories defined by the
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Evgeny Posenitskiy, Anthony Scemama</p>
-<p class="date">Created: 2021-11-01 Mon 15:23</p>
+<p class="date">Created: 2021-11-02 Tue 12:44</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
