@@ -118,6 +118,9 @@ second part of the [[./index.html][Autotools tutorial]].
    | ~docdir~     | =/usr/local/share/doc/<package>= | Where to install the documentation          |
    | ~srcdir~     | Set by =configure=               | The directory of the sources being compiled |
    
+   In the =Makefile.in=, these variables may be used between ~@@~
+   symbols, like ~@@bindir@@~ for instance.
+   
    #+begin_seealso
    - [[https://www.gnu.org/prep/standards/html_node/Directory-Variables.html#Directory-Variables][Directory variables]]
    #+end_seealso
@@ -146,7 +149,7 @@ second part of the [[./index.html][Autotools tutorial]].
 
      #+BEGIN_SRC makefile
 %_test.o: %_test.c
-$(CC) $< -o $@
+	$(CC) $< -o $@
      #+END_SRC
 
    - Special functions src_makefile{$(wildcard *.c)}, src_makefile{$(patsubst %.f, %.o, $(SRC))}, ...
@@ -179,6 +182,12 @@ $(CC) $< -o $@
   file. 
 
 * Unit testing
+
+  #+begin_exercise
+  Provide a unit test for the current package which always succeeds,
+  and another one which always fails.
+  #+end_exercise
+
 * Creating a distributed tarball
   
 ** Source distribution targets
