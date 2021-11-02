@@ -4,6 +4,9 @@
 #+HTML_LINK_HOME: index.html
 #+HTML_LINK_UP: index.html
 
+#+PROPERTY: header-args  :exports code
+
+
 
 # OLD STYLE
 # #+HTML_HEAD: <link rel="stylesheet" title="Standard" href="worg.css" type="text/css" />
@@ -15,12 +18,12 @@
 
 This page contains the [[https://www.gnu.org/software/autoconf/][GNU Autoconf]] tutorial, which is the first part of the [[./index.html][Autotools tutorial]].
 
-  #+begin_tip 
+  #+begin_tip
 Before you proceed to the tutorial, download the example project called *Sherman-Morrison*. This can be done in 2 ways:
-  
+
 - using *Git* if you are familiar with it: ~git clone https://github.com/q-posev/Sherman-Morrison.git~
-- by downloading the project from the *Assets* section (either ~.zip~ or ~.tar.gz~) on the following webpage: https://github.com/q-posev/Sherman-Morrison/releases/tag/v0.1-demo. Make sure to extract the files from the archive before starting the tutorial.
- 
+- by downloading the project from the *Assets* section (either ~.zip~ or ~.tar.gz~) on the following webpage: https://github.com/q-posev/Sherman-Morrison/archive/refs/tags/v0.1-demo.tar.gz . Make sure to extract the files from the archive before starting the tutorial.
+
   #+end_tip
 
 * Introduction
@@ -49,11 +52,11 @@ The source files depend on the [[https://portal.hdfgroup.org/display/HDF5/HDF5][
 HDF5 is a binary file format, which is designed for high-performance data input/output.
 We will learn how to automatically locate the HDF5 library using macros.
 
-  #+begin_tip 
-In the examples demonstated in this tutorial, 
+  #+begin_tip
+In the examples demonstated in this tutorial,
 the OS is Ubuntu with the default GNU compilers ~gcc/g++ 9.3.0~
 and with the HDF5 library installed via ~sudo apt-get install libhdf5-dev~ command.
-  #+end_tip 
+  #+end_tip
 
 Below is a source tree of our project. Header and source files can be found in the ~include/~ and ~src/~ directories, respectively.
 The ~tests/~ directory contains the ~test_h5.cpp~ and ~dataset.hdf5~ files needed to test compilation of the aforementioned source codes.
@@ -134,15 +137,44 @@ Let's execute ~make~ command and examine the output:
 
 #+begin_src
 $ make
-
-g++ -g -O2 -std=c++11 -I./include/ -I/usr/include/hdf5/serial   -c -o src/SM_Maponi.o src/SM_Maponi.cpp
-g++ -g -O2 -std=c++11 -I./include/ -I/usr/include/hdf5/serial   -c -o src/SM_Standard.o src/SM_Standard.cpp
-g++ -g -O2 -std=c++11 -I./include/ -I/usr/include/hdf5/serial   -c -o src/Woodbury.o src/Woodbury.cpp
-g++ -g -O2 -std=c++11 -I./include/ -I/usr/include/hdf5/serial   -c -o src/SMWB.o src/SMWB.cpp
-g++ -g -O2 -std=c++11 -I./include/ -I/usr/include/hdf5/serial   -c -o src/Helpers.o src/Helpers.cpp
-g++ -g -O2 -std=c++11 -I./include/ -I/usr/include/hdf5/serial   -c -o tests/test_h5.o tests/test_h5.cpp
-g++ -I./include/ -I/usr/include/hdf5/serial  -g -O2 -std=c++11 tests/test_h5.o src/SM_Maponi.o src/SM_Standard.o src/Woodbury.o src/SMWB.o src/Helpers.o -o bin/test_h5  -L/usr/lib/x86_64-linux-gnu/hdf5/serial -lhdf5 -lhdf5_cpp -lpthread -lz 
+g++ -g -O2 -std=c++11 -I/usr/include -I/usr/include/hdf5/serial  -I./include/  -c -o src/SM_Maponi.o src/SM_Maponi.cpp
+In file included from /home/test/.conda/envs/trex-hackathon/x86_64-conda-linux-gnu/sysroot/usr/include/sys/types.h:136,
+                 from /home/test/.conda/envs/trex-hackathon/x86_64-conda-linux-gnu/sysroot/usr/include/stdlib.h:320,
+                 from /home/test/.conda/envs/trex-hackathon/x86_64-conda-linux-gnu/include/c++/9.4.0/bits/std_abs.h:38,
+                 from /home/test/.conda/envs/trex-hackathon/x86_64-conda-linux-gnu/include/c++/9.4.0/cmath:47,
+                 from ./include/Helpers.hpp:3,
+                 from src/SM_Maponi.cpp:5:
+/usr/include/time.h:37:10: fatal error: bits/types/clock_t.h: No such file or directory
+   37 | #include <bits/types/clock_t.h>
+      |          ^~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make: *** [<builtin>: src/SM_Maponi.o] Error 1
 #+end_src
+
+- Remove paths related to =/usr/local/=
+- Remove `-lsz`, specific to HDF5 installation on the developer's platform
+- Insert ~CPPFLAGS~ coming from the environment
+
+#+begin_src makefile
+## Specify the C++ compiler as well as preprocessor, compiler and linking flags
+CXX      = g++
+CXXFLAGS = -g -O2 -std=c++11
+CPPFLAGS +=  -I./include/
+LIBS     = -lhdf5_hl -lhdf5  -lpthread -lz -ldl -lm  -lhdf5_cpp
+#+end_src
+
+
+#+begin_src
+$ make
+g++ -g -O2 -std=c++11 -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/test/.conda/envs/trex-hackathon/include -I./include/  -c -o src/SM_Maponi.o src/SM_Maponi.cpp
+g++ -g -O2 -std=c++11 -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/test/.conda/envs/trex-hackathon/include -I./include/  -c -o src/SM_Standard.o src/SM_Standard.cpp
+g++ -g -O2 -std=c++11 -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/test/.conda/envs/trex-hackathon/include -I./include/  -c -o src/Woodbury.o src/Woodbury.cpp
+g++ -g -O2 -std=c++11 -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/test/.conda/envs/trex-hackathon/include -I./include/  -c -o src/SMWB.o src/SMWB.cpp
+g++ -g -O2 -std=c++11 -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/test/.conda/envs/trex-hackathon/include -I./include/  -c -o src/Helpers.o src/Helpers.cpp
+g++ -g -O2 -std=c++11 -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/test/.conda/envs/trex-hackathon/include -I./include/  -c -o tests/test_h5.o tests/test_h5.cpp
+g++ -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/test/.conda/envs/trex-hackathon/include -I./include/ -g -O2 -std=c++11 tests/test_h5.o src/SM_Maponi.o src/SM_Standard.o src/Woodbury.o src/SMWB.o src/Helpers.o -o bin/test_h5  -Wl,-O2 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,--disable-new-dtags -Wl,--gc-sections -Wl,-rpath,/home/test/.conda/envs/trex-hackathon/lib -Wl,-rpath-link,/home/test/.conda/envs/trex-hackathon/lib -L/home/test/.conda/envs/trex-hackathon/lib -lhdf5_hl -lhdf5  -lpthread -lz -ldl -lm  -lhdf5_cpp
+#+end_src
+
 
 So it works. We can already see that ~.o~ object files are compiled first since they are indicated as dependencies
 of the ~$(BIN_DIR)/test_h5~ target, which is compiled and linked at the very end.
@@ -158,12 +190,12 @@ LIBS     = -lhdf5 -lhdf5_cpp -lpthread -lz
 #+end_src
 
 #+begin_question
-What are advantages and disadvantages of specifying compiler flags as above? 
+What are advantages and disadvantages of specifying compiler flags as above?
 #+end_question
 
 Among other things, the crucial issue here is the portability of the hard-coded paths to HDF5 (see ~CPPFLAGS~ and ~LDFLAGS~).
 
-Moreover, in this example, we provide all the flags already. 
+Moreover, in this example, we provide all the flags already.
 However, in real life, defining them is challenging, especially for programs with external dependencies.
 
 Wouldn't it be nice if we could automatize this process? Well, this is where **Autoconf** comes into play.
@@ -177,17 +209,17 @@ In this section, we will talk about several files:
 - =Makefile.in=
 - =Makefile=
 
-#+begin_tip 
+#+begin_tip
 The ultimate goal of the *Autoconf* is to produce the ~configure~ script based on the ~configure.ac~ file.
 The ~configure~ script then detects the ~Makefile.in~ file and replaces some variables there to produce
-the final ~Makefile~, which is used to build a project.  
+the final ~Makefile~, which is used to build a project.
 #+end_tip
 
 #+CAPTION[The Basics of Autotools (Gentoo)]: Figure from [[https://devmanual.gentoo.org/general-concepts/autotools/index.html][The Basics of Autotools]]
 [[https://devmanual.gentoo.org/general-concepts/autotools/diagram.png]]
 
 
-This might be confusing at the beginning. 
+This might be confusing at the beginning.
 Let's create the simplest ~configure.ac~ file for our project with the following contents:
 
 #+begin_src makefile
@@ -205,8 +237,8 @@ These are now stored in the ~$PACKAGE_NAME~ and ~$PACKAGE_VERSION~ variables, re
 We will not cover the details of the M4 syntax that is used internally by the Autoconf.
 For more information, see the [[https://www.gnu.org/software/autoconf/manual/autoconf-2.69/html_node/index.html][Autoconf documentation page]].
 
-We know that the source code is written in ~C++~ programming language (it can also be guessed from the ~.cpp~ extension). 
-Thus, we would like the *Autoconf* to find and possibly run some checks 
+We know that the source code is written in ~C++~ programming language (it can also be guessed from the ~.cpp~ extension).
+Thus, we would like the *Autoconf* to find and possibly run some checks
 using the ~C++~ compiler that is available on the current machine.
 
 Let's add a few additional macros for that and examine their output:
@@ -245,8 +277,8 @@ The contents of the current directory should be as follows:
 Now run ~autoreconf~ command in your terminal and examine the directory again.
 After succesfull execution, a ~configure~ shell script should appear.
 
-Let's run it by calling ~./configure~. 
-Several checks have been performed by *Autoconf* and in the end one might get the following 
+Let's run it by calling ~./configure~.
+Several checks have been performed by *Autoconf* and in the end one might get the following
 (the output may differ depending on the detected ~C++~ compiler):
 
 #+begin_src
@@ -258,15 +290,15 @@ CXX ...........:  g++
 CXXFLAGS ......:  -g -O2
 
 --------------------------------------------------
-#+end_src 
+#+end_src
 
 In the example above, the ~configure~ script has detected the GNU ~C++~ compiler and expanded the
-~${CXX}~ variable with the corresponding name. 
+~${CXX}~ variable with the corresponding name.
 Moreover, the script detects the default ~C++~ flags of ~g++~ and adds them to ~${CXXFLAGS}~.
 
 From now on we will focus mainly on ~$~-prefixed variables and calls to the *Autoconf* macros.
 
-#+begin_tip 
+#+begin_tip
 Whenever you make a change in the ~configure.ac~ file, do not forget to
 execute ~autoreconf -i~ to update the generated ~configure~ script.
 #+end_tip
@@ -318,8 +350,8 @@ LDFLAGS  = -L/usr/lib/x86_64-linux-gnu/hdf5/serial
 LIBS     = -lhdf5 -lhdf5_cpp -lpthread -lz
 ...........
 #+end_src
-  
-#+begin_tip 
+
+#+begin_tip
 Variables in between ~@~ signs are called substitutation variables and are important part of the *Autotools* toolkit.
 #+end_tip
 
@@ -335,8 +367,8 @@ $ diff Makefile.in Makefile
 > CXX      = g++
 > CXXFLAGS = -g -O2 -std=c++11
 #+end_src
- 
-This tells us that the substitution variables ~@CXX@~ and ~@CXXFLAGS@~ have been replaced 
+
+This tells us that the substitution variables ~@CXX@~ and ~@CXXFLAGS@~ have been replaced
 by ~g++~ and ~-g -O2~, respectively.
 
 Good, but we still have these hard-coded paths to HDF5 library in ~CPPFLAGS~ and ~LDFLAGS~.
@@ -366,7 +398,7 @@ AX_LIB_HDF5()
 The description of this macro can be found [[https://www.gnu.org/software/autoconf-archive/ax_lib_hdf5.html][here]]. Notably, it says:
 
 #+begin_src
-If HDF5 is successfully found, this macro calls 
+If HDF5 is successfully found, this macro calls
 
   AC_SUBST(HDF5_VERSION)
   AC_SUBST(HDF5_CC)
@@ -383,8 +415,8 @@ If HDF5 is successfully found, this macro calls
 and sets with_hdf5="yes". ...
 #+end_src
 
-This means that the macro will define a set of variables that can be manupulated 
-within ~configure.ac~ and/or ~Makefile.in~ files. 
+This means that the macro will define a set of variables that can be manupulated
+within ~configure.ac~ and/or ~Makefile.in~ files.
 In this example, we choose the former and will append the necessary flags with the ~HDF5_~ ones.
 
 ~configure.ac~:
@@ -445,8 +477,8 @@ LDFLAGS  = @LDFLAGS@
 ...........
 #+end_src
 
-Now reconfigure and examine the output produced by the ~configure~ script. 
-In the end, you will see a more verbose summary of the detected flags and 
+Now reconfigure and examine the output produced by the ~configure~ script.
+In the end, you will see a more verbose summary of the detected flags and
 newly added package features. The exact output may differ on your machine depending
 on the detected compiler and/or the HDF5 library.
 
@@ -458,7 +490,7 @@ sherman-morrison Version 0.0.1
 CXX ...........:  g++
 CXXFLAGS ......:   -g -O2 -std=c++11
 CPPFLAGS ......:  -I/usr/include -I/usr/include/hdf5/serial  -I./include/
-LDFLAGS .......:   -L/usr/lib/x86_64-linux-gnu/hdf5/serial 
+LDFLAGS .......:   -L/usr/lib/x86_64-linux-gnu/hdf5/serial
 LIBS ..........:  -lhdf5_hl -lhdf5  -lpthread -lsz -lz -ldl -lm  -lhdf5_cpp
 
 Package features:
@@ -488,9 +520,9 @@ $ diff Makefile.in Makefile
 > CXXFLAGS =  -g -O2 -std=c++11
 > CPPFLAGS = -I/usr/include -I/usr/include/hdf5/serial  -I./include/
 > LIBS     = -lhdf5_hl -lhdf5  -lpthread -lsz -lz -ldl -lm  -lhdf5_cpp
-> LDFLAGS  =  -L/usr/lib/x86_64-linux-gnu/hdf5/serial 
+> LDFLAGS  =  -L/usr/lib/x86_64-linux-gnu/hdf5/serial
 #+end_src
- 
+
 * pkg-config
 
 The [[https://linux.die.net/man/1/pkg-config][pkg-config program]] is a powerful tool to get information about installed libraries.
@@ -582,7 +614,7 @@ $ pkg-config --cflags --libs hdf5
 
 * Conclusion
 
-In this Tutorial you have learned how to make your in-house ~Makefile~ compatible with *Autoconf*. 
+In this Tutorial you have learned how to make your in-house ~Makefile~ compatible with *Autoconf*.
 This is achieved by converting ~Makefile~ into ~Makefile.in~ and introducing substitution variables.
 You have also learned how to use *Autoconf* to create the ~configure~ script, which sets up and checks programs and libraries on the host machine.
 The ~configure~ script is also responsible for producing the final ~Makefile~, which is used to build the project.
