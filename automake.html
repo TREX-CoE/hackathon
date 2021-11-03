@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-11-03 Wed 19:23 -->
+<!-- 2021-11-03 Wed 19:36 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Automake</title>
@@ -244,31 +244,31 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org72af5a1">1. Introduction</a></li>
-<li><a href="#orga2c846a">2. GNU coding standards</a>
+<li><a href="#org9f3f4da">1. Introduction</a></li>
+<li><a href="#orgfac1319">2. GNU coding standards</a>
 <ul>
-<li><a href="#org877ffad">2.1. Standard targets</a></li>
-<li><a href="#orgd3e5bc4">2.2. Filesystem Hierarchy Standard</a></li>
-<li><a href="#org402b272">2.3. Standard <code>Makefile.in</code> variables</a></li>
-<li><a href="#org3d05987">2.4. Standard environment variables</a></li>
+<li><a href="#org7794e9b">2.1. Standard targets</a></li>
+<li><a href="#org0756f18">2.2. Filesystem Hierarchy Standard</a></li>
+<li><a href="#org14eca9d">2.3. Standard <code>Makefile.in</code> variables</a></li>
+<li><a href="#org503bd70">2.4. Standard environment variables</a></li>
 </ul>
 </li>
-<li><a href="#org408da7e">3. Writing portable Makefiles</a>
+<li><a href="#org2d9c04c">3. Writing portable Makefiles</a>
 <ul>
-<li><a href="#orgee2a130">3.1. What you will lose by sticking to the POSIX standard</a></li>
-<li><a href="#org6813205">3.2. Rules that will make everything simpler</a></li>
+<li><a href="#orgcf3fa22">3.1. What you will lose by sticking to the POSIX standard</a></li>
+<li><a href="#orgb13e683">3.2. Rules that will make everything simpler</a></li>
 </ul>
 </li>
-<li><a href="#orgcc218ba">4. Automake basics</a></li>
-<li><a href="#org896aafd">5. Automake Syntax</a></li>
-<li><a href="#org7c72a0b">6. Unit testing</a></li>
-<li><a href="#org98d2c94">7. Creating a distributed tarball</a>
+<li><a href="#org3ae70f5">4. Automake basics</a></li>
+<li><a href="#org8ac2603">5. Automake Syntax</a></li>
+<li><a href="#org99710f2">6. Unit testing</a></li>
+<li><a href="#org65e17c7">7. Creating a distributed tarball</a>
 <ul>
-<li><a href="#org702b56d">7.1. Source distribution targets</a></li>
-<li><a href="#orgc003e69">7.2. Maintainer mode</a></li>
+<li><a href="#org192e1e3">7.1. Maintainer mode</a></li>
+<li><a href="#org828a39f">7.2. Source distribution targets</a></li>
 </ul>
 </li>
-<li><a href="#orgb10f744">8. Using pkg-config</a></li>
+<li><a href="#org09bf87f">8. Using pkg-config</a></li>
 </ul>
 </div>
 </div>
@@ -277,8 +277,8 @@ This page contains a tutorial on the usage <a href="http://www.gnu.org/software/
 second part of the <a href="./index.html">Autotools tutorial</a>.
 </p>
 
-<div id="outline-container-org72af5a1" class="outline-2">
-<h2 id="org72af5a1"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-org9f3f4da" class="outline-2">
+<h2 id="org9f3f4da"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Using a simplified syntax, <b>Automake</b> produces functional Makefiles
@@ -309,8 +309,8 @@ Makefile, using standard target names.
 </div>
 </div>
 
-<div id="outline-container-orga2c846a" class="outline-2">
-<h2 id="orga2c846a"><span class="section-number-2">2</span> GNU coding standards</h2>
+<div id="outline-container-orgfac1319" class="outline-2">
+<h2 id="orgfac1319"><span class="section-number-2">2</span> GNU coding standards</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 Some aspects of the GNU coding standards (GCS) are well known to
@@ -336,8 +336,8 @@ you want to make it available as as Linux distribution package
 </div>
 </div>
 
-<div id="outline-container-org877ffad" class="outline-3">
-<h3 id="org877ffad"><span class="section-number-3">2.1</span> Standard targets</h3>
+<div id="outline-container-org7794e9b" class="outline-3">
+<h3 id="org7794e9b"><span class="section-number-3">2.1</span> Standard targets</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 The GCS defines standard target names to be included in
@@ -364,8 +364,8 @@ multiple packages. Here is a short list of the main targets:
 </div>
 </div>
 
-<div id="outline-container-orgd3e5bc4" class="outline-3">
-<h3 id="orgd3e5bc4"><span class="section-number-3">2.2</span> Filesystem Hierarchy Standard</h3>
+<div id="outline-container-org0756f18" class="outline-3">
+<h3 id="org0756f18"><span class="section-number-3">2.2</span> Filesystem Hierarchy Standard</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 The Filesystem Hierarchy Standard (FHS) defines the directory
@@ -463,8 +463,8 @@ configuration files.
 </div>
 </div>
 
-<div id="outline-container-org402b272" class="outline-3">
-<h3 id="org402b272"><span class="section-number-3">2.3</span> Standard <code>Makefile.in</code> variables</h3>
+<div id="outline-container-org14eca9d" class="outline-3">
+<h3 id="org14eca9d"><span class="section-number-3">2.3</span> Standard <code>Makefile.in</code> variables</h3>
 <div class="outline-text-3" id="text-2-3">
 <p>
 Installation directories are named by standard variables, so it
@@ -574,8 +574,8 @@ arguments of the <code>configure</code> script:
 </div>
 </div>
 
-<div id="outline-container-org3d05987" class="outline-3">
-<h3 id="org3d05987"><span class="section-number-3">2.4</span> Standard environment variables</h3>
+<div id="outline-container-org503bd70" class="outline-3">
+<h3 id="org503bd70"><span class="section-number-3">2.4</span> Standard environment variables</h3>
 <div class="outline-text-3" id="text-2-4">
 <p>
 The GCS also defines a set of user-defined environment variables
@@ -673,8 +673,8 @@ can set these variables on the command line as arguments to
 </div>
 </div>
 
-<div id="outline-container-org408da7e" class="outline-2">
-<h2 id="org408da7e"><span class="section-number-2">3</span> Writing portable Makefiles</h2>
+<div id="outline-container-org2d9c04c" class="outline-2">
+<h2 id="org2d9c04c"><span class="section-number-2">3</span> Writing portable Makefiles</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 The Makefiles produced by <b>Automake</b> are made to be portable among
@@ -700,8 +700,8 @@ at the top of your Makefile.
 </p>
 </div>
 
-<div id="outline-container-orgee2a130" class="outline-3">
-<h3 id="orgee2a130"><span class="section-number-3">3.1</span> What you will lose by sticking to the POSIX standard</h3>
+<div id="outline-container-orgcf3fa22" class="outline-3">
+<h3 id="orgcf3fa22"><span class="section-number-3">3.1</span> What you will lose by sticking to the POSIX standard</h3>
 <div class="outline-text-3" id="text-3-1">
 <ul class="org-ul">
 <li><p>
@@ -719,8 +719,8 @@ Pattern rules, such as
 </div>
 </div>
 
-<div id="outline-container-org6813205" class="outline-3">
-<h3 id="org6813205"><span class="section-number-3">3.2</span> Rules that will make everything simpler</h3>
+<div id="outline-container-orgb13e683" class="outline-3">
+<h3 id="orgb13e683"><span class="section-number-3">3.2</span> Rules that will make everything simpler</h3>
 <div class="outline-text-3" id="text-3-2">
 <ul class="org-ul">
 <li>Don't use any other automatic variable than <code>$@</code> (the name of the current target)</li>
@@ -745,8 +745,8 @@ your Makefiles.</li>
 </div>
 </div>
 
-<div id="outline-container-orgcc218ba" class="outline-2">
-<h2 id="orgcc218ba"><span class="section-number-2">4</span> Automake basics</h2>
+<div id="outline-container-org3ae70f5" class="outline-2">
+<h2 id="org3ae70f5"><span class="section-number-2">4</span> Automake basics</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 Automake reads a file named <code>Makefile.am</code> and produces the <code>Makefile.in</code>
@@ -858,11 +858,11 @@ removes more files, including the <code>Makefile</code> and <code>config.status<
 </div>
 </div>
 
-<div id="outline-container-org896aafd" class="outline-2">
-<h2 id="org896aafd"><span class="section-number-2">5</span> Automake Syntax</h2>
+<div id="outline-container-org8ac2603" class="outline-2">
+<h2 id="org8ac2603"><span class="section-number-2">5</span> Automake Syntax</h2>
 </div>
-<div id="outline-container-org7c72a0b" class="outline-2">
-<h2 id="org7c72a0b"><span class="section-number-2">6</span> Unit testing</h2>
+<div id="outline-container-org99710f2" class="outline-2">
+<h2 id="org99710f2"><span class="section-number-2">6</span> Unit testing</h2>
 <div class="outline-text-2" id="text-6">
 <div class="exercise">
 <p>
@@ -874,13 +874,65 @@ and another one which always fails.
 </div>
 </div>
 
-<div id="outline-container-org98d2c94" class="outline-2">
-<h2 id="org98d2c94"><span class="section-number-2">7</span> Creating a distributed tarball</h2>
+<div id="outline-container-org65e17c7" class="outline-2">
+<h2 id="org65e17c7"><span class="section-number-2">7</span> Creating a distributed tarball</h2>
 <div class="outline-text-2" id="text-7">
 </div>
-<div id="outline-container-org702b56d" class="outline-3">
-<h3 id="org702b56d"><span class="section-number-3">7.1</span> Source distribution targets</h3>
+<div id="outline-container-org192e1e3" class="outline-3">
+<h3 id="org192e1e3"><span class="section-number-3">7.1</span> Maintainer mode</h3>
 <div class="outline-text-3" id="text-7-1">
+<p>
+There are two types of people who will try to compile the source
+code:
+</p>
+<ol class="org-ol">
+<li>The end-users having downloaded a tarball with sources</li>
+<li>The developers of the code, who produce the source distribution
+of the code</li>
+</ol>
+
+<p>
+These two profiles should be differentiated, because their system
+requirements are usually different. The first difference is that the
+code developers will need to install <b>Autotools</b> as they will
+produce the <code>configure</code> script, but <b>Autotools</b> will not be needed
+by the end-users.
+</p>
+
+<p>
+A more critical example is when complex Makefiles are produced by a
+script. The script generating the Makefiles should be stored in the
+version control system for developers, as opposed to the generated
+Makefiles. For the end-user's point of view, only the generated
+Makefiles are needed for the compilation of the sources, and the
+script should not be present in the source distribution.
+</p>
+
+<p>
+To handle these two types of profiles, <b>Autotools</b> provides the
+<i>maintainer mode</i>. For instance, in maintainer mode the <code>configure</code>
+script is re-generated when <code>configure.ac</code> has changed, as opposed
+to standard mode. All these rules are activated in the generated
+Makefiles by running
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">./configure --enable-maintainer-mode
+</pre>
+</div>
+
+<div class="seealso">
+<ul class="org-ul">
+<li><a href="https://autotools.io/automake/maintainer.html">Maintainer mode and the <code>missing</code> script</a></li>
+</ul>
+
+</div>
+</div>
+</div>
+
+<div id="outline-container-org828a39f" class="outline-3">
+<h3 id="org828a39f"><span class="section-number-3">7.2</span> Source distribution targets</h3>
+<div class="outline-text-3" id="text-7-2">
 <p>
 <b>Automake</b> provides automatically the <code>dist</code> target.
 <code class="src src-bash">make dist</code> creates a <code>.tar.gz</code> file which contains all the
@@ -1096,65 +1148,12 @@ can give to our users!
 </p>
 </div>
 </div>
-
-
-
-
-<div id="outline-container-orgc003e69" class="outline-3">
-<h3 id="orgc003e69"><span class="section-number-3">7.2</span> Maintainer mode</h3>
-<div class="outline-text-3" id="text-7-2">
-<p>
-There are two types of people who will try to compile the source
-code:
-</p>
-<ol class="org-ol">
-<li>The end-users having downloaded a tarball with sources</li>
-<li>The developers of the code, who produce the source distribution
-of the code</li>
-</ol>
-
-<p>
-These two profiles should be differentiated, because their system
-requirements are usually different. The first difference is that the
-code developers will need to install <b>Autotools</b> as they will
-produce the <code>configure</code> script, but <b>Autotools</b> will not be needed
-by the end-users.
-</p>
-
-<p>
-A more critical example is when complex Makefiles are produced by a
-script. The script generating the Makefiles should be stored in the
-version control system for developers, as opposed to the generated
-Makefiles. For the end-user's point of view, only the generated
-Makefiles are needed for the compilation of the sources, and the
-script should not be present in the source distribution.
-</p>
-
-<p>
-To handle these two types of profiles, <b>Autotools</b> provides the
-<i>maintainer mode</i>. For instance, in maintainer mode the <code>configure</code>
-script is re-generated when <code>configure.ac</code> has changed, as opposed
-to standard mode. All these rules are activated in the generated
-Makefiles by running
-</p>
-
-<div class="org-src-container">
-<pre class="src src-bash">./configure --enable-maintainer-mode
-</pre>
 </div>
 
-<div class="seealso">
-<ul class="org-ul">
-<li><a href="https://autotools.io/automake/maintainer.html">Maintainer mode and the <code>missing</code> script</a></li>
-</ul>
 
-</div>
-</div>
-</div>
-</div>
 
-<div id="outline-container-orgb10f744" class="outline-2">
-<h2 id="orgb10f744"><span class="section-number-2">8</span> Using pkg-config</h2>
+<div id="outline-container-org09bf87f" class="outline-2">
+<h2 id="org09bf87f"><span class="section-number-2">8</span> Using pkg-config</h2>
 <div class="outline-text-2" id="text-8">
 <p>
 When your software depends on external libraries and you try to
@@ -1253,7 +1252,7 @@ The pkg-config files are searched in the directories defined by the
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Evgeny Posenitskiy, Anthony Scemama</p>
-<p class="date">Created: 2021-11-03 Wed 19:23</p>
+<p class="date">Created: 2021-11-03 Wed 19:36</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
