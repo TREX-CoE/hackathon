@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-11-02 Tue 22:25 -->
+<!-- 2021-11-03 Wed 12:47 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Automake</title>
@@ -244,29 +244,29 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orga36a308">1. Introduction</a></li>
-<li><a href="#orgda98d8c">2. GNU standards</a>
+<li><a href="#org92ac364">1. Introduction</a></li>
+<li><a href="#org276c528">2. GNU standards</a>
 <ul>
-<li><a href="#org16b6d18">2.1. Standard targets</a></li>
-<li><a href="#orgfd7447e">2.2. Filesystem Hierarchy Standard (FHS)</a></li>
-<li><a href="#org0051bef">2.3. Standard variables</a></li>
+<li><a href="#org5ba53b7">2.1. Standard targets</a></li>
+<li><a href="#orga714548">2.2. Filesystem Hierarchy Standard (FHS)</a></li>
+<li><a href="#orge27ace9">2.3. Standard variables</a></li>
 </ul>
 </li>
-<li><a href="#org35b88b8">3. Writing portable Makefiles</a>
+<li><a href="#orgef11a40">3. Writing portable Makefiles</a>
 <ul>
-<li><a href="#orge37473b">3.1. What you will lose by sticking to the POSIX standard</a></li>
-<li><a href="#org32f4e8f">3.2. Rules that will make everything simpler</a></li>
+<li><a href="#org396d5d0">3.1. What you will lose by sticking to the POSIX standard</a></li>
+<li><a href="#org55b1d27">3.2. Rules that will make everything simpler</a></li>
 </ul>
 </li>
-<li><a href="#orgb90f3a6">4. Automake basics</a></li>
-<li><a href="#orgddfdc7c">5. Unit testing</a></li>
-<li><a href="#org5132e31">6. Creating a distributed tarball</a>
+<li><a href="#orgcd06c38">4. Automake basics</a></li>
+<li><a href="#orga329bb9">5. Unit testing</a></li>
+<li><a href="#org72023c9">6. Creating a distributed tarball</a>
 <ul>
-<li><a href="#org3bdb382">6.1. Source distribution targets</a></li>
-<li><a href="#orgcbf6f02">6.2. Maintainer mode</a></li>
+<li><a href="#org0154e83">6.1. Source distribution targets</a></li>
+<li><a href="#orgd4bd3b5">6.2. Maintainer mode</a></li>
 </ul>
 </li>
-<li><a href="#org9ab35e8">7. Using pkg-config</a></li>
+<li><a href="#org260803b">7. Using pkg-config</a></li>
 </ul>
 </div>
 </div>
@@ -275,8 +275,8 @@ This page contains a tutorial on the usage <a href="http://www.gnu.org/software/
 second part of the <a href="./index.html">Autotools tutorial</a>.
 </p>
 
-<div id="outline-container-orga36a308" class="outline-2">
-<h2 id="orga36a308"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-org92ac364" class="outline-2">
+<h2 id="org92ac364"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Using a simplified syntax, <b>Automake</b> produces functional Makefiles
@@ -307,8 +307,8 @@ Makefile, using standard target names.
 </div>
 </div>
 
-<div id="outline-container-orgda98d8c" class="outline-2">
-<h2 id="orgda98d8c"><span class="section-number-2">2</span> GNU standards</h2>
+<div id="outline-container-org276c528" class="outline-2">
+<h2 id="org276c528"><span class="section-number-2">2</span> GNU standards</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 GNU standards are well known to users. If you use them, your users
@@ -334,8 +334,8 @@ you want to make it available as as Linux distribution package
 </div>
 </div>
 
-<div id="outline-container-org16b6d18" class="outline-3">
-<h3 id="org16b6d18"><span class="section-number-3">2.1</span> Standard targets</h3>
+<div id="outline-container-org5ba53b7" class="outline-3">
+<h3 id="org5ba53b7"><span class="section-number-3">2.1</span> Standard targets</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 The GNU standards define standard target names to be included in
@@ -362,8 +362,8 @@ multiple packages. Here is a short list of the main targets:
 </div>
 </div>
 
-<div id="outline-container-orgfd7447e" class="outline-3">
-<h3 id="orgfd7447e"><span class="section-number-3">2.2</span> Filesystem Hierarchy Standard (FHS)</h3>
+<div id="outline-container-orga714548" class="outline-3">
+<h3 id="orga714548"><span class="section-number-3">2.2</span> Filesystem Hierarchy Standard (FHS)</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 The FHS defines the directory structure and contents in Linux
@@ -448,8 +448,8 @@ standard places for files like:
 </div>
 </div>
 
-<div id="outline-container-org0051bef" class="outline-3">
-<h3 id="org0051bef"><span class="section-number-3">2.3</span> Standard variables</h3>
+<div id="outline-container-orge27ace9" class="outline-3">
+<h3 id="orge27ace9"><span class="section-number-3">2.3</span> Standard variables</h3>
 <div class="outline-text-3" id="text-2-3">
 <p>
 Installation directories are named by standard variables, so it is
@@ -534,8 +534,8 @@ symbols, like <code>@@bindir@@</code> for instance.
 </div>
 </div>
 
-<div id="outline-container-org35b88b8" class="outline-2">
-<h2 id="org35b88b8"><span class="section-number-2">3</span> Writing portable Makefiles</h2>
+<div id="outline-container-orgef11a40" class="outline-2">
+<h2 id="orgef11a40"><span class="section-number-2">3</span> Writing portable Makefiles</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 The Makefiles produced by <b>Automake</b> are made to be portable among
@@ -561,8 +561,8 @@ at the top of your Makefile.
 </p>
 </div>
 
-<div id="outline-container-orge37473b" class="outline-3">
-<h3 id="orge37473b"><span class="section-number-3">3.1</span> What you will lose by sticking to the POSIX standard</h3>
+<div id="outline-container-org396d5d0" class="outline-3">
+<h3 id="org396d5d0"><span class="section-number-3">3.1</span> What you will lose by sticking to the POSIX standard</h3>
 <div class="outline-text-3" id="text-3-1">
 <ul class="org-ul">
 <li><p>
@@ -580,8 +580,8 @@ Pattern rules, such as
 </div>
 </div>
 
-<div id="outline-container-org32f4e8f" class="outline-3">
-<h3 id="org32f4e8f"><span class="section-number-3">3.2</span> Rules that will make everything simpler</h3>
+<div id="outline-container-org55b1d27" class="outline-3">
+<h3 id="org55b1d27"><span class="section-number-3">3.2</span> Rules that will make everything simpler</h3>
 <div class="outline-text-3" id="text-3-2">
 <ul class="org-ul">
 <li>Don't use any other automatic variable than <code>$@</code> (the name of the current target)</li>
@@ -606,8 +606,8 @@ your Makefiles.</li>
 </div>
 </div>
 
-<div id="outline-container-orgb90f3a6" class="outline-2">
-<h2 id="orgb90f3a6"><span class="section-number-2">4</span> Automake basics</h2>
+<div id="outline-container-orgcd06c38" class="outline-2">
+<h2 id="orgcd06c38"><span class="section-number-2">4</span> Automake basics</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 Automake reads the <code>Makefile.am</code> file and produces the <code>Makefile.in</code>
@@ -621,8 +621,8 @@ file.
 </div>
 </div>
 
-<div id="outline-container-orgddfdc7c" class="outline-2">
-<h2 id="orgddfdc7c"><span class="section-number-2">5</span> Unit testing</h2>
+<div id="outline-container-orga329bb9" class="outline-2">
+<h2 id="orga329bb9"><span class="section-number-2">5</span> Unit testing</h2>
 <div class="outline-text-2" id="text-5">
 <div class="exercise">
 <p>
@@ -634,12 +634,12 @@ and another one which always fails.
 </div>
 </div>
 
-<div id="outline-container-org5132e31" class="outline-2">
-<h2 id="org5132e31"><span class="section-number-2">6</span> Creating a distributed tarball</h2>
+<div id="outline-container-org72023c9" class="outline-2">
+<h2 id="org72023c9"><span class="section-number-2">6</span> Creating a distributed tarball</h2>
 <div class="outline-text-2" id="text-6">
 </div>
-<div id="outline-container-org3bdb382" class="outline-3">
-<h3 id="org3bdb382"><span class="section-number-3">6.1</span> Source distribution targets</h3>
+<div id="outline-container-org0154e83" class="outline-3">
+<h3 id="org0154e83"><span class="section-number-3">6.1</span> Source distribution targets</h3>
 <div class="outline-text-3" id="text-6-1">
 <p>
 <b>Automake</b> provides the <code>dist</code> and <code>distcheck</code> targets:
@@ -660,8 +660,8 @@ tests, etc.
 </div>
 </div>
 
-<div id="outline-container-orgcbf6f02" class="outline-3">
-<h3 id="orgcbf6f02"><span class="section-number-3">6.2</span> Maintainer mode</h3>
+<div id="outline-container-orgd4bd3b5" class="outline-3">
+<h3 id="orgd4bd3b5"><span class="section-number-3">6.2</span> Maintainer mode</h3>
 <div class="outline-text-3" id="text-6-2">
 <p>
 There are two types of people who will try to compile the source
@@ -713,8 +713,8 @@ Makefiles by running
 </div>
 </div>
 
-<div id="outline-container-org9ab35e8" class="outline-2">
-<h2 id="org9ab35e8"><span class="section-number-2">7</span> Using pkg-config</h2>
+<div id="outline-container-org260803b" class="outline-2">
+<h2 id="org260803b"><span class="section-number-2">7</span> Using pkg-config</h2>
 <div class="outline-text-2" id="text-7">
 <p>
 When your software depends on external libraries and you try to
@@ -813,7 +813,7 @@ The pkg-config files are searched in the directories defined by the
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Evgeny Posenitskiy, Anthony Scemama</p>
-<p class="date">Created: 2021-11-02 Tue 22:25</p>
+<p class="date">Created: 2021-11-03 Wed 12:47</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
