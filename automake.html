@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-11-03 Wed 17:07 -->
+<!-- 2021-11-03 Wed 19:23 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Automake</title>
@@ -244,30 +244,31 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org3a4853e">1. Introduction</a></li>
-<li><a href="#orga55b200">2. GNU coding standards</a>
+<li><a href="#org72af5a1">1. Introduction</a></li>
+<li><a href="#orga2c846a">2. GNU coding standards</a>
 <ul>
-<li><a href="#org74736d8">2.1. Standard targets</a></li>
-<li><a href="#org1b60617">2.2. Filesystem Hierarchy Standard</a></li>
-<li><a href="#org793e192">2.3. Standard <code>Makefile.in</code> variables</a></li>
-<li><a href="#org365256c">2.4. Standard environment variables</a></li>
+<li><a href="#org877ffad">2.1. Standard targets</a></li>
+<li><a href="#orgd3e5bc4">2.2. Filesystem Hierarchy Standard</a></li>
+<li><a href="#org402b272">2.3. Standard <code>Makefile.in</code> variables</a></li>
+<li><a href="#org3d05987">2.4. Standard environment variables</a></li>
 </ul>
 </li>
-<li><a href="#orgd96c4fb">3. Writing portable Makefiles</a>
+<li><a href="#org408da7e">3. Writing portable Makefiles</a>
 <ul>
-<li><a href="#orgaf91e2c">3.1. What you will lose by sticking to the POSIX standard</a></li>
-<li><a href="#org239dedd">3.2. Rules that will make everything simpler</a></li>
+<li><a href="#orgee2a130">3.1. What you will lose by sticking to the POSIX standard</a></li>
+<li><a href="#org6813205">3.2. Rules that will make everything simpler</a></li>
 </ul>
 </li>
-<li><a href="#orgcb6c519">4. Automake basics</a></li>
-<li><a href="#org007d32e">5. Unit testing</a></li>
-<li><a href="#org23a39e5">6. Creating a distributed tarball</a>
+<li><a href="#orgcc218ba">4. Automake basics</a></li>
+<li><a href="#org896aafd">5. Automake Syntax</a></li>
+<li><a href="#org7c72a0b">6. Unit testing</a></li>
+<li><a href="#org98d2c94">7. Creating a distributed tarball</a>
 <ul>
-<li><a href="#org9f7d0f9">6.1. Source distribution targets</a></li>
-<li><a href="#org22ae456">6.2. Maintainer mode</a></li>
+<li><a href="#org702b56d">7.1. Source distribution targets</a></li>
+<li><a href="#orgc003e69">7.2. Maintainer mode</a></li>
 </ul>
 </li>
-<li><a href="#orgef9aca3">7. Using pkg-config</a></li>
+<li><a href="#orgb10f744">8. Using pkg-config</a></li>
 </ul>
 </div>
 </div>
@@ -276,8 +277,8 @@ This page contains a tutorial on the usage <a href="http://www.gnu.org/software/
 second part of the <a href="./index.html">Autotools tutorial</a>.
 </p>
 
-<div id="outline-container-org3a4853e" class="outline-2">
-<h2 id="org3a4853e"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-org72af5a1" class="outline-2">
+<h2 id="org72af5a1"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Using a simplified syntax, <b>Automake</b> produces functional Makefiles
@@ -308,8 +309,8 @@ Makefile, using standard target names.
 </div>
 </div>
 
-<div id="outline-container-orga55b200" class="outline-2">
-<h2 id="orga55b200"><span class="section-number-2">2</span> GNU coding standards</h2>
+<div id="outline-container-orga2c846a" class="outline-2">
+<h2 id="orga2c846a"><span class="section-number-2">2</span> GNU coding standards</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 Some aspects of the GNU coding standards (GCS) are well known to
@@ -335,8 +336,8 @@ you want to make it available as as Linux distribution package
 </div>
 </div>
 
-<div id="outline-container-org74736d8" class="outline-3">
-<h3 id="org74736d8"><span class="section-number-3">2.1</span> Standard targets</h3>
+<div id="outline-container-org877ffad" class="outline-3">
+<h3 id="org877ffad"><span class="section-number-3">2.1</span> Standard targets</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 The GCS defines standard target names to be included in
@@ -363,8 +364,8 @@ multiple packages. Here is a short list of the main targets:
 </div>
 </div>
 
-<div id="outline-container-org1b60617" class="outline-3">
-<h3 id="org1b60617"><span class="section-number-3">2.2</span> Filesystem Hierarchy Standard</h3>
+<div id="outline-container-orgd3e5bc4" class="outline-3">
+<h3 id="orgd3e5bc4"><span class="section-number-3">2.2</span> Filesystem Hierarchy Standard</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 The Filesystem Hierarchy Standard (FHS) defines the directory
@@ -462,8 +463,8 @@ configuration files.
 </div>
 </div>
 
-<div id="outline-container-org793e192" class="outline-3">
-<h3 id="org793e192"><span class="section-number-3">2.3</span> Standard <code>Makefile.in</code> variables</h3>
+<div id="outline-container-org402b272" class="outline-3">
+<h3 id="org402b272"><span class="section-number-3">2.3</span> Standard <code>Makefile.in</code> variables</h3>
 <div class="outline-text-3" id="text-2-3">
 <p>
 Installation directories are named by standard variables, so it
@@ -573,8 +574,8 @@ arguments of the <code>configure</code> script:
 </div>
 </div>
 
-<div id="outline-container-org365256c" class="outline-3">
-<h3 id="org365256c"><span class="section-number-3">2.4</span> Standard environment variables</h3>
+<div id="outline-container-org3d05987" class="outline-3">
+<h3 id="org3d05987"><span class="section-number-3">2.4</span> Standard environment variables</h3>
 <div class="outline-text-3" id="text-2-4">
 <p>
 The GCS also defines a set of user-defined environment variables
@@ -672,8 +673,8 @@ can set these variables on the command line as arguments to
 </div>
 </div>
 
-<div id="outline-container-orgd96c4fb" class="outline-2">
-<h2 id="orgd96c4fb"><span class="section-number-2">3</span> Writing portable Makefiles</h2>
+<div id="outline-container-org408da7e" class="outline-2">
+<h2 id="org408da7e"><span class="section-number-2">3</span> Writing portable Makefiles</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 The Makefiles produced by <b>Automake</b> are made to be portable among
@@ -699,8 +700,8 @@ at the top of your Makefile.
 </p>
 </div>
 
-<div id="outline-container-orgaf91e2c" class="outline-3">
-<h3 id="orgaf91e2c"><span class="section-number-3">3.1</span> What you will lose by sticking to the POSIX standard</h3>
+<div id="outline-container-orgee2a130" class="outline-3">
+<h3 id="orgee2a130"><span class="section-number-3">3.1</span> What you will lose by sticking to the POSIX standard</h3>
 <div class="outline-text-3" id="text-3-1">
 <ul class="org-ul">
 <li><p>
@@ -718,8 +719,8 @@ Pattern rules, such as
 </div>
 </div>
 
-<div id="outline-container-org239dedd" class="outline-3">
-<h3 id="org239dedd"><span class="section-number-3">3.2</span> Rules that will make everything simpler</h3>
+<div id="outline-container-org6813205" class="outline-3">
+<h3 id="org6813205"><span class="section-number-3">3.2</span> Rules that will make everything simpler</h3>
 <div class="outline-text-3" id="text-3-2">
 <ul class="org-ul">
 <li>Don't use any other automatic variable than <code>$@</code> (the name of the current target)</li>
@@ -744,24 +745,125 @@ your Makefiles.</li>
 </div>
 </div>
 
-<div id="outline-container-orgcb6c519" class="outline-2">
-<h2 id="orgcb6c519"><span class="section-number-2">4</span> Automake basics</h2>
+<div id="outline-container-orgcc218ba" class="outline-2">
+<h2 id="orgcc218ba"><span class="section-number-2">4</span> Automake basics</h2>
 <div class="outline-text-2" id="text-4">
 <p>
-Automake reads the <code>Makefile.am</code> file and produces the <code>Makefile.in</code>
+Automake reads a file named <code>Makefile.am</code> and produces the <code>Makefile.in</code>
 file. The produced file may contain thousands of lines, and is
 guaranteed to have the basic functionalities (<code class="src src-bash">make all</code>,
 <code class="src src-bash">make clean</code>, &#x2026;) in a portable Makefile.
 <code>Makefile.am</code> contains regular <code>make</code> syntax, and the code it
-contains will be inserted at the proper location in the <code>Makefil.in</code>
+contains will be inserted at the proper location in the <code>Makefile.in</code>
 file. 
+</p>
+
+
+<p>
+We will now create the minimal working example for the code
+presented in the <b>Autoconf</b> section. First, inform <b>Autoconf</b> that
+you will be using <b>Automake</b> by inserting the <code>AC_INIT_AUTOMAKE</code>
+macro in <code>configure.ac</code>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile">AC_INIT([sherman-morrison], [0.0.1], [])
+AM_INIT_AUTOMAKE([foreign subdir-objects silent-rules])
+</pre>
+</div>
+
+<p>
+The <code>foreign</code> flag informs <b>Autotools</b> that you are not building a
+GNU project, otherwise you will be warned that file files <code>NEWS</code>,
+<code>README</code>, <code>AUTHORS</code>, <code>ChangeLog</code> and <code>COPYING</code> should be present in
+the project.
+</p>
+
+<p>
+The <code>slient-rules</code> option causes <b>Automake</b> to generate Makefiles
+that don't display the complete command line of the actions it
+performs, but a less verbose output similar to CMake.
+</p>
+
+<p>
+The <code>subdir-objects</code> option informs <b>Automake</b> that source files
+can be located in subdirectories. It is the case here because all
+the source files are located in the <code>src/</code> and <code>tests/</code> directories.
+</p>
+
+<p>
+Then, create the file <code>Makefile.am</code> with the following content:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile"><span style="color: #a0522d;">bin_PROGRAMS</span> = test_h5
+
+<span style="color: #a0522d;">test_h5_SOURCES</span> = $(<span style="color: #a0522d;">SOURCES</span>)
+
+<span style="color: #a0522d;">SOURCES</span> = src/SM_Maponi.cpp \
+          src/SM_Standard.cpp \
+          src/Woodbury.cpp \
+          src/SMWB.cpp \
+          src/Helpers.cpp \
+          tests/test_h5.cpp
+</pre>
+</div>
+
+<p>
+The syntax of this file will be explained in the next section.
+</p>
+
+<div class="note">
+<p>
+In the definition of the <code class="src src-makefile">SOURCES</code> variable, all the
+required files are explicitly written. As <b>Automake</b> produces
+<i>portable</i> Makefiles, it is not possible to benefit from the GNU
+make syntax such as <code class="src src-makefile">$(wildcard src/*.cpp)</code>.
+</p>
+
+</div>
+
+
+<div class="warning">
+<p>
+<b>Automake</b> will overwrite <code>Makefile.in</code>. Before running automake the
+first time, don't forget to make a backup copy of your <code>Makefile.in</code> file.
+</p>
+
+</div>
+
+<p>
+We can now create the <code>Makefile.in</code> and the <code>Makefile</code> by running
+</p>
+<div class="org-src-container">
+<pre class="src src-bash">$ autoreconf
+$ ./configure
+</pre>
+</div>
+
+<p>
+and build the project 
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">$ make
+</pre>
+</div>
+
+<p>
+You can remark that many standard targets are available.
+<code>make clean</code> cleans the compiled files, <code>make maintainer-clean</code>
+removes more files, including the <code>Makefile</code> and <code>config.status</code>.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org007d32e" class="outline-2">
-<h2 id="org007d32e"><span class="section-number-2">5</span> Unit testing</h2>
-<div class="outline-text-2" id="text-5">
+<div id="outline-container-org896aafd" class="outline-2">
+<h2 id="org896aafd"><span class="section-number-2">5</span> Automake Syntax</h2>
+</div>
+<div id="outline-container-org7c72a0b" class="outline-2">
+<h2 id="org7c72a0b"><span class="section-number-2">6</span> Unit testing</h2>
+<div class="outline-text-2" id="text-6">
 <div class="exercise">
 <p>
 Provide a unit test for the current package which always succeeds,
@@ -772,35 +874,235 @@ and another one which always fails.
 </div>
 </div>
 
-<div id="outline-container-org23a39e5" class="outline-2">
-<h2 id="org23a39e5"><span class="section-number-2">6</span> Creating a distributed tarball</h2>
-<div class="outline-text-2" id="text-6">
+<div id="outline-container-org98d2c94" class="outline-2">
+<h2 id="org98d2c94"><span class="section-number-2">7</span> Creating a distributed tarball</h2>
+<div class="outline-text-2" id="text-7">
 </div>
-<div id="outline-container-org9f7d0f9" class="outline-3">
-<h3 id="org9f7d0f9"><span class="section-number-3">6.1</span> Source distribution targets</h3>
-<div class="outline-text-3" id="text-6-1">
+<div id="outline-container-org702b56d" class="outline-3">
+<h3 id="org702b56d"><span class="section-number-3">7.1</span> Source distribution targets</h3>
+<div class="outline-text-3" id="text-7-1">
 <p>
-<b>Automake</b> provides the <code>dist</code> and <code>distcheck</code> targets:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-bash">$ make dist
-$ make distcheck
-</pre>
-</div>
-
-<p>
+<b>Automake</b> provides automatically the <code>dist</code> target.
 <code class="src src-bash">make dist</code> creates a <code>.tar.gz</code> file which contains all the
 files necessary to install the package: installation instructions,
 <code>configure</code> script, source code, documentation, man pages, unit
 tests, etc.
 </p>
+
+<div class="org-src-container">
+<pre class="src src-bash">$ make dist
+[...]
+$ tar --list -f sherman-morrison-0.0.1.tar.gz 
+sherman-morrison-0.0.1/
+sherman-morrison-0.0.1/m4/
+sherman-morrison-0.0.1/m4/ax_lib_hdf5.m4
+sherman-morrison-0.0.1/src/
+sherman-morrison-0.0.1/src/SM_Maponi.cpp
+sherman-morrison-0.0.1/src/SM_Standard.cpp
+sherman-morrison-0.0.1/src/Woodbury.cpp
+sherman-morrison-0.0.1/src/SMWB.cpp
+sherman-morrison-0.0.1/src/Helpers.cpp
+sherman-morrison-0.0.1/tests/
+sherman-morrison-0.0.1/tests/test_h5.cpp
+sherman-morrison-0.0.1/Makefile.am
+sherman-morrison-0.0.1/configure
+sherman-morrison-0.0.1/configure.ac
+sherman-morrison-0.0.1/aclocal.m4
+sherman-morrison-0.0.1/Makefile.in
+sherman-morrison-0.0.1/compile
+sherman-morrison-0.0.1/depcomp
+sherman-morrison-0.0.1/install-sh
+sherman-morrison-0.0.1/missing
+</pre>
+</div>
+
+<div class="question">
+<p>
+Can you figure out if this archive is OK?
+</p>
+
+</div>
+
+<p>
+To answer this question, we can use the power of <b>Automake</b> and run
+the <code>distcheck</code> target:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">$ make distcheck
+[...]
+../../src/SM_Maponi.cpp:4:10: fatal error: SM_Maponi.hpp: No such file or directory
+ #<span style="color: #b22222;">include "SM_Maponi.hpp"</span>
+          ^~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [Makefile:449: src/SM_Maponi.o] Error 1
+make[1]: Leaving directory <span style="color: #8b2252;">'/home/test/Sherman-Morrison-0.1-demo/sherman-morrison-0.0.1/_build/sub'</span>
+make: *** [Makefile:613: distcheck] Error 1
+</pre>
+</div>
+
+<p>
+Oh no! this archive is not valid.  By inspecting the content of the
+archive, we notice we forgot to add the header files in the
+sources. Although the project builds on our platform, the Makefile
+is incomplete because it lacks some dependencies.
+</p>
+
+<p>
+We can update the <code>SOURCES</code> variables as
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile"><span style="color: #a0522d;">SOURCES</span> = src/SM_Maponi.cpp       \
+          src/SM_Standard.cpp     \
+          src/Woodbury.cpp        \
+          src/SMWB.cpp            \
+          src/Helpers.cpp         \
+          tests/test_h5.cpp       \
+          include/Helpers.hpp     \
+          include/SM_Maponi.hpp   \
+          include/SM_Standard.hpp \
+          include/SMWB.hpp        \
+          include/Woodbury.hpp
+</pre>
+</div>
+
+<p>
+and run <code>make dist</code> again to rebuild the source distribution. Note
+that the current Makefile detects that <code>Makefile.am</code> has changed, so
+it re-runs <b>Automake</b> and also re-generates the Makefile using
+<code>config.status</code> before producing the updated archive.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">$ tar --list -f sherman-morrison-0.0.1.tar.gz 
+sherman-morrison-0.0.1/
+sherman-morrison-0.0.1/include/
+sherman-morrison-0.0.1/include/Helpers.hpp
+sherman-morrison-0.0.1/include/SM_Maponi.hpp
+sherman-morrison-0.0.1/include/SM_Standard.hpp
+sherman-morrison-0.0.1/include/SMWB.hpp
+sherman-morrison-0.0.1/include/Woodbury.hpp
+sherman-morrison-0.0.1/m4/
+sherman-morrison-0.0.1/m4/ax_lib_hdf5.m4
+sherman-morrison-0.0.1/src/
+sherman-morrison-0.0.1/src/SM_Maponi.cpp
+sherman-morrison-0.0.1/src/SM_Standard.cpp
+sherman-morrison-0.0.1/src/Woodbury.cpp
+sherman-morrison-0.0.1/src/SMWB.cpp
+sherman-morrison-0.0.1/src/Helpers.cpp
+sherman-morrison-0.0.1/tests/
+sherman-morrison-0.0.1/tests/test_h5.cpp
+sherman-morrison-0.0.1/Makefile.am
+sherman-morrison-0.0.1/configure
+sherman-morrison-0.0.1/configure.ac
+sherman-morrison-0.0.1/aclocal.m4
+sherman-morrison-0.0.1/Makefile.in
+sherman-morrison-0.0.1/compile
+sherman-morrison-0.0.1/depcomp
+sherman-morrison-0.0.1/install-sh
+sherman-morrison-0.0.1/missing
+</pre>
+</div>
+
+<p>
+We can now test again the source distribution:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">$ make distcheck
+[...]
+make[1]: Entering directory <span style="color: #8b2252;">'/home/test/Sherman-Morrison-0.1-demo/sherman-morrison-0.0.1/_build/sub'</span>
+<span style="color: #a0522d;">depbase</span>=<span style="color: #ff00ff;">`echo src/SM_Maponi.o | sed 's|[^/]*$|.deps/&amp;|;s|\.o$||'`</span>;<span style="color: #8b2252;">\</span>
+g++ -DPACKAGE_NAME=<span style="color: #8b2252;">\"</span>sherman-morrison<span style="color: #8b2252;">\"</span> -DPACKAGE_TARNAME=<span style="color: #8b2252;">\"</span>sherman-morrison<span style="color: #8b2252;">\"</span> -DPACKAGE_VERSION=<span style="color: #8b2252;">\"</span>0.0.1<span style="color: #8b2252;">\"</span> -DPACKAGE_STRING=<span style="color: #8b2252;">\"</span>sherman-morrison<span style="color: #8b2252;">\ </span>0.0.1<span style="color: #8b2252;">\"</span> -DPACKAGE_BUGREPORT=<span style="color: #8b2252;">\"\"</span> -DPACKAGE_URL=<span style="color: #8b2252;">\"\"</span> -DPACKAGE=<span style="color: #8b2252;">\"</span>sherman-morrison<span style="color: #8b2252;">\"</span> -DVERSION=<span style="color: #8b2252;">\"</span>0.0.1<span style="color: #8b2252;">\"</span> -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_HDF5=1 -I. -I../..   -I/usr/include -I/usr/include/hdf5/serial  -I./include/  -g -O2 -std=c++11 -MT src/SM_Maponi.o -MD -MP -MF $<span style="color: #a0522d;">depbase</span>.Tpo -c -o src/SM_Maponi.o ../../src/SM_Maponi.cpp &amp;&amp;<span style="color: #8b2252;">\</span>
+mv -f $<span style="color: #a0522d;">depbase</span>.Tpo $<span style="color: #a0522d;">depbase</span>.Po
+../../src/SM_Maponi.cpp:4:10: fatal error: SM_Maponi.hpp: No such file or directory
+ #<span style="color: #b22222;">include "SM_Maponi.hpp"</span>
+          ^~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [Makefile:449: src/SM_Maponi.o] Error 1
+make[1]: Leaving directory <span style="color: #8b2252;">'/home/test/Sherman-Morrison-0.1-demo/sherman-morrison-0.0.1/_build/sub'</span>
+make: *** [Makefile:613: distcheck] Error 1
+</pre>
+</div>
+
+<p>
+Oh no! still the same error! But now we know that the header file is
+present.
+</p>
+
+<div class="question">
+<p>
+Can you figure out what is wrong now?
+</p>
+
+</div>
+
+<p>
+Inspecting the compilation line, we notice that the compilation
+takes place in the <code>sherman-morrison-0.0.1/_build/sub</code> directory.
+<b>Automake</b> is now trying to make an <i>out of source</i> build: building
+the package outside of the source directory. In the previous
+tutorial, we have introduced <code>-I./include</code> to the <code>CPPFLAGS</code>
+variable in the <code>configure.ac</code> file. Using such a relative path
+implies that we are running make in the source directory, which is
+not desirable if you want to be able to make RPM packages for instance.
+</p>
+
+<p>
+So now we need to move this definition into the <code>Makefile.am</code> file.
+<code>configure.ac</code> becomes:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile"><span style="color: #a0522d;">CPPFLAGS</span>=<span style="color: #8b2252;">"${</span><span style="color: #a0522d;">HDF5_CPPFLAGS</span><span style="color: #8b2252;">} ${</span><span style="color: #a0522d;">CPPFLAGS</span><span style="color: #8b2252;">}"</span>
+</pre>
+</div>
+
+<p>
+and <code>Makefile.am</code> has the extra line:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile"><span style="color: #a0522d;">AM_CPPFLAGS</span> =  -I$(<span style="color: #a0522d;">srcdir</span>)/include/
+</pre>
+</div>
+
+<p>
+You can remark that we have now introduced the <code>srcdir</code> variable
+which points the the root of the source. For <i>in source</i> builds,
+<code>srcdir</code> is <code>.</code> but for <i>out of source</i> builts it is set to the
+relative path to the root. If for some reason you need the absolute
+path, you can use <code>abs_srcdir</code> instead.
+</p>
+
+<p>
+Now, let us test our source distribution:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">$ make
+[...]
+========================================================
+sherman-morrison-0.0.1 archives ready for distribution: 
+sherman-morrison-0.0.1.tar.gz
+========================================================
+</pre>
+</div>
+
+<p>
+Success! the distribution compiles and we now have something that we
+can give to our users!
+</p>
 </div>
 </div>
 
-<div id="outline-container-org22ae456" class="outline-3">
-<h3 id="org22ae456"><span class="section-number-3">6.2</span> Maintainer mode</h3>
-<div class="outline-text-3" id="text-6-2">
+
+
+
+<div id="outline-container-orgc003e69" class="outline-3">
+<h3 id="orgc003e69"><span class="section-number-3">7.2</span> Maintainer mode</h3>
+<div class="outline-text-3" id="text-7-2">
 <p>
 There are two types of people who will try to compile the source
 code:
@@ -851,9 +1153,9 @@ Makefiles by running
 </div>
 </div>
 
-<div id="outline-container-orgef9aca3" class="outline-2">
-<h2 id="orgef9aca3"><span class="section-number-2">7</span> Using pkg-config</h2>
-<div class="outline-text-2" id="text-7">
+<div id="outline-container-orgb10f744" class="outline-2">
+<h2 id="orgb10f744"><span class="section-number-2">8</span> Using pkg-config</h2>
+<div class="outline-text-2" id="text-8">
 <p>
 When your software depends on external libraries and you try to
 compile it on an unknown system, you need to figure out what are the
@@ -951,7 +1253,7 @@ The pkg-config files are searched in the directories defined by the
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Evgeny Posenitskiy, Anthony Scemama</p>
-<p class="date">Created: 2021-11-03 Wed 17:07</p>
+<p class="date">Created: 2021-11-03 Wed 19:23</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
