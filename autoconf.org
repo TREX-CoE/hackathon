@@ -260,10 +260,16 @@ CXXFLAGS ......:  ${CXXFLAGS}
 
 The contents of the current directory should be as follows:
 
-~bin/  configure.ac  include/  LICENSE  Makefile  README.md  src/  tests/~
+#+begin_src
+bin/  configure.ac  include/  LICENSE  Makefile  README.md  src/  tests/
+#+end_src
 
 Now run ~autoreconf~ command in your terminal and examine the directory again.
 After succesfull execution, a ~configure~ shell script should appear.
+
+#+begin_tip
+If you want to see what =autoreconf= does, use the ~-v~ option.
+#+end_tip
 
 Let's run it by calling ~./configure~.
 Several checks have been performed by *Autoconf* and in the end one might get the following

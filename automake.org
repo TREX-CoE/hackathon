@@ -220,14 +220,85 @@ second part of the [[./index.html][Autotools tutorial]].
 
 * Automake basics
 
-  Automake reads the =Makefile.am= file and produces the =Makefile.in=
+  Automake reads a file named =Makefile.am= and produces the =Makefile.in=
   file. The produced file may contain thousands of lines, and is
   guaranteed to have the basic functionalities (src_bash{make all},
   src_bash{make clean}, ...) in a portable Makefile.
   =Makefile.am= contains regular =make= syntax, and the code it
-  contains will be inserted at the proper location in the =Makefil.in=
+  contains will be inserted at the proper location in the =Makefile.in=
   file. 
 
+
+  We will now create the minimal working example for the code
+  presented in the *Autoconf* section. First, inform *Autoconf* that
+  you will be using *Automake* by inserting the ~AC_INIT_AUTOMAKE~
+  macro in =configure.ac=:
+
+  #+begin_src makefile
+AC_INIT([sherman-morrison], [0.0.1], [])
+AM_INIT_AUTOMAKE([foreign subdir-objects silent-rules])
+  #+end_src
+
+  The ~foreign~ flag informs *Autotools* that you are not building a
+  GNU project, otherwise you will be warned that file files =NEWS=,
+  =README=, =AUTHORS=, =ChangeLog= and =COPYING= should be present in
+  the project.
+
+  The ~slient-rules~ option causes *Automake* to generate Makefiles
+  that don't display the complete command line of the actions it
+  performs, but a less verbose output similar to CMake.
+
+  The ~subdir-objects~ option informs *Automake* that source files
+  can be located in subdirectories. It is the case here because all
+  the source files are located in the =src/= and =tests/= directories.
+  
+  Then, create the file =Makefile.am= with the following content:
+
+  #+begin_src makefile
+bin_PROGRAMS = test_h5
+
+test_h5_SOURCES = $(SOURCES)
+
+SOURCES = src/SM_Maponi.cpp \
+          src/SM_Standard.cpp \
+          src/Woodbury.cpp \
+          src/SMWB.cpp \
+          src/Helpers.cpp \
+          tests/test_h5.cpp
+  #+end_src
+
+  The syntax of this file will be explained in the next section.
+
+  #+begin_note
+  In the definition of the src_makefile{SOURCES} variable, all the
+  required files are explicitly written. As *Automake* produces
+  /portable/ Makefiles, it is not possible to benefit from the GNU
+  make syntax such as src_makefile{$(wildcard src/*.cpp)}.
+  #+end_note
+
+  
+  #+begin_warning
+  *Automake* will overwrite =Makefile.in=. Before running automake the
+  first time, don't forget to make a backup copy of your =Makefile.in= file.
+  #+end_warning
+  
+  We can now create the =Makefile.in= and the =Makefile= by running
+  #+begin_src bash
+$ autoreconf
+$ ./configure
+  #+end_src
+
+  and build the project 
+
+  #+begin_src bash
+$ make
+  #+end_src
+
+  You can remark that many standard targets are available.
+  ~make clean~ cleans the compiled files, ~make maintainer-clean~
+  removes more files, including the =Makefile= and =config.status=.
+
+* Automake Syntax
 * Unit testing
 
   #+begin_exercise
@@ -239,18 +310,183 @@ second part of the [[./index.html][Autotools tutorial]].
   
 ** Source distribution targets
 
-   *Automake* provides the ~dist~ and ~distcheck~ targets:
-   
-   #+BEGIN_SRC bash
-$ make dist
-$ make distcheck
-   #+END_SRC
-  
+   *Automake* provides automatically the ~dist~ target.
    src_bash{make dist} creates a =.tar.gz= file which contains all the
    files necessary to install the package: installation instructions,
    =configure= script, source code, documentation, man pages, unit
    tests, etc.
    
+  #+begin_src bash
+$ make dist
+[...]
+$ tar --list -f sherman-morrison-0.0.1.tar.gz 
+sherman-morrison-0.0.1/
+sherman-morrison-0.0.1/m4/
+sherman-morrison-0.0.1/m4/ax_lib_hdf5.m4
+sherman-morrison-0.0.1/src/
+sherman-morrison-0.0.1/src/SM_Maponi.cpp
+sherman-morrison-0.0.1/src/SM_Standard.cpp
+sherman-morrison-0.0.1/src/Woodbury.cpp
+sherman-morrison-0.0.1/src/SMWB.cpp
+sherman-morrison-0.0.1/src/Helpers.cpp
+sherman-morrison-0.0.1/tests/
+sherman-morrison-0.0.1/tests/test_h5.cpp
+sherman-morrison-0.0.1/Makefile.am
+sherman-morrison-0.0.1/configure
+sherman-morrison-0.0.1/configure.ac
+sherman-morrison-0.0.1/aclocal.m4
+sherman-morrison-0.0.1/Makefile.in
+sherman-morrison-0.0.1/compile
+sherman-morrison-0.0.1/depcomp
+sherman-morrison-0.0.1/install-sh
+sherman-morrison-0.0.1/missing
+  #+end_src
+
+  #+begin_question
+  Can you figure out if this archive is OK?
+  #+end_question
+
+  To answer this question, we can use the power of *Automake* and run
+  the ~distcheck~ target:
+
+  #+begin_src bash
+$ make distcheck
+[...]
+../../src/SM_Maponi.cpp:4:10: fatal error: SM_Maponi.hpp: No such file or directory
+ #include "SM_Maponi.hpp"
+          ^~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [Makefile:449: src/SM_Maponi.o] Error 1
+make[1]: Leaving directory '/home/test/Sherman-Morrison-0.1-demo/sherman-morrison-0.0.1/_build/sub'
+make: *** [Makefile:613: distcheck] Error 1
+  #+end_src
+
+  Oh no! this archive is not valid.  By inspecting the content of the
+  archive, we notice we forgot to add the header files in the
+  sources. Although the project builds on our platform, the Makefile
+  is incomplete because it lacks some dependencies.
+
+  We can update the ~SOURCES~ variables as
+
+  #+begin_src makefile
+SOURCES = src/SM_Maponi.cpp       \
+          src/SM_Standard.cpp     \
+          src/Woodbury.cpp        \
+          src/SMWB.cpp            \
+          src/Helpers.cpp         \
+          tests/test_h5.cpp       \
+          include/Helpers.hpp     \
+          include/SM_Maponi.hpp   \
+          include/SM_Standard.hpp \
+          include/SMWB.hpp        \
+          include/Woodbury.hpp
+  #+end_src
+
+  and run ~make dist~ again to rebuild the source distribution. Note
+  that the current Makefile detects that =Makefile.am= has changed, so
+  it re-runs *Automake* and also re-generates the Makefile using
+  =config.status= before producing the updated archive.
+
+  #+begin_src bash
+$ tar --list -f sherman-morrison-0.0.1.tar.gz 
+sherman-morrison-0.0.1/
+sherman-morrison-0.0.1/include/
+sherman-morrison-0.0.1/include/Helpers.hpp
+sherman-morrison-0.0.1/include/SM_Maponi.hpp
+sherman-morrison-0.0.1/include/SM_Standard.hpp
+sherman-morrison-0.0.1/include/SMWB.hpp
+sherman-morrison-0.0.1/include/Woodbury.hpp
+sherman-morrison-0.0.1/m4/
+sherman-morrison-0.0.1/m4/ax_lib_hdf5.m4
+sherman-morrison-0.0.1/src/
+sherman-morrison-0.0.1/src/SM_Maponi.cpp
+sherman-morrison-0.0.1/src/SM_Standard.cpp
+sherman-morrison-0.0.1/src/Woodbury.cpp
+sherman-morrison-0.0.1/src/SMWB.cpp
+sherman-morrison-0.0.1/src/Helpers.cpp
+sherman-morrison-0.0.1/tests/
+sherman-morrison-0.0.1/tests/test_h5.cpp
+sherman-morrison-0.0.1/Makefile.am
+sherman-morrison-0.0.1/configure
+sherman-morrison-0.0.1/configure.ac
+sherman-morrison-0.0.1/aclocal.m4
+sherman-morrison-0.0.1/Makefile.in
+sherman-morrison-0.0.1/compile
+sherman-morrison-0.0.1/depcomp
+sherman-morrison-0.0.1/install-sh
+sherman-morrison-0.0.1/missing
+  #+end_src
+
+  We can now test again the source distribution:
+
+  #+begin_src bash
+$ make distcheck
+[...]
+make[1]: Entering directory '/home/test/Sherman-Morrison-0.1-demo/sherman-morrison-0.0.1/_build/sub'
+depbase=`echo src/SM_Maponi.o | sed 's|[^/]*$|.deps/&|;s|\.o$||'`;\
+g++ -DPACKAGE_NAME=\"sherman-morrison\" -DPACKAGE_TARNAME=\"sherman-morrison\" -DPACKAGE_VERSION=\"0.0.1\" -DPACKAGE_STRING=\"sherman-morrison\ 0.0.1\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\" -DPACKAGE=\"sherman-morrison\" -DVERSION=\"0.0.1\" -DSTDC_HEADERS=1 -DHAVE_SYS_TYPES_H=1 -DHAVE_SYS_STAT_H=1 -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_MEMORY_H=1 -DHAVE_STRINGS_H=1 -DHAVE_INTTYPES_H=1 -DHAVE_STDINT_H=1 -DHAVE_UNISTD_H=1 -DHAVE_HDF5=1 -I. -I../..   -I/usr/include -I/usr/include/hdf5/serial  -I./include/  -g -O2 -std=c++11 -MT src/SM_Maponi.o -MD -MP -MF $depbase.Tpo -c -o src/SM_Maponi.o ../../src/SM_Maponi.cpp &&\
+mv -f $depbase.Tpo $depbase.Po
+../../src/SM_Maponi.cpp:4:10: fatal error: SM_Maponi.hpp: No such file or directory
+ #include "SM_Maponi.hpp"
+          ^~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [Makefile:449: src/SM_Maponi.o] Error 1
+make[1]: Leaving directory '/home/test/Sherman-Morrison-0.1-demo/sherman-morrison-0.0.1/_build/sub'
+make: *** [Makefile:613: distcheck] Error 1
+  #+end_src
+
+  Oh no! still the same error! But now we know that the header file is
+  present.
+
+  #+begin_question
+Can you figure out what is wrong now?
+  #+end_question
+
+  Inspecting the compilation line, we notice that the compilation
+  takes place in the =sherman-morrison-0.0.1/_build/sub= directory.
+  *Automake* is now trying to make an /out of source/ build: building
+  the package outside of the source directory. In the previous
+  tutorial, we have introduced ~-I./include~ to the ~CPPFLAGS~
+  variable in the =configure.ac= file. Using such a relative path
+  implies that we are running make in the source directory, which is
+  not desirable if you want to be able to make RPM packages for instance.
+
+  So now we need to move this definition into the =Makefile.am= file.
+  =configure.ac= becomes:
+
+  #+begin_src makefile
+CPPFLAGS="${HDF5_CPPFLAGS} ${CPPFLAGS}"
+  #+end_src
+  
+  and =Makefile.am= has the extra line:
+
+  #+begin_src makefile
+AM_CPPFLAGS =  -I$(srcdir)/include/
+  #+end_src
+  
+  You can remark that we have now introduced the ~srcdir~ variable
+  which points the the root of the source. For /in source/ builds,
+  ~srcdir~ is ~.~ but for /out of source/ builts it is set to the
+  relative path to the root. If for some reason you need the absolute
+  path, you can use ~abs_srcdir~ instead.
+
+  Now, let us test our source distribution:
+
+  #+begin_src bash
+$ make
+[...]
+========================================================
+sherman-morrison-0.0.1 archives ready for distribution: 
+sherman-morrison-0.0.1.tar.gz
+========================================================
+  #+end_src
+
+  Success! the distribution compiles and we now have something that we
+  can give to our users!
+  
+
+
+
 ** Maintainer mode
    There are two types of people who will try to compile the source
    code:
@@ -368,3 +604,4 @@ LDFLAGS="${LDFLAGS} `pkg-config --libs qmckl`"
   | HTMLIZE: | Autotools.org |
   | HTMLIZE: | autoconf.org  |
   | HTMLIZE: | automake.org  |
+  
