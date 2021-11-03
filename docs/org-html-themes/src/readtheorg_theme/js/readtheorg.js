@@ -10,6 +10,7 @@ $(function() {
     $('.error').before("<p class='admonition-title error'>Error</p>");
     $('.danger').before("<p class='admonition-title danger'>Danger</p>");
     $('.question').before("<p class='admonition-title question'>Question</p>");
+    $('.exercise').before("<p class='admonition-title exercise'>Exercise</p>");
 });
 
 $( document ).ready(function() {

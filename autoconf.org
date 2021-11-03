@@ -363,6 +363,12 @@ Good, but we still have the hard-coded path to ~lib~ directory in ~LDFLAGS~.
 Among other things, this directory contain the HDF5 library.
 Let's try to find this library using *Autoconf* functionality.
 
+#+begin_tip
+To re-create quickly the Makefiles without re-running ~./configure~,
+just run ~./config.status~ and the options of the previous
+~./configure~ will be used.
+#+end_tip
+
 * Detecting external dependencies
 
 It is possible to write your our own macros to detect external dependencies.

@@ -21,82 +21,173 @@ second part of the [[./index.html][Autotools tutorial]].
 
 * Introduction
 
-Using a simplified syntax, *Automake* produces functional Makefiles
-which are consistent with the GNU coding standards. This implies that
-the Makefiles use standard build targets
-(src_bash{make install}, src_bash{make clean}, src_bash{make dist},
-...) and standard installation paths (=/usr/bin=, =/usr/share/=,
-=/usr/include=, =/usr/man=, ...). To avoid struggling too much with
-*Automake*, it is important to understand the usual build, test and
-install philosophies common to GNU projects, as well as the underlying
-infrastructure managed by *Autotools*.
+  Using a simplified syntax, *Automake* produces functional Makefiles
+  which are consistent with the GNU coding standards. This implies that
+  the Makefiles use standard build targets
+  (src_bash{make install}, src_bash{make clean}, src_bash{make dist},
+  ...) and standard installation paths (=/usr/bin=, =/usr/share/=,
+  =/usr/include=, =/usr/man=, ...). To avoid struggling too much with
+  *Automake*, it is important to understand the usual build, test and
+  install philosophies common to GNU projects, as well as the underlying
+  infrastructure managed by *Autotools*.
 
-#+CAPTION[The Basics of Autotools (Gentoo)]: Figure from [[https://devmanual.gentoo.org/general-concepts/autotools/index.html][The Basics of Autotools]]
-[[https://devmanual.gentoo.org/general-concepts/autotools/diagram.png]]
+  #+CAPTION[The Basics of Autotools (Gentoo)]: Figure from [[https://devmanual.gentoo.org/general-concepts/autotools/index.html][The Basics of Autotools]]
+  [[https://devmanual.gentoo.org/general-concepts/autotools/diagram.png]]
 
-You have seen in the *Autoconf* tutorial how to write =configure.ac= and =Makefile.in=.
-Here, we introduce *Automake* which will produce the =Makefile.in= from a simplified file =Makefile.am=.
-The produced file 
+  You have seen in the *Autoconf* tutorial how to write =configure.ac=
+  and =Makefile.in=.  Here, we introduce *Automake* which will produce
+  the =Makefile.in= from a high-level specification file =Makefile.am=.
+  The produced file will automatically add extra functionalities to the
+  Makefile, using standard target names.
 
 * GNU standards
 
+  GNU standards are well known to users. If you use them, your users
+  will be grateful because it will avoid them to read your installation
+  instructions.
+  In addition, it will make the packaging of your code much simpler if
+  you want to make it available as as Linux distribution package
+  (=.deb=, =.rpm=, ...), or as a package for
+  [[https://brew.sh/][Homebrew]],
+  [[http://guix.gnu.org/][Guix]],
+  [[https://conda.io/][Conda]],
+  [[https://spack.io/][Spack]],
+  [[https://easybuild.io/][EasyBuild]], ...
+  
+  #+begin_seealso
+  - [[https://www.gnu.org/prep/standards/html_node/index.html][GNU coding standards]]
+  - [[https://coderwall.com/p/urkybq/how-to-create-debian-package-from-source][How to create Debian package from source]]
+  - [[https://rpm-packaging-guide.github.io/][RPM packaging guide]]
+  #+end_seealso
+
 ** Standard targets
 
-make all
-    Builds all the targets sufficient to declare the package built.
+   The GNU standards define standard target names to be included in
+   Makefiles, such that the behavior of make becomes uniform among
+   multiple packages. Here is a short list of the main targets:
+   
+   - ~make all~ :: Builds all the targets sufficient to declare the package built.
+   - ~make clean~ :: Removes all derived files.
+   - ~make check~ :: Runs unit tests provided by the package.
+   - ~make install~ :: Installs the package
+   - ~make uninstall~ :: Uninstalls the package
+   - ~make html~ :: Builds the documentation in HTML format
+   - ~make check~ :: Performs self-tests
 
-make check
-    Runs unit tests provided by the package.
+   #+begin_seealso
+   - [[https://www.gnu.org/prep/standards/html_node/Standard-Targets.html#Standard-Targets][Standard targets for users]]
+   #+end_seealso
 
-make install
-    Installs the package
+** Filesystem Hierarchy Standard (FHS)
 
-make clean
-    Removes all derived files.
+   The FHS defines the directory structure and contents in Linux
+   distributions. All Unix-like systems follow the FHS, which defines
+   standard places for files like:
+
+   | Path           | Description                          |
+   |----------------+--------------------------------------|
+   | =/bin=         | Essential binaries                   |
+   | =/lib=         | Essential libraries                  |
+   | =/etc=         | Editable Text Configuration files    |
+   | =/sbin=        | Essential system binaries            |
+   | =/tmp=         | Directory for temporary files        |
+   | =/usr=         | Secondary hierarchy for user data    |
+   | =/usr/bin=     | Non-essential binaries               |
+   | =/usr/lib=     | Libraries for non-essential binaries |
+   | =/usr/include= | Standard include files               |
+   | =/usr/local=   | Tertiary hierarchy for local data    |
+
+   #+begin_seealso
+   - [[https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard][FHS on Wikipedia]]
+   - [[https://refspecs.linuxfoundation.org/FHS_3.0/fhs-3.0.pdf][FHS specification]]
+   #+end_seealso
+
+** Standard variables
+   
+   Installation directories are named by standard variables, so it is
+   easy to install the package in a non-standard place.
+   The main variables are:
+
+   | Variable     | Default                          | Description                                 |
+   |--------------+----------------------------------+---------------------------------------------|
+   | ~prefix~     | =/usr/local=                     | Root of the hierarchy                       |
+   | ~bindir~     | =/usr/local/bin=                 | Where to install the binaries               |
+   | ~sysconfdir~ | =/usr/local/etc=                 | Where to install configuration files        |
+   | ~includedir~ | =/usr/local/lib=                 | Where to install the libraries              |
+   | ~includedir~ | =/usr/local/include=             | Where to install include files              |
+   | ~docdir~     | =/usr/local/share/doc/<package>= | Where to install the documentation          |
+   | ~srcdir~     | Set by =configure=               | The directory of the sources being compiled |
+   
+   In the =Makefile.in=, these variables may be used between ~@@~
+   symbols, like ~@@bindir@@~ for instance.
+   
+   #+begin_seealso
+   - [[https://www.gnu.org/prep/standards/html_node/Directory-Variables.html#Directory-Variables][Directory variables]]
+   #+end_seealso
 
 * Writing portable Makefiles
 
-The Makefiles produced by *Automake* are made to be portable among
-Linux and Unix systems. Before diving into *Automake*, we will present
-a few techniques to write portable Makefiles.
+  The Makefiles produced by *Automake* are made to be portable among
+  Linux and Unix systems. Before diving into *Automake*, we will present
+  a few techniques to write portable Makefiles.
 
-The most popular implementation of =make= is GNU Make. GNU Make is much more
-evolved than the POSIX standard, so Makefiles designed for GNU Make are not
-guaranteed to work with alternate implementations of =make=, such as BSD make for
-instance. If you want your software to be /really/ portable, you should stick to the
-POSIX standard in your Makefile by including the line
-#+BEGIN_SRC makefile
-.POSIX
-#+END_SRC
-at the top of your Makefile.
-
-** What you will lose by sticking to the POSIX standard
-
-- Pattern rules, such as
+  The most popular implementation of =make= is GNU Make. GNU Make is much more
+  evolved than the POSIX standard, so Makefiles designed for GNU Make are not
+  guaranteed to work with alternate implementations of =make=, such as BSD make for
+  instance. If you want your software to be /really/ portable, you should stick to the
+  POSIX standard in your Makefile by including the line
 
   #+BEGIN_SRC makefile
-  %_test.o: %_test.c
-          $(CC) $< -o $@
+.POSIX
   #+END_SRC
 
-- Special functions src_makefile{$(wildcard *.c)}, src_makefile{$(patsubst %.f, %.o, $(SRC))}, ...
+  at the top of your Makefile.
+  
+** What you will lose by sticking to the POSIX standard
+
+   - Pattern rules, such as
+
+     #+BEGIN_SRC makefile
+%_test.o: %_test.c
+	$(CC) $< -o $@
+     #+END_SRC
+
+   - Special functions src_makefile{$(wildcard *.c)}, src_makefile{$(patsubst %.f, %.o, $(SRC))}, ...
 
 ** Rules that will make everything simpler
 
-- Use src_bash{/bin/sh} instead of src_bash{/bin/bash}
-- Don't put your compiled files (=.o=) in a separate location than the source files
-- Give up writing your Makefiles by hand. Write *scripts* (Bash, Python) to
-  write them for you.
-- Install =bmake= as an alternative to GNU make to check the portability of
-  your Makefiles.
+   - Don't use any other automatic variable than ~$@~ (the name of the current target) 
+   - Use src_bash{/bin/sh} instead of src_bash{/bin/bash}
+   - Don't put your compiled files (=.o=) in a separate location than the source files
+   - Give up writing your Makefiles by hand. Write *scripts* (Bash, Python) to
+     write them for you.
+   - Install =bmake= as an alternative to GNU make to check the portability of
+     your Makefiles.
 
-** Useful links
 
-- [[http://gnu.ist.utl.pt/software/autoconf/manual/autoconf-2.57/html_chapter/autoconf_10.html][Portable shell programming]]
-- [[https://www.oreilly.com/library/view/managing-projects-with/0596006101/ch07.html][Portable Makefiles]]
+   #+begin_seealso
+   - [[http://gnu.ist.utl.pt/software/autoconf/manual/autoconf-2.57/html_chapter/autoconf_10.html][Portable shell programming]]
+   - [[https://www.oreilly.com/library/view/managing-projects-with/0596006101/ch07.html][Portable Makefiles]]
+   - [[https://www.gnu.org/savannah-checkouts/gnu/autoconf/manual/autoconf-2.70/html_node/Portable-Make.html#Portable-Make][Portable Make programming]]
+   #+end_seealso
 
-* Automake basics  
+* Automake basics
+
+  Automake reads the =Makefile.am= file and produces the =Makefile.in=
+  file. The produced file may contain thousands of lines, and is
+  guaranteed to have the basic functionalities (src_bash{make all},
+  src_bash{make clean}, ...) in a portable Makefile.
+  =Makefile.am= contains regular =make= syntax, and the code it
+  contains will be inserted at the proper location in the =Makefil.in=
+  file. 
+
 * Unit testing
+
+  #+begin_exercise
+  Provide a unit test for the current package which always succeeds,
+  and another one which always fails.
+  #+end_exercise
+
 * Creating a distributed tarball
   
 ** Source distribution targets
@@ -143,11 +234,9 @@ $ make distcheck
 ./configure --enable-maintainer-mode
    #+END_SRC
   
-  
-
-** Useful links
-
+   #+begin_seealso
    - [[https://autotools.io/automake/maintainer.html][Maintainer mode and the =missing= script]]
+   #+end_seealso
   
 * Using pkg-config
 
@@ -189,8 +278,8 @@ Libs.private:  -L/home/scemama/TREX/trexio/_install/lib -L/usr/lib/x86_64-linux-
   ~-I/usr/local/include~ to the C preprocessor (the ~CPPFLAGS~
   variable), and the ~-L/usr/local/lib -lqmckl~ flag at the link stage
   (the ~LDFLAGS~ variable) if you want to use the dynamically linked library.
-# It also tells you the more complicated chain of dependencies
-# required to link the library statically (the ~Libs.private~ entry).
+  # It also tells you the more complicated chain of dependencies
+  # required to link the library statically (the ~Libs.private~ entry).
 
   This information can be accessed using the ~pkg-config~ command:
   #+BEGIN_SRC bash
@@ -203,29 +292,25 @@ $ pkg-config --libs qmckl
 
   In your =configure.ac= file, you can simply use
 
-#+BEGIN_SRC bash
+  #+BEGIN_SRC bash
 PKG_CHECK_MODULES([qmckl])
 CFLAGS="${CFLAGS} `pkg-config --cflags qmckl`"
 LDFLAGS="${LDFLAGS} `pkg-config --libs qmckl`"
-#+END_SRC
+  #+END_SRC
 
-to include the appropriate flags. The ~PKG_CHECK_MODULE~ macro
-will fail if pkg-config is not installed on the system, or if the
-=qmckl.pc= file is not found.
+  to include the appropriate flags. The ~PKG_CHECK_MODULE~ macro
+  will fail if pkg-config is not installed on the system, or if the
+  =qmckl.pc= file is not found.
   
   #+begin_tip 
   The pkg-config files are searched in the directories defined by the
   src_bash{PKG_CONFIG_PATH} environment variable.
   #+end_tip 
 
-** Useful Links
-
+  #+begin_seealso  
    - [[https://people.freedesktop.org/~dbn/pkg-config-guide.html][Guide to pkg-config]]
    - [[https://autotools.io/pkgconfig/index.html][Dependency discovery — pkg-config]]
-
-* TODO Improvements
-  
- - Libtool?
+  #+end_seealso  
 
 * No export                                                        :noexport:
   #+BEGIN_SRC bash
