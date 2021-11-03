@@ -298,14 +298,31 @@ $ make
   ~make clean~ cleans the compiled files, ~make maintainer-clean~
   removes more files, including the =Makefile= and =config.status=.
 
-* Automake Syntax
-* Unit testing
+  *Automake* also provides ~make install~ and ~make uninstall~. To
+   test it, you can create a directory named ~_install~ in the current
+   directory and configure the package to be installed in this
+   particular directory:
 
-  #+begin_exercise
-  Provide a unit test for the current package which always succeeds,
-  and another one which always fails.
-  #+end_exercise
-
+  #+begin_src bash
+$ mkdir _install
+$ ./configure --prefix=$PWD/_install
+[...]
+$ make install
+make[1]: Entering directory '/home/test/Sherman-Morrison-0.1-demo'
+ /bin/mkdir -p '/home/test/Sherman-Morrison-0.1-demo/_install/bin'
+  /usr/bin/install -c test_h5 '/home/test/Sherman-Morrison-0.1-demo/_install/bin'
+make[1]: Nothing to be done for 'install-data-am'.
+make[1]: Leaving directory '/home/test/Sherman-Morrison-0.1-demo'
+$ ls _install/
+bin
+$ ls _install/bin/
+test_h5
+$ make uninstall
+ ( cd '/home/test/Sherman-Morrison-0.1-demo/_install/bin' && rm -f test_h5 )
+$ ls _install/bin/
+$ 
+  #+end_src
+  
 * Creating a distributed tarball
   
 ** Maintainer mode
@@ -495,7 +512,7 @@ CPPFLAGS="${HDF5_CPPFLAGS} ${CPPFLAGS}"
   and =Makefile.am= has the extra line:
 
   #+begin_src makefile
-AM_CPPFLAGS =  -I$(srcdir)/include/
+INCLUDES =  -I$(srcdir)/include/
   #+end_src
   
   You can remark that we have now introduced the ~srcdir~ variable
@@ -519,6 +536,116 @@ sherman-morrison-0.0.1.tar.gz
   can give to our users!
   
 
+* Automake Syntax
+
+** Variables
+
+  Here is the list of the main variables that are used in
+  =Makefile.am=:
+
+  - ~AM_CPPFLAGS = -I/dir1 -I/dir2 -I$(srcdir)/include ...~ :: List the
+    ~-I~ flags that need to be passed to the compiler to find the
+    include files
+  - ~AM_LDFLAGS = -L/dir1 -L/dir2 ...~ :: Flags to be passed to the linker
+  - ~LDADD = file.o $(top_builddir)/dir1/libmylib.la -lmylib ...~ :: Object
+    files and built libraries to be linked with all executables
+  - ~CLEANFILES = my_file.mod ...~ :: List of extra files to remove
+    with ~make clean~
+  - ~EXTRA_DIST~ :: Additional files to be  shipped with the binary distribution.
+    
+    #+begin_note
+User variables such as ~CFLAGS~ or ~CPPFLAGS~ should never be
+overwritten in a ~Makefile.am~. This explains why these variables have
+the ~AM_~ prefix.
+    #+end_note
+
+** Product list variables
+
+  In the previous section, we have seen two special variables
+  ~bin_PROGRAMS~ and ~test_h5_SOURCES~.
+
+  ~bin_PROGRAMS~ contains the names of the programs we are building,
+  and these will be installed in ~$(exec_prefix)/bin~ upon invocation of
+  ~make install~.
+
+  /Product list variables/ (PLV) conform to the following template:
+
+  #+begin_src 
+[modifier-list]prefix_PRIMARY = product1 product2 ... productN
+  #+end_src
+    
+*** Installation location prefixes
+   
+    The ~prefix~ can be an /installation location prefix/, as in for
+    example ~bin_PROGRAMS~ or ~lib_LIBRARIES~. The ~prefix~ corresponds
+    to a variable defining a directory chopping off the ~dir~
+    suffix. For example, the ~bin~ prefix corresponds to the ~$(bindir)~
+    variable. You can make your own prefix, for example:
+
+    #+begin_src makefile
+gpudir = $(exec_prefix)/gpu
+gpu_PROGRAMS = cublas_test
+    #+end_src
+  
+*** Other prefixes
+
+    - ~noinst~ :: Products that should not be installed
+    - ~check~ :: Products that should be built for testing
+    - ~EXTRA~ :: Products that are built conditionally
+      
+*** Primaries
+
+    A primary is a class of products. This defines the rules to create
+    in the Makefile to satisfy the needs of the product.
+
+    - ~PROGRAMS~ :: Create rules to build the binary executables
+    - ~LIBRARIES~ :: Create rules to build the libraries
+    - ~LTLIBRARIES~ :: Create rules to build the libraries using *Libtool*
+    - ~SCRIPTS~ :: Create rules to install the scripts
+    - ~DATA~ :: Arbitrary files (documentation, test data, etc)
+    - ~HEADERS~ :: Header files to be installed
+
+** Product source variables
+
+  In our example, the name of the program is ~test_h5~, so by defining
+  ~test_h5_SOURCES~ we can list the source files needed to build
+  ~test_h5~. Automake will then do everything necessary in the
+  =Makefile.in= to build ~test_h5~.
+  
+   /Product source variables/ (PSV) conform to the following template:
+
+  #+begin_src 
+[modifier-list]product_SOURCES = file1 file2 ... fileN
+  #+end_src
+
+  ~product~ refers to the built product. If the product contains
+  special characters, these should be replaced by underscores. For
+  example:
+
+  #+begin_src makefile
+lib_LIBRARIES = libc++.a
+libc___a_SOURCES = ...
+  #+end_src
+  
+** PLV and PSV modifiers
+   
+   Modifiers change the default behavior of the variable. The main
+   modifiers are ~dist~ and ~nodist~, which indicate if the files
+   should be part of the distributed package or not.
+   
+
+   #+begin_exercise
+Modify the =Makefile.am= to add the =LICENSE= file to the source
+distribution package, and to install the =README.md= file into the
+documentation directory.
+   #+end_exercise
+
+* Unit testing
+
+  #+begin_exercise
+  Provide a unit test for the current package which always succeeds,
+  and another one which always fails.
+  #+end_exercise
 
 * Using pkg-config
 
