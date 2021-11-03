@@ -40,12 +40,12 @@ second part of the [[./index.html][Autotools tutorial]].
   The produced file will automatically add extra functionalities to the
   Makefile, using standard target names.
 
-* GNU standards
+* GNU coding standards
 
-  GNU standards are well known to users. If you use them, your users
-  will be grateful because it will avoid them to read your installation
-  instructions.
-  In addition, it will make the packaging of your code much simpler if
+  Some aspects of the GNU coding standards (GCS) are well known to
+  users. If you use them, your users will be grateful because it will
+  avoid them to read your installation instructions! In addition, it
+  will make the packaging of your code much simpler if
   you want to make it available as as Linux distribution package
   (=.deb=, =.rpm=, ...), or as a package for
   [[https://brew.sh/][Homebrew]],
@@ -62,7 +62,7 @@ second part of the [[./index.html][Autotools tutorial]].
 
 ** Standard targets
 
-   The GNU standards define standard target names to be included in
+   The GCS defines standard target names to be included in
    Makefiles, such that the behavior of make becomes uniform among
    multiple packages. Here is a short list of the main targets:
    
@@ -78,11 +78,12 @@ second part of the [[./index.html][Autotools tutorial]].
    - [[https://www.gnu.org/prep/standards/html_node/Standard-Targets.html#Standard-Targets][Standard targets for users]]
    #+end_seealso
 
-** Filesystem Hierarchy Standard (FHS)
+** Filesystem Hierarchy Standard
 
-   The FHS defines the directory structure and contents in Linux
-   distributions. All Unix-like systems follow the FHS, which defines
-   standard places for files like:
+   The Filesystem Hierarchy Standard (FHS) defines the directory
+   structure and contents in Linux distributions. All Unix-like
+   systems follow more or less the FHS, which defines standard places
+   for files like:
 
    | Path           | Description                          |
    |----------------+--------------------------------------|
@@ -90,6 +91,7 @@ second part of the [[./index.html][Autotools tutorial]].
    | =/lib=         | Essential libraries                  |
    | =/etc=         | Editable Text Configuration files    |
    | =/sbin=        | Essential system binaries            |
+   | =/share=       | Platform-independent files           |
    | =/tmp=         | Directory for temporary files        |
    | =/usr=         | Secondary hierarchy for user data    |
    | =/usr/bin=     | Non-essential binaries               |
@@ -97,29 +99,74 @@ second part of the [[./index.html][Autotools tutorial]].
    | =/usr/include= | Standard include files               |
    | =/usr/local=   | Tertiary hierarchy for local data    |
 
+   It is important to know what these directories contain, because it
+   will let you know where to install your software and the extra
+   files that are distributed with it such as the documentation or the
+   configuration files.
+   
    #+begin_seealso
    - [[https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard][FHS on Wikipedia]]
    - [[https://refspecs.linuxfoundation.org/FHS_3.0/fhs-3.0.pdf][FHS specification]]
    #+end_seealso
 
-** Standard variables
+** Standard =Makefile.in= variables
    
-   Installation directories are named by standard variables, so it is
-   easy to install the package in a non-standard place.
+   Installation directories are named by standard variables, so it
+   gives the user the flexibility to install the package in a
+   non-standard place. For example, this feature is required for
+   packaging where the software is installed in a temporary directory.
+
    The main variables are:
 
-   | Variable     | Default                          | Description                                 |
-   |--------------+----------------------------------+---------------------------------------------|
-   | ~prefix~     | =/usr/local=                     | Root of the hierarchy                       |
-   | ~bindir~     | =/usr/local/bin=                 | Where to install the binaries               |
-   | ~sysconfdir~ | =/usr/local/etc=                 | Where to install configuration files        |
-   | ~includedir~ | =/usr/local/lib=                 | Where to install the libraries              |
-   | ~includedir~ | =/usr/local/include=             | Where to install include files              |
-   | ~docdir~     | =/usr/local/share/doc/<package>= | Where to install the documentation          |
-   | ~srcdir~     | Set by =configure=               | The directory of the sources being compiled |
+   | Variable      | Default                         | Description                                 |
+   |---------------+---------------------------------+---------------------------------------------|
+   | ~prefix~      | ~/usr/local~                    | Root of the hierarchy                       |
+   | ~exec_prefix~ | ~$(prefix)~                     | Root of the hierarchy of executable files   |
+   | ~bindir~      | ~$(exec_prefix)/bin~            | Where to install the binaries               |
+   | ~datarootdir~ | ~$(prefix)/share~               | The root of the platform-independent files  |
+   | ~datadir~     | ~$(datarootdir)~                | Where to install platform-independent files |
+   | ~sysconfdir~  | ~$(prefix)/etc~                 | Where to install configuration files        |
+   | ~libdir~      | ~$(exec_prefix)/lib~            | Where to install the libraries              |
+   | ~includedir~  | ~$(prefix)/include~             | Where to install include files              |
+   | ~docdir~      | ~$(datarootdir)/doc/$(package)~ | Where to install the documentation          |
+   | ~srcdir~      | Set by =configure=              | The directory of the sources being compiled |
    
-   In the =Makefile.in=, these variables may be used between ~@@~
-   symbols, like ~@@bindir@@~ for instance.
+   In the =Makefile.in=, these variables may be used between ~@~
+   symbols, like ~@bindir@~ for instance.
+
+   These variables can take different values by specifying them as
+   arguments of the =configure= script:
+
+   #+begin_src bash
+./configure --prefix=$HOME/install --sysconfdir=$HOME/.config/
+   #+end_src
+   
+** Standard environment variables
+   
+   The GCS also defines a set of user-defined environment variables
+   allowing to change the compilation behavior of the package.
+
+   | Variable   | Description                    |
+   |------------+--------------------------------|
+   | ~CC~       | C compiler                     |
+   | ~FC~       | Fortran compiler               |
+   | ~CXX~      | C++ compiler                   |
+   | ~CPP~      | C/C++ preprocessor             |
+   |------------+--------------------------------|
+   | ~CFLAGS~   | C compiler flags               |
+   | ~FCFLAGS~  | Fortran compiler flags         |
+   | ~CXXFLAGS~ | C++ compiler flags             |
+   | ~CPPFLAGS~ | C/C++ preprocessor flags       |
+   | ~LDFLAGS~  | Linker flags                   |
+   | ~LIBS~     | Libraries to add to the linker |
+   
+   #+begin_tip
+   To use alternate compiler flags without changing the Makefile, you
+   can set these variables on the command line as arguments to
+   =make=. For example:
+   
+   src_bash{make FC=ifort FCFLAGS="-xAVX -O2"}
+   #+end_tip
    
    #+begin_seealso
    - [[https://www.gnu.org/prep/standards/html_node/Directory-Variables.html#Directory-Variables][Directory variables]]
