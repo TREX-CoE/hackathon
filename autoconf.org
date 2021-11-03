@@ -147,13 +147,14 @@ Normally, you should get a lot of errors, which are impossible to debug. So what
 The compilation crashed due to several issues. 
 One of them is that the aforementioned =Makefile= was adapted for one single machine.
 Another issues comes from the fact that compiler flags are overwritten in =Makefile= instead of being appended to the existing ones.
-This means that if the current environment (e.g. ~trex-hackathon~ created with ~conda~) did some smart job 
-and pre-set some compiler options, this information is lost.
+It means that even if the current environment (e.g. the one created with ~conda~) did some smart job 
+and pre-set some compiler options, this information is still lost.
 
-Now, let's append to the existing flags using ~+=~ syntax of of Makefile.
+Let's append to the existing flags instead of overwriting them.
+For this we will use ~+=~ syntax of Makefile.
 
 #+begin_src makefile
-CXX       =
+CXX       = g++
 CXXFLAGS += -std=c++11
 CPPFLAGS += -I./include/
 LIBS     += -lhdf5 -lhdf5_cpp -lz
@@ -174,16 +175,18 @@ g++ -fPIC -isystem /home/user/.conda/envs/autotools/include -std=c++11   -I./inc
 g++  -I./include/ -fPIC -isystem /home/user/.conda/envs/autotools/include -std=c++11 tests/test_h5.o src/SM_Maponi.o src/SM_Standard.o src/Woodbury.o src/SMWB.o src/Helpers.o -o bin/test_h5  -L/home/user/.conda/envs/autotools/lib -lhdf5 -lhdf5_cpp -lz
 #+end_src
 
-So it works now.
+So it works.
 
 #+begin_question
 What is going to happen when you try to use the updated =Makefile= outside of the ~conda~ environment?
 #+end_question
 
+Unfortunately, our solution does not resolve the portability issue.
 In this example, we demonstrated that defining compiler flags is challenging, 
 especially for programs with external dependencies.
 
-Wouldn't it be nice if we could automatize this process? Well, this is where **Autoconf** comes into play.
+Would it be better if we could automate this process? 
+Well, this is where **Autoconf** comes into play.
 
 * Autoconf
 
