@@ -18,13 +18,11 @@
 
 This page contains the [[https://www.gnu.org/software/autoconf/][GNU Autoconf]] tutorial, which is the first part of the [[./index.html][Autotools tutorial]].
 
-  #+begin_tip
-Before you proceed to the tutorial, download the example project called *Sherman-Morrison*. This can be done in 2 ways:
-
-- using *Git* if you are familiar with it: ~git clone https://github.com/q-posev/Sherman-Morrison.git~
-- by downloading the project from the *Assets* section (either ~.zip~ or ~.tar.gz~) on the following webpage: https://github.com/q-posev/Sherman-Morrison/archive/refs/tags/v0.1-demo.tar.gz . Make sure to extract the files from the archive before starting the tutorial.
-
-  #+end_tip
+  #+begin_important
+Before you proceed to the tutorial, download the example project called *Sherman-Morrison*. 
+The project can be downloaded using the following link: https://github.com/q-posev/Sherman-Morrison/archive/refs/tags/v0.1-demo.tar.gz. 
+Make sure to extract the files from the archive before starting the tutorial.
+  #+end_important
 
 * Introduction
 
@@ -51,12 +49,6 @@ We will learn how to configure and test the ~C++~ compiler before building the p
 The source files depend on the [[https://portal.hdfgroup.org/display/HDF5/HDF5][HDF5 library]], which is a good example of external dependency.
 HDF5 is a binary file format, which is designed for high-performance data input/output.
 We will learn how to automatically locate the HDF5 library using macros.
-
-  #+begin_tip
-In the examples demonstated in this tutorial,
-the OS is Ubuntu with the default GNU compilers ~gcc/g++ 9.3.0~
-and with the HDF5 library installed via ~sudo apt-get install libhdf5-dev~ command.
-  #+end_tip
 
 Below is a source tree of our project. Header and source files can be found in the ~include/~ and ~src/~ directories, respectively.
 The ~tests/~ directory contains the ~test_h5.cpp~ and ~dataset.hdf5~ files needed to test compilation of the aforementioned source codes.
@@ -133,60 +125,15 @@ $(BIN_DIR)/test_h5: $(DEPS_CXX) $(TST_DIR)/test_h5.o
         $(CXX) $(CPPFLAGS) $(CXXFLAGS) $(TST_DIR)/test_h5.o $(DEPS_CXX) -o $(EXEC) $(LDFLAGS) $(LIBS)
 #+end_src
 
-Let's execute ~make~ command and examine the output:
-
-#+begin_src
-$ make
-g++ -g -O2 -std=c++11 -I/usr/include -I/usr/include/hdf5/serial  -I./include/  -c -o src/SM_Maponi.o src/SM_Maponi.cpp
-In file included from /home/test/.conda/envs/trex-hackathon/x86_64-conda-linux-gnu/sysroot/usr/include/sys/types.h:136,
-                 from /home/test/.conda/envs/trex-hackathon/x86_64-conda-linux-gnu/sysroot/usr/include/stdlib.h:320,
-                 from /home/test/.conda/envs/trex-hackathon/x86_64-conda-linux-gnu/include/c++/9.4.0/bits/std_abs.h:38,
-                 from /home/test/.conda/envs/trex-hackathon/x86_64-conda-linux-gnu/include/c++/9.4.0/cmath:47,
-                 from ./include/Helpers.hpp:3,
-                 from src/SM_Maponi.cpp:5:
-/usr/include/time.h:37:10: fatal error: bits/types/clock_t.h: No such file or directory
-   37 | #include <bits/types/clock_t.h>
-      |          ^~~~~~~~~~~~~~~~~~~~~~
-compilation terminated.
-make: *** [<builtin>: src/SM_Maponi.o] Error 1
-#+end_src
-
-- Remove paths related to =/usr/local/=
-- Remove `-lsz`, specific to HDF5 installation on the developer's platform
-- Insert ~CPPFLAGS~ coming from the environment
-
-#+begin_src makefile
-## Specify the C++ compiler as well as preprocessor, compiler and linking flags
-CXX       = g++
-CXXFLAGS  = -g -O2 -std=c++11
-CPPFLAGS += -I./include/
-LIBS      = -lhdf5_cpp -lhdf5
-#+end_src
-
-
-#+begin_src
-$ make
-g++ -g -O2 -std=c++11 -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/test/.conda/envs/trex-hackathon/include -I./include/  -c -o src/SM_Maponi.o src/SM_Maponi.cpp
-g++ -g -O2 -std=c++11 -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/test/.conda/envs/trex-hackathon/include -I./include/  -c -o src/SM_Standard.o src/SM_Standard.cpp
-g++ -g -O2 -std=c++11 -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/test/.conda/envs/trex-hackathon/include -I./include/  -c -o src/Woodbury.o src/Woodbury.cpp
-g++ -g -O2 -std=c++11 -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/test/.conda/envs/trex-hackathon/include -I./include/  -c -o src/SMWB.o src/SMWB.cpp
-g++ -g -O2 -std=c++11 -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/test/.conda/envs/trex-hackathon/include -I./include/  -c -o src/Helpers.o src/Helpers.cpp
-g++ -g -O2 -std=c++11 -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/test/.conda/envs/trex-hackathon/include -I./include/  -c -o tests/test_h5.o tests/test_h5.cpp
-g++ -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/test/.conda/envs/trex-hackathon/include -I./include/ -g -O2 -std=c++11 tests/test_h5.o src/SM_Maponi.o src/SM_Standard.o src/Woodbury.o src/SMWB.o src/Helpers.o -o bin/test_h5  -Wl,-O2 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,--disable-new-dtags -Wl,--gc-sections -Wl,-rpath,/home/test/.conda/envs/trex-hackathon/lib -Wl,-rpath-link,/home/test/.conda/envs/trex-hackathon/lib -L/home/test/.conda/envs/trex-hackathon/lib -lhdf5_cpp -lhdf5
-#+end_src
-
-
-So it works. We can already see that ~.o~ object files are compiled first since they are indicated as dependencies
-of the ~$(BIN_DIR)/test_h5~ target, which is compiled and linked at the very end.
-
-Let's have a look at the following part of our ~Makefile~:
+Let's have a look at the following part of our ~Makefile~ 
+(from now on we will only focus on the following lines):
 
 #+begin_src makefile
 CXX      = g++
 CXXFLAGS = -g -O2 -std=c++11
-CPPFLAGS = -I./include/ -I/usr/include/hdf5/serial
+CPPFLAGS = -I/usr/include -I/usr/include/hdf5/serial  -I./include/
+LIBS     = -lhdf5_hl -lhdf5  -lpthread -lsz -lz -ldl -lm  -lhdf5_cpp
 LDFLAGS  = -L/usr/lib/x86_64-linux-gnu/hdf5/serial
-LIBS     = -lhdf5 -lhdf5_cpp -lpthread -lz
 #+end_src
 
 #+begin_question
@@ -195,8 +142,47 @@ What are advantages and disadvantages of specifying compiler flags as above?
 
 Among other things, the crucial issue here is the portability of the hard-coded paths to HDF5 (see ~CPPFLAGS~ and ~LDFLAGS~).
 
-Moreover, in this example, we provide all the flags already.
-However, in real life, defining them is challenging, especially for programs with external dependencies.
+Let's execute ~make~ command and examine the output. 
+Normally, you should get a lot of errors, which are impossible to debug. So what happened? 
+
+The compilation crashed due to several issues. 
+One of them is that the aforementioned =Makefile= was adapted for one single machine.
+Another issues comes from the fact that compiler flags are overwritten in =Makefile= instead of being appended to the existing ones.
+This means that if the current environment (e.g. ~trex-hackathon~ created with ~conda~) did some smart job 
+and pre-set some compiler options, this information is lost.
+
+Now, let's append to the existing flags using ~+=~ syntax of of Makefile.
+
+#+begin_src makefile
+CXX       =
+CXXFLAGS += -std=c++11
+CPPFLAGS += -I./include/
+LIBS     += -lhdf5 -lhdf5_cpp -lz
+LDFLAGS  += -L/home/evgeny/.conda/envs/autotools/lib
+#+end_src
+
+If we now run ~make~ command the output may look like this:
+
+#+begin_src
+$ make
+
+g++ -fPIC -isystem /home/evgeny/.conda/envs/autotools/include -std=c++11   -I./include/  -c -o src/SM_Maponi.o src/SM_Maponi.cpp
+g++ -fPIC -isystem /home/evgeny/.conda/envs/autotools/include -std=c++11   -I./include/  -c -o src/SM_Standard.o src/SM_Standard.cpp
+g++ -fPIC -isystem /home/evgeny/.conda/envs/autotools/include -std=c++11   -I./include/  -c -o src/Woodbury.o src/Woodbury.cpp
+g++ -fPIC -isystem /home/evgeny/.conda/envs/autotools/include -std=c++11   -I./include/  -c -o src/SMWB.o src/SMWB.cpp
+g++ -fPIC -isystem /home/evgeny/.conda/envs/autotools/include -std=c++11   -I./include/  -c -o src/Helpers.o src/Helpers.cpp
+g++ -fPIC -isystem /home/evgeny/.conda/envs/autotools/include -std=c++11   -I./include/  -c -o tests/test_h5.o tests/test_h5.cpp
+g++  -I./include/ -fPIC -isystem /home/evgeny/.conda/envs/autotools/include -std=c++11 tests/test_h5.o src/SM_Maponi.o src/SM_Standard.o src/Woodbury.o src/SMWB.o src/Helpers.o -o bin/test_h5  -L/home/evgeny/.conda/envs/autotools/lib -lhdf5 -lhdf5_cpp -lz
+#+end_src
+
+So it works now.
+
+#+begin_question
+What is going to happen when you give the updated =Makefile= back to your colleague?
+#+end_question
+
+In this example, we demonstrated that defining compiler flags is challenging, 
+especially for programs with external dependencies.
 
 Wouldn't it be nice if we could automatize this process? Well, this is where **Autoconf** comes into play.
 
@@ -279,22 +265,21 @@ After succesfull execution, a ~configure~ shell script should appear.
 
 Let's run it by calling ~./configure~.
 Several checks have been performed by *Autoconf* and in the end one might get the following
-(the output may differ depending on the detected ~C++~ compiler):
+(the ~CXX~ output will be different on your machine):
 
 #+begin_src
 -------------------------------------------------
 
 sherman-morrison Version 0.0.1
 
-CXX ...........:  /home/test/.conda/envs/trex-hackathon/bin/x86_64-conda-linux-gnu-c++
-CXXFLAGS ......:  -fvisibility-inlines-hidden -std=c++17 -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/test/.conda/envs/trex-hackathon/include
+CXX ...........:  /home/evgeny/.conda/envs/autotools/bin/x86_64-conda-linux-gnu-c++
+CXXFLAGS ......:  -fPIC -isystem ${CONDA_PREFIX}/include
 
 --------------------------------------------------
 #+end_src
 
 In the example above, the ~configure~ script has detected the GNU ~C++~ compiler and expanded the
 ~${CXX}~ variable with the corresponding name.
-Moreover, the script detects the default ~C++~ flags of ~g++~ and adds them to ~${CXXFLAGS}~.
 
 From now on we will focus mainly on ~$~-prefixed variables and calls to the *Autoconf* macros.
 
@@ -341,14 +326,13 @@ CXXFLAGS ......:  ${CXXFLAGS}
 --------------------------------------------------"
 #+end_src
 
-~Makefile.in~ (only the top part has to be changed):
+~Makefile.in~ (remember, only the top part has to be changed):
 #+begin_src makefile
-CXX      = @CXX@
-CXXFLAGS = @CXXFLAGS@ -std=c++11
+CXX       = @CXX@
+CXXFLAGS  = @CXXFLAGS@
 CPPFLAGS += -I./include/
-LIBS     = -lhdf5_cpp -lhdf5
-
-...........
+LIBS     += -lhdf5 -lhdf5_cpp -lz
+LDFLAGS  += -L/home/evgeny/.conda/envs/autotools/lib
 #+end_src
 
 #+begin_tip
@@ -362,22 +346,27 @@ Let's reconfigure (~autoreconf -i && ./configure~) and examine the changes betwe
 $ diff Makefile.in Makefile
 
 < CXX      = @CXX@
-< CXXFLAGS = @CXXFLAGS@ -std=c++11
+< CXXFLAGS = @CXXFLAGS@
 ---
-> CXX      = /home/test/.conda/envs/trex-hackathon/bin/x86_64-conda-linux-gnu-c++
-> CXXFLAGS = -fvisibility-inlines-hidden -std=c++17 -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/test/.conda/envs/trex-hackathon/include -std=c++11
+> CXX       = /home/evgeny/.conda/envs/autotools/bin/x86_64-conda-linux-gnu-c++
+> CXXFLAGS  = -fPIC -isystem ${CONDA_PREFIX}/include
 #+end_src
 
 This tells us that the substitution variables ~@CXX@~ and ~@CXXFLAGS@~ have been replaced
-by ~g++~ and ~-g -O2~, respectively.
+with the values detected by the ~configure~ script.
 
-Good, but we still have these hard-coded paths to HDF5 library in ~CPPFLAGS~ and ~LDFLAGS~.
+#+begin_question
+In the example above, we forgot to add one ~C++~ compiler flag. Which one?
+#+end_question
+
+Good, but we still have the hard-coded path to ~lib~ directory in ~LDFLAGS~.
+Among other things, this directory contain the HDF5 library.
 Let's try to find this library using *Autoconf* functionality.
 
 * Detecting external dependencies
 
-It is possible to write your our own macros to detect an external dependency.
-However, in this example we will try to locate the HDF5 library, which is widely used nowadays.
+It is possible to write your our own macros to detect external dependencies.
+However, in this example we will try to locate the HDF5 library, which is widely used.
 Luckily for us, the GNU website has an [[https://www.gnu.org/software/autoconf-archive/The-Macros.html][archive of Autoconf macros]] for many packages, including HDF5.
 The ~ax_lib_hdf5.m4~ file can be downloaded from the aforementioned page.
 
@@ -439,6 +428,15 @@ AC_CONFIG_MACRO_DIR([m4])
 # call the m4 macro to locate the HDF5 library
 AX_LIB_HDF5()
 
+# raise an error if HDF5 is missing
+if test "x${with_hdf5}" = xno; then
+  AC_MSG_ERROR([
+    ------------------------------------------
+    Configuring with the HDF5 library is
+    required to build this project.
+    ------------------------------------------])
+fi
+
 # prepend compiler and linking flags with that of HDF5
 CXXFLAGS="${HDF5_CFLAGS} ${CXXFLAGS} -std=c++11"
 CPPFLAGS="${HDF5_CPPFLAGS} ${CPPFLAGS} -I./include/"
@@ -474,7 +472,6 @@ CXXFLAGS = @CXXFLAGS@
 CPPFLAGS = @CPPFLAGS@
 LIBS     = @LIBS@
 LDFLAGS  = @LDFLAGS@
-...........
 #+end_src
 
 Now reconfigure and examine the output produced by the ~configure~ script.
@@ -487,11 +484,11 @@ on the detected compiler and/or the HDF5 library.
 
 sherman-morrison Version 0.0.1
 
-CXX ...........:  /home/test/.conda/envs/trex-hackathon/bin/x86_64-conda-linux-gnu-c++
-CXXFLAGS ......:   -fvisibility-inlines-hidden -std=c++17 -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/test/.conda/envs/trex-hackathon/include -std=c++11
-CPPFLAGS ......:  -I/home/test/.conda/envs/trex-hackathon/include -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/test/.conda/envs/trex-hackathon/include -I./include/
-LDFLAGS .......:   -L/home/test/.conda/envs/trex-hackathon/lib -Wl,-O2 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,--disable-new-dtags -Wl,--gc-sections -Wl,-rpath,/home/test/.conda/envs/trex-hackathon/lib -Wl,-rpath-link,/home/test/.conda/envs/trex-hackathon/lib -L/home/test/.conda/envs/trex-hackathon/lib
-LIBS ..........:  -lhdf5_hl -lhdf5  -lcrypto -lcurl -lrt -lpthread -lz -ldl -lm  -lhdf5_cpp
+CXX ...........:  /home/evgeny/.conda/envs/autotools/bin/x86_64-conda-linux-gnu-c++
+CXXFLAGS ......:   -fPIC -isystem ${CONDA_PREFIX}/include -std=c++11
+CPPFLAGS ......:  -I/home/evgeny/.conda/envs/autotools/include   -I./include/
+LDFLAGS .......:   -L/home/evgeny/.conda/envs/autotools/lib  
+LIBS ..........:  -lhdf5_hl -lhdf5  -lcrypto -lcurl -lrt -lpthread -lz -ldl -lm   -lhdf5_cpp
 
 Package features:
   Compilation with HDF5 ..:  yes
@@ -500,41 +497,25 @@ Package features:
 --------------------------------------------------
 #+end_src
 
-#+begin_tip
 You can now see how all hard-coded HDF5 paths have been detected by the ~ax_lib_hdf5.m4~ macro.
 Moreover, all flags are propagated to the resulting ~Makefile~ due to the use of substitution variables.
-#+end_tip
 
-This can also be checked by visualising differences between ~Makefile.in~ and ~Makefile~:
+#+begin_question
+Examine the difference between =Makefile.in= and =Makefile=. 
+Is it consistent with the aforementioned summary?
+#+end_question
 
-#+begin_src
-$ diff Makefile.in Makefile
-
-< CXX      = @CXX@
-< CXXFLAGS = @CXXFLAGS@
-< CPPFLAGS = @CPPFLAGS@
-< LIBS     = @LIBS@
-< LDFLAGS  = @LDFLAGS@
----
-> CXX      = /home/test/.conda/envs/trex-hackathon/bin/x86_64-conda-linux-gnu-c++
-> CXXFLAGS =  -fvisibility-inlines-hidden -std=c++17 -fmessage-length=0 -march=nocona -mtune=haswell -ftree-vectorize -fPIC -fstack-protector-strong -fno-plt -O2 -ffunction-sections -pipe -isystem /home/test/.conda/envs/trex-hackathon/include -std=c++11
-> CPPFLAGS = -I/home/test/.conda/envs/trex-hackathon/include -DNDEBUG -D_FORTIFY_SOURCE=2 -O2 -isystem /home/test/.conda/envs/trex-hackathon/include -I./include/
-> LIBS     = -lhdf5_hl -lhdf5  -lcrypto -lcurl -lrt -lpthread -lz -ldl -lm  -lhdf5_cpp
-> LDFLAGS  =  -L/home/test/.conda/envs/trex-hackathon/lib -Wl,-O2 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now -Wl,--disable-new-dtags -Wl,--gc-sections -Wl,-rpath,/home/test/.conda/envs/trex-hackathon/lib -Wl,-rpath-link,/home/test/.conda/envs/trex-hackathon/lib -L/home/test/.conda/envs/trex-hackathon/lib
-
-#+end_src
+#+begin_question
+Try to reconfigure using ~./configure --without-hdf5~ or ~./configure --with-hdf5~. 
+Which part of the ~configure.ac~ script produces the output message?
+#+end_question
 
 * pkg-config
 
 The [[https://linux.die.net/man/1/pkg-config][pkg-config program]] is a powerful tool to get information about installed libraries.
 *Autoconf* incorporates some of the ~pkg-config~ functionality.
 
-#+begin_tip
-The minimal setup of ~pkg-config~ consists of calls to the
-initialization macro ~PKG_PROG_PKG_CONFIG~ and the search macro ~PKG_CHECK_MODULES~.
-#+end_tip
-
-The ~PKG_CHECK_MODULES~ can be configured to check the required version of the HDF5 library (see [[https://autotools.io/pkgconfig/pkg_check_modules.html][the Autotools Mythbuster website]] for more details).
+The ~PKG_CHECK_MODULES~ can be configured to detect and check the required version of the HDF5 library (see [[https://autotools.io/pkgconfig/pkg_check_modules.html][the Autotools Mythbuster website]] for more details).
 For example, ~PKG_CHECK_MODULES([HDF5], [hdf5 >= 1.8])~ verifies that the HDF5 version is not older than ~1.8~.
 
 ~configure.ac~:
@@ -557,14 +538,21 @@ AC_CONFIG_MACRO_DIR([m4])
 # call the m4 macro to locate the HDF5 library
 AX_LIB_HDF5()
 
+# raise an error if HDF5 is missing
+if test "x${with_hdf5}" = xno; then
+  AC_MSG_ERROR([
+    ------------------------------------------
+    Configuring with the HDF5 library is
+    required to build this project.
+    ------------------------------------------])
+fi
+
 # prepend compiler and linking flags with that of HDF5
 CXXFLAGS="${HDF5_CFLAGS} ${CXXFLAGS} -std=c++11"
 CPPFLAGS="${HDF5_CPPFLAGS} ${CPPFLAGS} -I./include/"
 LDFLAGS="${HDF5_LDFLAGS} ${LDFLAGS}"
 LIBS="${HDF5_LIBS} ${LIBS} -lhdf5_cpp"
 
-# check for pkg-config
-PKG_PROG_PKG_CONFIG()
 # clean the output of AX_LIB_HDF5 macro since the same variables are substitutted by PKG_CHECK_MODULES
 HDF5_CFLAGS=""
 HDF5_LIBS=""
@@ -596,22 +584,26 @@ Package features:
 --------------------------------------------------"
 #+end_src
 
-After reconfiguration, the summary contains ~CFLAGS~ and ~LIBS~ detected by ~pkg-config~:
+Reconfiguration should fail with the following error message:
 
 #+begin_src
-  .........................
-  pkg-config CFLAGS ......:  -I/usr/include/hdf5/serial
-  pkg-config LIBS ........:  -L/usr/lib/x86_64-linux-gnu/hdf5/serial -lhdf5
-  .........................
+checking for hdf5 >= 1.8... no
+configure: error: Package requirements (hdf5 >= 1.8) were not met:
+
+No package 'hdf5' found
 #+end_src
 
-These flags can be verified by locating the HDF5 installation with ~pkg-config~ directly. For example,
+This might happen when package developers forgot to provide 
+the configuration file for ~pkg-config~. 
+From now on, this is up to you to decide what should be done.
 
-#+begin_src
-$ pkg-config --cflags --libs hdf5
+Many *Autoconf* macros (including ~PKG_CHECK_MODULES~) allows to specify
+actions to be taken if a given file/program/library is found and/or not found.
 
--I/usr/include/hdf5/serial -L/usr/lib/x86_64-linux-gnu/hdf5/serial -lhdf5
-#+end_src
+#+begin_question
+Modify the call to the ~PKG_CHECK_MODULES~ macro in order to raise a warning 
+when HDF5 cannot be detected with ~pkg-config~. This can be done using ~AC_MSG_WARN~ macro.
+#+end_question
 
 * Conclusion
 
