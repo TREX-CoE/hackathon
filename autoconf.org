@@ -7,7 +7,6 @@
 #+PROPERTY: header-args  :exports code
 
 
-
 # OLD STYLE
 # #+HTML_HEAD: <link rel="stylesheet" title="Standard" href="worg.css" type="text/css" />
 # #+INFOJS_OPT: toc:t mouse:underline path:org-info.js
@@ -19,8 +18,8 @@
 This page contains the [[https://www.gnu.org/software/autoconf/][GNU Autoconf]] tutorial, which is the first part of the [[./index.html][Autotools tutorial]].
 
   #+begin_important
-Before you proceed to the tutorial, download the example project called *Sherman-Morrison*. 
-The project can be downloaded using the following link: https://github.com/q-posev/Sherman-Morrison/archive/refs/tags/v0.1-demo.tar.gz. 
+Before you proceed to the tutorial, download the example project called *Sherman-Morrison* 
+using the following link: https://github.com/q-posev/Sherman-Morrison/archive/refs/tags/v0.1-demo.tar.gz. 
 Make sure to extract the files from the archive before starting the tutorial.
   #+end_important
 
@@ -178,7 +177,7 @@ g++  -I./include/ -fPIC -isystem /home/evgeny/.conda/envs/autotools/include -std
 So it works now.
 
 #+begin_question
-What is going to happen when you give the updated =Makefile= back to your colleague?
+What is going to happen when you try to use the updated =Makefile= outside of the ~conda~ environment?
 #+end_question
 
 In this example, we demonstrated that defining compiler flags is challenging, 
@@ -336,7 +335,7 @@ LDFLAGS  += -L/home/evgeny/.conda/envs/autotools/lib
 #+end_src
 
 #+begin_tip
-Variables in between ~@~ signs are called substitutation variables and are important part of the *Autotools* toolkit.
+Variables in between ~@~ signs are called substitution variables and are important part of the *Autotools* toolkit.
 #+end_tip
 
 Let's reconfigure (~autoreconf -i && ./configure~) and examine the changes between the input
@@ -356,15 +355,15 @@ This tells us that the substitution variables ~@CXX@~ and ~@CXXFLAGS@~ have been
 with the values detected by the ~configure~ script.
 
 #+begin_question
-In the example above, we forgot to add one ~C++~ compiler flag. Which one?
+In the example above, we forgot to add a compiler flag. Which one?
 #+end_question
 
 Good, but we still have the hard-coded path to ~lib~ directory in ~LDFLAGS~.
-Among other things, this directory contain the HDF5 library.
+Among other things, this directory contains the HDF5 library.
 Let's try to find this library using *Autoconf* functionality.
 
 #+begin_tip
-To re-create quickly the Makefiles without re-running ~./configure~,
+To re-create quickly the =Makefile= without re-running ~./configure~,
 just run ~./config.status~ and the options of the previous
 ~./configure~ will be used.
 #+end_tip
@@ -506,15 +505,15 @@ Package features:
 You can now see how all hard-coded HDF5 paths have been detected by the ~ax_lib_hdf5.m4~ macro.
 Moreover, all flags are propagated to the resulting ~Makefile~ due to the use of substitution variables.
 
-#+begin_question
+#+begin_exercise
 Examine the difference between =Makefile.in= and =Makefile=. 
 Is it consistent with the aforementioned summary?
-#+end_question
+#+end_exercise
 
-#+begin_question
-Try to reconfigure using ~./configure --without-hdf5~ or ~./configure --with-hdf5~. 
+#+begin_exercise
+Try to reconfigure using ~./configure --without-hdf5~ or ~./configure --with-hdf5=no~. 
 Which part of the ~configure.ac~ script produces the output message?
-#+end_question
+#+end_exercise
 
 * pkg-config
 
@@ -603,13 +602,18 @@ This might happen when package developers forgot to provide
 the configuration file for ~pkg-config~. 
 From now on, this is up to you to decide what should be done.
 
-Many *Autoconf* macros (including ~PKG_CHECK_MODULES~) allows to specify
+Many *Autoconf* macros (including ~PKG_CHECK_MODULES~) allow to specify
 actions to be taken if a given file/program/library is found and/or not found.
+In the case of ~PKG_CHECK_MODULES~, the syntax is the following:
 
-#+begin_question
+#+begin_src
+PKG_CHECK_MODULES(prefix, list-of-modules, action-if-found, action-if-not-found)
+#+end_src
+
+#+begin_exercise
 Modify the call to the ~PKG_CHECK_MODULES~ macro in order to raise a warning 
 when HDF5 cannot be detected with ~pkg-config~. This can be done using ~AC_MSG_WARN~ macro.
-#+end_question
+#+end_exercise
 
 * Conclusion
 
