@@ -1,0 +1,14 @@
+name: autotools
+channels:
+  - conda-forge
+dependencies:
+  - compilers
+  - pkg-config
+  - automake
+  - hdf5
+variables:
+  CFLAGS: "-isystem ${CONDA_PREFIX}/include"
+  CXXFLAGS: "-fPIC -isystem ${CONDA_PREFIX}/include"
+  CPPFLAGS: " "
+  LDFLAGS: " "
+  LIBS: " "
