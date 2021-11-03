@@ -157,7 +157,7 @@ CXX       =
 CXXFLAGS += -std=c++11
 CPPFLAGS += -I./include/
 LIBS     += -lhdf5 -lhdf5_cpp -lz
-LDFLAGS  += -L/home/evgeny/.conda/envs/autotools/lib
+LDFLAGS  += -L/home/user/.conda/envs/autotools/lib
 #+end_src
 
 If we now run ~make~ command the output may look like this:
@@ -165,13 +165,13 @@ If we now run ~make~ command the output may look like this:
 #+begin_src
 $ make
 
-g++ -fPIC -isystem /home/evgeny/.conda/envs/autotools/include -std=c++11   -I./include/  -c -o src/SM_Maponi.o src/SM_Maponi.cpp
-g++ -fPIC -isystem /home/evgeny/.conda/envs/autotools/include -std=c++11   -I./include/  -c -o src/SM_Standard.o src/SM_Standard.cpp
-g++ -fPIC -isystem /home/evgeny/.conda/envs/autotools/include -std=c++11   -I./include/  -c -o src/Woodbury.o src/Woodbury.cpp
-g++ -fPIC -isystem /home/evgeny/.conda/envs/autotools/include -std=c++11   -I./include/  -c -o src/SMWB.o src/SMWB.cpp
-g++ -fPIC -isystem /home/evgeny/.conda/envs/autotools/include -std=c++11   -I./include/  -c -o src/Helpers.o src/Helpers.cpp
-g++ -fPIC -isystem /home/evgeny/.conda/envs/autotools/include -std=c++11   -I./include/  -c -o tests/test_h5.o tests/test_h5.cpp
-g++  -I./include/ -fPIC -isystem /home/evgeny/.conda/envs/autotools/include -std=c++11 tests/test_h5.o src/SM_Maponi.o src/SM_Standard.o src/Woodbury.o src/SMWB.o src/Helpers.o -o bin/test_h5  -L/home/evgeny/.conda/envs/autotools/lib -lhdf5 -lhdf5_cpp -lz
+g++ -fPIC -isystem /home/user/.conda/envs/autotools/include -std=c++11   -I./include/  -c -o src/SM_Maponi.o src/SM_Maponi.cpp
+g++ -fPIC -isystem /home/user/.conda/envs/autotools/include -std=c++11   -I./include/  -c -o src/SM_Standard.o src/SM_Standard.cpp
+g++ -fPIC -isystem /home/user/.conda/envs/autotools/include -std=c++11   -I./include/  -c -o src/Woodbury.o src/Woodbury.cpp
+g++ -fPIC -isystem /home/user/.conda/envs/autotools/include -std=c++11   -I./include/  -c -o src/SMWB.o src/SMWB.cpp
+g++ -fPIC -isystem /home/user/.conda/envs/autotools/include -std=c++11   -I./include/  -c -o src/Helpers.o src/Helpers.cpp
+g++ -fPIC -isystem /home/user/.conda/envs/autotools/include -std=c++11   -I./include/  -c -o tests/test_h5.o tests/test_h5.cpp
+g++  -I./include/ -fPIC -isystem /home/user/.conda/envs/autotools/include -std=c++11 tests/test_h5.o src/SM_Maponi.o src/SM_Standard.o src/Woodbury.o src/SMWB.o src/Helpers.o -o bin/test_h5  -L/home/user/.conda/envs/autotools/lib -lhdf5 -lhdf5_cpp -lz
 #+end_src
 
 So it works now.
@@ -271,7 +271,7 @@ Several checks have been performed by *Autoconf* and in the end one might get th
 
 sherman-morrison Version 0.0.1
 
-CXX ...........:  /home/evgeny/.conda/envs/autotools/bin/x86_64-conda-linux-gnu-c++
+CXX ...........:  /home/user/.conda/envs/autotools/bin/x86_64-conda-linux-gnu-c++
 CXXFLAGS ......:  -fPIC -isystem ${CONDA_PREFIX}/include
 
 --------------------------------------------------
@@ -331,7 +331,7 @@ CXX       = @CXX@
 CXXFLAGS  = @CXXFLAGS@
 CPPFLAGS += -I./include/
 LIBS     += -lhdf5 -lhdf5_cpp -lz
-LDFLAGS  += -L/home/evgeny/.conda/envs/autotools/lib
+LDFLAGS  += -L/home/user/.conda/envs/autotools/lib
 #+end_src
 
 #+begin_tip
@@ -347,7 +347,7 @@ $ diff Makefile.in Makefile
 < CXX      = @CXX@
 < CXXFLAGS = @CXXFLAGS@
 ---
-> CXX       = /home/evgeny/.conda/envs/autotools/bin/x86_64-conda-linux-gnu-c++
+> CXX       = /home/user/.conda/envs/autotools/bin/x86_64-conda-linux-gnu-c++
 > CXXFLAGS  = -fPIC -isystem ${CONDA_PREFIX}/include
 #+end_src
 
@@ -489,10 +489,10 @@ on the detected compiler and/or the HDF5 library.
 
 sherman-morrison Version 0.0.1
 
-CXX ...........:  /home/evgeny/.conda/envs/autotools/bin/x86_64-conda-linux-gnu-c++
+CXX ...........:  /home/user/.conda/envs/autotools/bin/x86_64-conda-linux-gnu-c++
 CXXFLAGS ......:   -fPIC -isystem ${CONDA_PREFIX}/include -std=c++11
-CPPFLAGS ......:  -I/home/evgeny/.conda/envs/autotools/include   -I./include/
-LDFLAGS .......:   -L/home/evgeny/.conda/envs/autotools/lib  
+CPPFLAGS ......:  -I/home/user/.conda/envs/autotools/include   -I./include/
+LDFLAGS .......:   -L/home/user/.conda/envs/autotools/lib  
 LIBS ..........:  -lhdf5_hl -lhdf5  -lcrypto -lcurl -lrt -lpthread -lz -ldl -lm   -lhdf5_cpp
 
 Package features:
