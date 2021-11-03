@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-11-03 Wed 13:50 -->
+<!-- 2021-11-03 Wed 17:07 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Automake</title>
@@ -244,29 +244,30 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgcce934c">1. Introduction</a></li>
-<li><a href="#org7bae061">2. GNU standards</a>
+<li><a href="#org3a4853e">1. Introduction</a></li>
+<li><a href="#orga55b200">2. GNU coding standards</a>
 <ul>
-<li><a href="#org29c5e9f">2.1. Standard targets</a></li>
-<li><a href="#org568539d">2.2. Filesystem Hierarchy Standard (FHS)</a></li>
-<li><a href="#org1afe0bc">2.3. Standard variables</a></li>
+<li><a href="#org74736d8">2.1. Standard targets</a></li>
+<li><a href="#org1b60617">2.2. Filesystem Hierarchy Standard</a></li>
+<li><a href="#org793e192">2.3. Standard <code>Makefile.in</code> variables</a></li>
+<li><a href="#org365256c">2.4. Standard environment variables</a></li>
 </ul>
 </li>
-<li><a href="#org48b181a">3. Writing portable Makefiles</a>
+<li><a href="#orgd96c4fb">3. Writing portable Makefiles</a>
 <ul>
-<li><a href="#orge010eb5">3.1. What you will lose by sticking to the POSIX standard</a></li>
-<li><a href="#org1d7588e">3.2. Rules that will make everything simpler</a></li>
+<li><a href="#orgaf91e2c">3.1. What you will lose by sticking to the POSIX standard</a></li>
+<li><a href="#org239dedd">3.2. Rules that will make everything simpler</a></li>
 </ul>
 </li>
-<li><a href="#org532bcca">4. Automake basics</a></li>
-<li><a href="#orge5deb1a">5. Unit testing</a></li>
-<li><a href="#orgdc7ddd7">6. Creating a distributed tarball</a>
+<li><a href="#orgcb6c519">4. Automake basics</a></li>
+<li><a href="#org007d32e">5. Unit testing</a></li>
+<li><a href="#org23a39e5">6. Creating a distributed tarball</a>
 <ul>
-<li><a href="#orgeceb24c">6.1. Source distribution targets</a></li>
-<li><a href="#org0cc63ec">6.2. Maintainer mode</a></li>
+<li><a href="#org9f7d0f9">6.1. Source distribution targets</a></li>
+<li><a href="#org22ae456">6.2. Maintainer mode</a></li>
 </ul>
 </li>
-<li><a href="#org86bd40e">7. Using pkg-config</a></li>
+<li><a href="#orgef9aca3">7. Using pkg-config</a></li>
 </ul>
 </div>
 </div>
@@ -275,8 +276,8 @@ This page contains a tutorial on the usage <a href="http://www.gnu.org/software/
 second part of the <a href="./index.html">Autotools tutorial</a>.
 </p>
 
-<div id="outline-container-orgcce934c" class="outline-2">
-<h2 id="orgcce934c"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-org3a4853e" class="outline-2">
+<h2 id="org3a4853e"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Using a simplified syntax, <b>Automake</b> produces functional Makefiles
@@ -307,14 +308,14 @@ Makefile, using standard target names.
 </div>
 </div>
 
-<div id="outline-container-org7bae061" class="outline-2">
-<h2 id="org7bae061"><span class="section-number-2">2</span> GNU standards</h2>
+<div id="outline-container-orga55b200" class="outline-2">
+<h2 id="orga55b200"><span class="section-number-2">2</span> GNU coding standards</h2>
 <div class="outline-text-2" id="text-2">
 <p>
-GNU standards are well known to users. If you use them, your users
-will be grateful because it will avoid them to read your installation
-instructions.
-In addition, it will make the packaging of your code much simpler if
+Some aspects of the GNU coding standards (GCS) are well known to
+users. If you use them, your users will be grateful because it will
+avoid them to read your installation instructions! In addition, it
+will make the packaging of your code much simpler if
 you want to make it available as as Linux distribution package
 (<code>.deb</code>, <code>.rpm</code>, &#x2026;), or as a package for
 <a href="https://brew.sh/">Homebrew</a>,
@@ -334,11 +335,11 @@ you want to make it available as as Linux distribution package
 </div>
 </div>
 
-<div id="outline-container-org29c5e9f" class="outline-3">
-<h3 id="org29c5e9f"><span class="section-number-3">2.1</span> Standard targets</h3>
+<div id="outline-container-org74736d8" class="outline-3">
+<h3 id="org74736d8"><span class="section-number-3">2.1</span> Standard targets</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
-The GNU standards define standard target names to be included in
+The GCS defines standard target names to be included in
 Makefiles, such that the behavior of make becomes uniform among
 multiple packages. Here is a short list of the main targets:
 </p>
@@ -362,13 +363,14 @@ multiple packages. Here is a short list of the main targets:
 </div>
 </div>
 
-<div id="outline-container-org568539d" class="outline-3">
-<h3 id="org568539d"><span class="section-number-3">2.2</span> Filesystem Hierarchy Standard (FHS)</h3>
+<div id="outline-container-org1b60617" class="outline-3">
+<h3 id="org1b60617"><span class="section-number-3">2.2</span> Filesystem Hierarchy Standard</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
-The FHS defines the directory structure and contents in Linux
-distributions. All Unix-like systems follow the FHS, which defines
-standard places for files like:
+The Filesystem Hierarchy Standard (FHS) defines the directory
+structure and contents in Linux distributions. All Unix-like
+systems follow more or less the FHS, which defines standard places
+for files like:
 </p>
 
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
@@ -407,6 +409,11 @@ standard places for files like:
 </tr>
 
 <tr>
+<td class="org-left"><code>/share</code></td>
+<td class="org-left">Platform-independent files</td>
+</tr>
+
+<tr>
 <td class="org-left"><code>/tmp</code></td>
 <td class="org-left">Directory for temporary files</td>
 </tr>
@@ -438,6 +445,13 @@ standard places for files like:
 </tbody>
 </table>
 
+<p>
+It is important to know what these directories contain, because it
+will let you know where to install your software and the extra
+files that are distributed with it such as the documentation or the
+configuration files.
+</p>
+
 <div class="seealso">
 <ul class="org-ul">
 <li><a href="https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard">FHS on Wikipedia</a></li>
@@ -448,12 +462,17 @@ standard places for files like:
 </div>
 </div>
 
-<div id="outline-container-org1afe0bc" class="outline-3">
-<h3 id="org1afe0bc"><span class="section-number-3">2.3</span> Standard variables</h3>
+<div id="outline-container-org793e192" class="outline-3">
+<h3 id="org793e192"><span class="section-number-3">2.3</span> Standard <code>Makefile.in</code> variables</h3>
 <div class="outline-text-3" id="text-2-3">
 <p>
-Installation directories are named by standard variables, so it is
-easy to install the package in a non-standard place.
+Installation directories are named by standard variables, so it
+gives the user the flexibility to install the package in a
+non-standard place. For example, this feature is required for
+packaging where the software is installed in a temporary directory.
+</p>
+
+<p>
 The main variables are:
 </p>
 
@@ -482,32 +501,50 @@ The main variables are:
 </tr>
 
 <tr>
+<td class="org-left"><code>exec_prefix</code></td>
+<td class="org-left"><code>$(prefix)</code></td>
+<td class="org-left">Root of the hierarchy of executable files</td>
+</tr>
+
+<tr>
 <td class="org-left"><code>bindir</code></td>
-<td class="org-left"><code>/usr/local/bin</code></td>
+<td class="org-left"><code>$(exec_prefix)/bin</code></td>
 <td class="org-left">Where to install the binaries</td>
 </tr>
 
 <tr>
+<td class="org-left"><code>datarootdir</code></td>
+<td class="org-left"><code>$(prefix)/share</code></td>
+<td class="org-left">The root of the platform-independent files</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>datadir</code></td>
+<td class="org-left"><code>$(datarootdir)</code></td>
+<td class="org-left">Where to install platform-independent files</td>
+</tr>
+
+<tr>
 <td class="org-left"><code>sysconfdir</code></td>
-<td class="org-left"><code>/usr/local/etc</code></td>
+<td class="org-left"><code>$(prefix)/etc</code></td>
 <td class="org-left">Where to install configuration files</td>
 </tr>
 
 <tr>
-<td class="org-left"><code>includedir</code></td>
-<td class="org-left"><code>/usr/local/lib</code></td>
+<td class="org-left"><code>libdir</code></td>
+<td class="org-left"><code>$(exec_prefix)/lib</code></td>
 <td class="org-left">Where to install the libraries</td>
 </tr>
 
 <tr>
 <td class="org-left"><code>includedir</code></td>
-<td class="org-left"><code>/usr/local/include</code></td>
+<td class="org-left"><code>$(prefix)/include</code></td>
 <td class="org-left">Where to install include files</td>
 </tr>
 
 <tr>
 <td class="org-left"><code>docdir</code></td>
-<td class="org-left"><code>/usr/local/share/doc/&lt;package&gt;</code></td>
+<td class="org-left"><code>$(datarootdir)/doc/$(package)</code></td>
 <td class="org-left">Where to install the documentation</td>
 </tr>
 
@@ -520,9 +557,110 @@ The main variables are:
 </table>
 
 <p>
-In the <code>Makefile.in</code>, these variables may be used between <code>@@</code>
-symbols, like <code>@@bindir@@</code> for instance.
+In the <code>Makefile.in</code>, these variables may be used between <code>@</code>
+symbols, like <code>@bindir@</code> for instance.
 </p>
+
+<p>
+These variables can take different values by specifying them as
+arguments of the <code>configure</code> script:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">./configure --prefix=$<span style="color: #a0522d;">HOME</span>/install --sysconfdir=$<span style="color: #a0522d;">HOME</span>/.config/
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org365256c" class="outline-3">
+<h3 id="org365256c"><span class="section-number-3">2.4</span> Standard environment variables</h3>
+<div class="outline-text-3" id="text-2-4">
+<p>
+The GCS also defines a set of user-defined environment variables
+allowing to change the compilation behavior of the package.
+</p>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Variable</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><code>CC</code></td>
+<td class="org-left">C compiler</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>FC</code></td>
+<td class="org-left">Fortran compiler</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>CXX</code></td>
+<td class="org-left">C++ compiler</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>CPP</code></td>
+<td class="org-left">C/C++ preprocessor</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left"><code>CFLAGS</code></td>
+<td class="org-left">C compiler flags</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>FCFLAGS</code></td>
+<td class="org-left">Fortran compiler flags</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>CXXFLAGS</code></td>
+<td class="org-left">C++ compiler flags</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>CPPFLAGS</code></td>
+<td class="org-left">C/C++ preprocessor flags</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>LDFLAGS</code></td>
+<td class="org-left">Linker flags</td>
+</tr>
+
+<tr>
+<td class="org-left"><code>LIBS</code></td>
+<td class="org-left">Libraries to add to the linker</td>
+</tr>
+</tbody>
+</table>
+
+<div class="tip">
+<p>
+To use alternate compiler flags without changing the Makefile, you
+can set these variables on the command line as arguments to
+<code>make</code>. For example:
+</p>
+
+<p>
+<code class="src src-bash">make <span style="color: #a0522d;">FC</span>=ifort <span style="color: #a0522d;">FCFLAGS</span>=<span style="color: #8b2252;">"-xAVX -O2"</span></code>
+</p>
+
+</div>
 
 <div class="seealso">
 <ul class="org-ul">
@@ -534,8 +672,8 @@ symbols, like <code>@@bindir@@</code> for instance.
 </div>
 </div>
 
-<div id="outline-container-org48b181a" class="outline-2">
-<h2 id="org48b181a"><span class="section-number-2">3</span> Writing portable Makefiles</h2>
+<div id="outline-container-orgd96c4fb" class="outline-2">
+<h2 id="orgd96c4fb"><span class="section-number-2">3</span> Writing portable Makefiles</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 The Makefiles produced by <b>Automake</b> are made to be portable among
@@ -561,8 +699,8 @@ at the top of your Makefile.
 </p>
 </div>
 
-<div id="outline-container-orge010eb5" class="outline-3">
-<h3 id="orge010eb5"><span class="section-number-3">3.1</span> What you will lose by sticking to the POSIX standard</h3>
+<div id="outline-container-orgaf91e2c" class="outline-3">
+<h3 id="orgaf91e2c"><span class="section-number-3">3.1</span> What you will lose by sticking to the POSIX standard</h3>
 <div class="outline-text-3" id="text-3-1">
 <ul class="org-ul">
 <li><p>
@@ -580,8 +718,8 @@ Pattern rules, such as
 </div>
 </div>
 
-<div id="outline-container-org1d7588e" class="outline-3">
-<h3 id="org1d7588e"><span class="section-number-3">3.2</span> Rules that will make everything simpler</h3>
+<div id="outline-container-org239dedd" class="outline-3">
+<h3 id="org239dedd"><span class="section-number-3">3.2</span> Rules that will make everything simpler</h3>
 <div class="outline-text-3" id="text-3-2">
 <ul class="org-ul">
 <li>Don't use any other automatic variable than <code>$@</code> (the name of the current target)</li>
@@ -606,8 +744,8 @@ your Makefiles.</li>
 </div>
 </div>
 
-<div id="outline-container-org532bcca" class="outline-2">
-<h2 id="org532bcca"><span class="section-number-2">4</span> Automake basics</h2>
+<div id="outline-container-orgcb6c519" class="outline-2">
+<h2 id="orgcb6c519"><span class="section-number-2">4</span> Automake basics</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 Automake reads the <code>Makefile.am</code> file and produces the <code>Makefile.in</code>
@@ -621,8 +759,8 @@ file.
 </div>
 </div>
 
-<div id="outline-container-orge5deb1a" class="outline-2">
-<h2 id="orge5deb1a"><span class="section-number-2">5</span> Unit testing</h2>
+<div id="outline-container-org007d32e" class="outline-2">
+<h2 id="org007d32e"><span class="section-number-2">5</span> Unit testing</h2>
 <div class="outline-text-2" id="text-5">
 <div class="exercise">
 <p>
@@ -634,12 +772,12 @@ and another one which always fails.
 </div>
 </div>
 
-<div id="outline-container-orgdc7ddd7" class="outline-2">
-<h2 id="orgdc7ddd7"><span class="section-number-2">6</span> Creating a distributed tarball</h2>
+<div id="outline-container-org23a39e5" class="outline-2">
+<h2 id="org23a39e5"><span class="section-number-2">6</span> Creating a distributed tarball</h2>
 <div class="outline-text-2" id="text-6">
 </div>
-<div id="outline-container-orgeceb24c" class="outline-3">
-<h3 id="orgeceb24c"><span class="section-number-3">6.1</span> Source distribution targets</h3>
+<div id="outline-container-org9f7d0f9" class="outline-3">
+<h3 id="org9f7d0f9"><span class="section-number-3">6.1</span> Source distribution targets</h3>
 <div class="outline-text-3" id="text-6-1">
 <p>
 <b>Automake</b> provides the <code>dist</code> and <code>distcheck</code> targets:
@@ -660,8 +798,8 @@ tests, etc.
 </div>
 </div>
 
-<div id="outline-container-org0cc63ec" class="outline-3">
-<h3 id="org0cc63ec"><span class="section-number-3">6.2</span> Maintainer mode</h3>
+<div id="outline-container-org22ae456" class="outline-3">
+<h3 id="org22ae456"><span class="section-number-3">6.2</span> Maintainer mode</h3>
 <div class="outline-text-3" id="text-6-2">
 <p>
 There are two types of people who will try to compile the source
@@ -713,8 +851,8 @@ Makefiles by running
 </div>
 </div>
 
-<div id="outline-container-org86bd40e" class="outline-2">
-<h2 id="org86bd40e"><span class="section-number-2">7</span> Using pkg-config</h2>
+<div id="outline-container-orgef9aca3" class="outline-2">
+<h2 id="orgef9aca3"><span class="section-number-2">7</span> Using pkg-config</h2>
 <div class="outline-text-2" id="text-7">
 <p>
 When your software depends on external libraries and you try to
@@ -813,7 +951,7 @@ The pkg-config files are searched in the directories defined by the
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Evgeny Posenitskiy, Anthony Scemama</p>
-<p class="date">Created: 2021-11-03 Wed 13:50</p>
+<p class="date">Created: 2021-11-03 Wed 17:07</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
