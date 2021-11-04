@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-11-04 Thu 17:08 -->
+<!-- 2021-11-04 Thu 21:43 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Automake</title>
@@ -244,44 +244,45 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org83e9366">1. Introduction</a></li>
-<li><a href="#org034dee8">2. GNU coding standards</a>
+<li><a href="#org60cc853">1. Introduction</a></li>
+<li><a href="#orgf5e11a0">2. GNU coding standards</a>
 <ul>
-<li><a href="#org409d905">2.1. Standard targets</a></li>
-<li><a href="#org65561c7">2.2. Filesystem Hierarchy Standard</a></li>
-<li><a href="#org9c8f028">2.3. Standard <code>Makefile.in</code> variables</a></li>
-<li><a href="#orgc2a41fd">2.4. Standard environment variables</a></li>
+<li><a href="#org29e987e">2.1. Standard targets</a></li>
+<li><a href="#org305819c">2.2. Filesystem Hierarchy Standard</a></li>
+<li><a href="#orgb6f84d3">2.3. Standard <code>Makefile.in</code> variables</a></li>
+<li><a href="#org3b89f1e">2.4. Standard environment variables</a></li>
 </ul>
 </li>
-<li><a href="#org9176657">3. Writing portable Makefiles</a>
+<li><a href="#org947ec6c">3. Writing portable Makefiles</a>
 <ul>
-<li><a href="#org2160b68">3.1. What you will lose by sticking to the POSIX standard</a></li>
-<li><a href="#orgcae33be">3.2. Rules that will make everything simpler</a></li>
+<li><a href="#org9502351">3.1. What you will lose by sticking to the POSIX standard</a></li>
+<li><a href="#orga64b27a">3.2. Rules that will make everything simpler</a></li>
 </ul>
 </li>
-<li><a href="#org503d4df">4. Automake basics</a></li>
-<li><a href="#orge0bbbaf">5. Creating a distributed tarball</a>
+<li><a href="#org2c1223f">4. Automake basics</a></li>
+<li><a href="#orgbe8dd02">5. Creating a distributed tarball</a>
 <ul>
-<li><a href="#org8a4494e">5.1. Maintainer mode</a></li>
-<li><a href="#org6d2c6ad">5.2. Source distribution targets</a></li>
+<li><a href="#org3861f27">5.1. Maintainer mode</a></li>
+<li><a href="#org0d0ccc2">5.2. Source distribution targets</a></li>
 </ul>
 </li>
-<li><a href="#org49e0afd">6. Automake Syntax</a>
+<li><a href="#org11df6e7">6. Automake Syntax</a>
 <ul>
-<li><a href="#org0e275f2">6.1. Variables</a></li>
-<li><a href="#org4502b9d">6.2. Product list variables</a>
+<li><a href="#org89b8337">6.1. Variables</a></li>
+<li><a href="#org6450228">6.2. Product list variables</a>
 <ul>
-<li><a href="#org6b81873">6.2.1. Installation location prefixes</a></li>
-<li><a href="#org4600c05">6.2.2. Other prefixes</a></li>
-<li><a href="#org82a0379">6.2.3. Primaries</a></li>
+<li><a href="#orgfe43a1b">6.2.1. Installation location prefixes</a></li>
+<li><a href="#orgbc04e9f">6.2.2. Other prefixes</a></li>
+<li><a href="#org3e6b1ad">6.2.3. Primaries</a></li>
 </ul>
 </li>
-<li><a href="#orgd38fb94">6.3. Product source variables</a></li>
-<li><a href="#orgc31f05a">6.4. PLV and PSV modifiers</a></li>
+<li><a href="#org902180e">6.3. Product source variables</a></li>
+<li><a href="#org23c432a">6.4. PLV and PSV modifiers</a></li>
 </ul>
 </li>
-<li><a href="#orgf43bfe4">7. Unit testing</a></li>
-<li><a href="#org6a92154">8. Using pkg-config</a></li>
+<li><a href="#orgd3a9328">7. Testing</a></li>
+<li><a href="#org1281d2e">8. Using pkg-config</a></li>
+<li><a href="#orge94001c">9. Useful links</a></li>
 </ul>
 </div>
 </div>
@@ -290,8 +291,8 @@ This page contains a tutorial on the usage <a href="http://www.gnu.org/software/
 second part of the <a href="./index.html">Autotools tutorial</a>.
 </p>
 
-<div id="outline-container-org83e9366" class="outline-2">
-<h2 id="org83e9366"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-org60cc853" class="outline-2">
+<h2 id="org60cc853"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Using a simplified syntax, <b>Automake</b> produces functional Makefiles
@@ -322,8 +323,8 @@ Makefile, using standard target names.
 </div>
 </div>
 
-<div id="outline-container-org034dee8" class="outline-2">
-<h2 id="org034dee8"><span class="section-number-2">2</span> GNU coding standards</h2>
+<div id="outline-container-orgf5e11a0" class="outline-2">
+<h2 id="orgf5e11a0"><span class="section-number-2">2</span> GNU coding standards</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 Some aspects of the GNU coding standards (GCS) are well known to
@@ -349,8 +350,8 @@ you want to make it available as as Linux distribution package
 </div>
 </div>
 
-<div id="outline-container-org409d905" class="outline-3">
-<h3 id="org409d905"><span class="section-number-3">2.1</span> Standard targets</h3>
+<div id="outline-container-org29e987e" class="outline-3">
+<h3 id="org29e987e"><span class="section-number-3">2.1</span> Standard targets</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 The GCS defines standard target names to be included in
@@ -377,8 +378,8 @@ multiple packages. Here is a short list of the main targets:
 </div>
 </div>
 
-<div id="outline-container-org65561c7" class="outline-3">
-<h3 id="org65561c7"><span class="section-number-3">2.2</span> Filesystem Hierarchy Standard</h3>
+<div id="outline-container-org305819c" class="outline-3">
+<h3 id="org305819c"><span class="section-number-3">2.2</span> Filesystem Hierarchy Standard</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 The Filesystem Hierarchy Standard (FHS) defines the directory
@@ -476,8 +477,8 @@ configuration files.
 </div>
 </div>
 
-<div id="outline-container-org9c8f028" class="outline-3">
-<h3 id="org9c8f028"><span class="section-number-3">2.3</span> Standard <code>Makefile.in</code> variables</h3>
+<div id="outline-container-orgb6f84d3" class="outline-3">
+<h3 id="orgb6f84d3"><span class="section-number-3">2.3</span> Standard <code>Makefile.in</code> variables</h3>
 <div class="outline-text-3" id="text-2-3">
 <p>
 Installation directories are named by standard variables, so it
@@ -587,8 +588,8 @@ arguments of the <code>configure</code> script:
 </div>
 </div>
 
-<div id="outline-container-orgc2a41fd" class="outline-3">
-<h3 id="orgc2a41fd"><span class="section-number-3">2.4</span> Standard environment variables</h3>
+<div id="outline-container-org3b89f1e" class="outline-3">
+<h3 id="org3b89f1e"><span class="section-number-3">2.4</span> Standard environment variables</h3>
 <div class="outline-text-3" id="text-2-4">
 <p>
 The GCS also defines a set of user-defined environment variables
@@ -686,8 +687,8 @@ can set these variables on the command line as arguments to
 </div>
 </div>
 
-<div id="outline-container-org9176657" class="outline-2">
-<h2 id="org9176657"><span class="section-number-2">3</span> Writing portable Makefiles</h2>
+<div id="outline-container-org947ec6c" class="outline-2">
+<h2 id="org947ec6c"><span class="section-number-2">3</span> Writing portable Makefiles</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 The Makefiles produced by <b>Automake</b> are made to be portable among
@@ -713,8 +714,8 @@ at the top of your Makefile.
 </p>
 </div>
 
-<div id="outline-container-org2160b68" class="outline-3">
-<h3 id="org2160b68"><span class="section-number-3">3.1</span> What you will lose by sticking to the POSIX standard</h3>
+<div id="outline-container-org9502351" class="outline-3">
+<h3 id="org9502351"><span class="section-number-3">3.1</span> What you will lose by sticking to the POSIX standard</h3>
 <div class="outline-text-3" id="text-3-1">
 <ul class="org-ul">
 <li><p>
@@ -732,8 +733,8 @@ Pattern rules, such as
 </div>
 </div>
 
-<div id="outline-container-orgcae33be" class="outline-3">
-<h3 id="orgcae33be"><span class="section-number-3">3.2</span> Rules that will make everything simpler</h3>
+<div id="outline-container-orga64b27a" class="outline-3">
+<h3 id="orga64b27a"><span class="section-number-3">3.2</span> Rules that will make everything simpler</h3>
 <div class="outline-text-3" id="text-3-2">
 <ul class="org-ul">
 <li>Don't use any other automatic variable than <code>$@</code> (the name of the current target)</li>
@@ -758,8 +759,8 @@ your Makefiles.</li>
 </div>
 </div>
 
-<div id="outline-container-org503d4df" class="outline-2">
-<h2 id="org503d4df"><span class="section-number-2">4</span> Automake basics</h2>
+<div id="outline-container-org2c1223f" class="outline-2">
+<h2 id="org2c1223f"><span class="section-number-2">4</span> Automake basics</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 Automake reads a file named <code>Makefile.am</code> and produces the <code>Makefile.in</code>
@@ -899,12 +900,12 @@ $
 </div>
 </div>
 
-<div id="outline-container-orge0bbbaf" class="outline-2">
-<h2 id="orge0bbbaf"><span class="section-number-2">5</span> Creating a distributed tarball</h2>
+<div id="outline-container-orgbe8dd02" class="outline-2">
+<h2 id="orgbe8dd02"><span class="section-number-2">5</span> Creating a distributed tarball</h2>
 <div class="outline-text-2" id="text-5">
 </div>
-<div id="outline-container-org8a4494e" class="outline-3">
-<h3 id="org8a4494e"><span class="section-number-3">5.1</span> Maintainer mode</h3>
+<div id="outline-container-org3861f27" class="outline-3">
+<h3 id="org3861f27"><span class="section-number-3">5.1</span> Maintainer mode</h3>
 <div class="outline-text-3" id="text-5-1">
 <p>
 There are two types of people who will try to compile the source
@@ -955,8 +956,8 @@ Makefiles by running
 </div>
 </div>
 
-<div id="outline-container-org6d2c6ad" class="outline-3">
-<h3 id="org6d2c6ad"><span class="section-number-3">5.2</span> Source distribution targets</h3>
+<div id="outline-container-org0d0ccc2" class="outline-3">
+<h3 id="org0d0ccc2"><span class="section-number-3">5.2</span> Source distribution targets</h3>
 <div class="outline-text-3" id="text-5-2">
 <p>
 <b>Automake</b> provides automatically the <code>dist</code> target.
@@ -1176,12 +1177,12 @@ can give to our users!
 </div>
 
 
-<div id="outline-container-org49e0afd" class="outline-2">
-<h2 id="org49e0afd"><span class="section-number-2">6</span> Automake Syntax</h2>
+<div id="outline-container-org11df6e7" class="outline-2">
+<h2 id="org11df6e7"><span class="section-number-2">6</span> Automake Syntax</h2>
 <div class="outline-text-2" id="text-6">
 </div>
-<div id="outline-container-org0e275f2" class="outline-3">
-<h3 id="org0e275f2"><span class="section-number-3">6.1</span> Variables</h3>
+<div id="outline-container-org89b8337" class="outline-3">
+<h3 id="org89b8337"><span class="section-number-3">6.1</span> Variables</h3>
 <div class="outline-text-3" id="text-6-1">
 <p>
 Here is the list of the main variables that are used in
@@ -1213,8 +1214,8 @@ the <code>AM_</code> prefix.
 </div>
 </div>
 
-<div id="outline-container-org4502b9d" class="outline-3">
-<h3 id="org4502b9d"><span class="section-number-3">6.2</span> Product list variables</h3>
+<div id="outline-container-org6450228" class="outline-3">
+<h3 id="org6450228"><span class="section-number-3">6.2</span> Product list variables</h3>
 <div class="outline-text-3" id="text-6-2">
 <p>
 In the previous section, we have seen two special variables
@@ -1236,8 +1237,8 @@ and these will be installed in <code>$(exec_prefix)/bin</code> upon invocation o
 </pre>
 </div>
 
-<div id="outline-container-org6b81873" class="outline-4">
-<h4 id="org6b81873"><span class="section-number-4">6.2.1</span> Installation location prefixes</h4>
+<div id="outline-container-orgfe43a1b" class="outline-4">
+<h4 id="orgfe43a1b"><span class="section-number-4">6.2.1</span> Installation location prefixes</h4>
 <div class="outline-text-4" id="text-6-2-1">
 <p>
 The <code>prefix</code> can be an <i>installation location prefix</i>, as in for
@@ -1255,8 +1256,8 @@ variable. You can make your own prefix, for example:
 </div>
 </div>
 
-<div id="outline-container-org4600c05" class="outline-4">
-<h4 id="org4600c05"><span class="section-number-4">6.2.2</span> Other prefixes</h4>
+<div id="outline-container-orgbc04e9f" class="outline-4">
+<h4 id="orgbc04e9f"><span class="section-number-4">6.2.2</span> Other prefixes</h4>
 <div class="outline-text-4" id="text-6-2-2">
 <dl class="org-dl">
 <dt><code>noinst</code></dt><dd>Products that should not be installed</dd>
@@ -1266,8 +1267,8 @@ variable. You can make your own prefix, for example:
 </div>
 </div>
 
-<div id="outline-container-org82a0379" class="outline-4">
-<h4 id="org82a0379"><span class="section-number-4">6.2.3</span> Primaries</h4>
+<div id="outline-container-org3e6b1ad" class="outline-4">
+<h4 id="org3e6b1ad"><span class="section-number-4">6.2.3</span> Primaries</h4>
 <div class="outline-text-4" id="text-6-2-3">
 <p>
 A primary is a class of products. This defines the rules to create
@@ -1286,8 +1287,8 @@ in the Makefile to satisfy the needs of the product.
 </div>
 </div>
 
-<div id="outline-container-orgd38fb94" class="outline-3">
-<h3 id="orgd38fb94"><span class="section-number-3">6.3</span> Product source variables</h3>
+<div id="outline-container-org902180e" class="outline-3">
+<h3 id="org902180e"><span class="section-number-3">6.3</span> Product source variables</h3>
 <div class="outline-text-3" id="text-6-3">
 <p>
 In our example, the name of the program is <code>test_h5</code>, so by defining
@@ -1318,8 +1319,8 @@ example:
 </div>
 </div>
 
-<div id="outline-container-orgc31f05a" class="outline-3">
-<h3 id="orgc31f05a"><span class="section-number-3">6.4</span> PLV and PSV modifiers</h3>
+<div id="outline-container-org23c432a" class="outline-3">
+<h3 id="org23c432a"><span class="section-number-3">6.4</span> PLV and PSV modifiers</h3>
 <div class="outline-text-3" id="text-6-4">
 <p>
 Modifiers change the default behavior of the variable. The main
@@ -1340,21 +1341,132 @@ documentation directory.
 </div>
 </div>
 
-<div id="outline-container-orgf43bfe4" class="outline-2">
-<h2 id="orgf43bfe4"><span class="section-number-2">7</span> Unit testing</h2>
+<div id="outline-container-orgd3a9328" class="outline-2">
+<h2 id="orgd3a9328"><span class="section-number-2">7</span> Testing</h2>
 <div class="outline-text-2" id="text-7">
-<div class="exercise">
 <p>
-Provide a unit test for the current package which always succeeds,
-and another one which always fails.
+Automake provides a framework for testing your program. The <code>TEST</code>
+variable contains a list of tests to execute when the user runs
+<code>make check</code>. The tests should be written such that success
+corresponds to an exit code equal to <code>0</code>. An exit status of <code>77</code>
+means that the test should be ignored. For all other exit codes, the
+test failed.
+</p>
+
+<div class="important">
+<p>
+Once you have added the <code>TEST</code> variable to <code>Makefile.am</code>, you need to
+run <code>autoreconf -i</code>. It will detect that you will need the testing
+framework and install it in your package.
 </p>
 
 </div>
+
+<div class="exercise">
+<ol class="org-ol">
+<li>Provide a dummy test for the current package which always succeeds,
+and another one which always fails.</li>
+<li>Add the tests to the <code>Makefile.am</code></li>
+<li>Run <code>make check</code></li>
+</ol>
+
+</div>
+
+<div class="note">
+<p>
+The prefix <code>check</code> is used for products that should only be
+built when <code>make check</code> is run.
+</p>
+
+</div>
+
+<p>
+In <code>Makefile.am</code>, we add
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile"><span style="color: #a0522d;">TESTS</span> = tests/success tests/failure
+<span style="color: #a0522d;">check_PROGRAMS</span> = $(<span style="color: #a0522d;">TESTS</span>)
+
+<span style="color: #a0522d;">tests_success_SOURCES</span> = tests/success.cpp
+<span style="color: #a0522d;">tests_failure_SOURCES</span> = tests/failure.cpp
+</pre>
+</div>
+
+<p>
+We can now test the package by running
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">$ make check
+[...]
+PASS: tests/success
+FAIL: tests/failure
+============================================================================
+Testsuite summary for sherman-morrison 0.0.1
+============================================================================
+# <span style="color: #b22222;">TOTAL: 2</span>
+# <span style="color: #b22222;">PASS:  1</span>
+# <span style="color: #b22222;">SKIP:  0</span>
+# <span style="color: #b22222;">XFAIL: 0</span>
+# <span style="color: #b22222;">FAIL:  1</span>
+# <span style="color: #b22222;">XPASS: 0</span>
+# <span style="color: #b22222;">ERROR: 0</span>
+============================================================================
+See ./test-suite.log
+============================================================================
+</pre>
+</div>
+
+<p>
+which results in an error.
+</p>
+
+<p>
+Sometimes, you know that a test fails, but you don't have time to
+fix it right away. You can add this test to the <code>XFAIL_TESTS</code>
+variable, which contains the list of tests that are expected to
+fail. Similarly, the <code>XPASS_TESTS</code> are tests that are not supposed
+to pass.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile"><span style="color: #a0522d;">TESTS</span> = tests/success tests/failure
+<span style="color: #a0522d;">XFAIL_TESTS</span> = tests/failure
+<span style="color: #a0522d;">check_PROGRAMS</span> = $(<span style="color: #a0522d;">TESTS</span>)
+
+<span style="color: #a0522d;">tests_success_SOURCES</span> = tests/success.cpp
+<span style="color: #a0522d;">tests_failure_SOURCES</span> = tests/failure.cpp
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-bash">PASS: tests/success
+XFAIL: tests/failure
+============================================================================
+Testsuite summary for sherman-morrison 0.0.1
+============================================================================
+# <span style="color: #b22222;">TOTAL: 2</span>
+# <span style="color: #b22222;">PASS:  1</span>
+# <span style="color: #b22222;">SKIP:  0</span>
+# <span style="color: #b22222;">XFAIL: 1</span>
+# <span style="color: #b22222;">FAIL:  0</span>
+# <span style="color: #b22222;">XPASS: 0</span>
+# <span style="color: #b22222;">ERROR: 0</span>
+============================================================================
+</pre>
+</div>
+
+<p>
+Now, when we run <code>make distcheck</code>, the tests will also be run when
+building the source distribution package.
+</p>
 </div>
 </div>
 
-<div id="outline-container-org6a92154" class="outline-2">
-<h2 id="org6a92154"><span class="section-number-2">8</span> Using pkg-config</h2>
+
+<div id="outline-container-org1281d2e" class="outline-2">
+<h2 id="org1281d2e"><span class="section-number-2">8</span> Using pkg-config</h2>
 <div class="outline-text-2" id="text-8">
 <p>
 When your software depends on external libraries and you try to
@@ -1450,10 +1562,22 @@ The pkg-config files are searched in the directories defined by the
 </div>
 </div>
 </div>
+
+
+<div id="outline-container-orge94001c" class="outline-2">
+<h2 id="orge94001c"><span class="section-number-2">9</span> Useful links</h2>
+<div class="outline-text-2" id="text-9">
+<ul class="org-ul">
+<li><a href="http://clusterchimps.org/autotools.php">CUDA and GNU Autotools</a></li>
+<li><a href="https://www.gnu.org/software/automake/manual/html_node/Multiple-Outputs.html">Handling Tools that Produce Many Outputs</a></li>
+<li><a href="https://stackoverflow.com/questions/67460091/autotools-and-fortran-modules/67535762#67535762">Autotools and Fortran Modules</a></li>
+</ul>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Evgeny Posenitskiy, Anthony Scemama</p>
-<p class="date">Created: 2021-11-04 Thu 17:08</p>
+<p class="date">Created: 2021-11-04 Thu 21:43</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
