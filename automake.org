@@ -200,6 +200,7 @@ second part of the [[./index.html][Autotools tutorial]].
      #+END_SRC
 
    - Special functions src_makefile{$(wildcard *.c)}, src_makefile{$(patsubst %.f, %.o, $(SRC))}, ...
+   - The ability to have one rule with multiple output files
 
 ** Rules that will make everything simpler
 
@@ -220,14 +221,18 @@ second part of the [[./index.html][Autotools tutorial]].
 
 * Automake basics
 
-  Automake reads a file named =Makefile.am= and produces the =Makefile.in=
+  *Automake* reads a file named =Makefile.am= and produces the =Makefile.in=
   file. The produced file may contain thousands of lines, and is
   guaranteed to have the basic functionalities (src_bash{make all},
   src_bash{make clean}, ...) in a portable Makefile.
-  =Makefile.am= contains regular =make= syntax, and the code it
+  =Makefile.am= contains portable =make= syntax, and the code it
   contains will be inserted at the proper location in the =Makefile.in=
   file. 
 
+  #+begin_note
+  *Automake* enables the use of the ~+=~ operator, which is an
+   extension of the POSIX standard.
+  #+end_note
 
   We will now create the minimal working example for the code
   presented in the *Autoconf* section. First, inform *Autoconf* that
@@ -252,6 +257,10 @@ AM_INIT_AUTOMAKE([foreign subdir-objects silent-rules])
   can be located in subdirectories. It is the case here because all
   the source files are located in the =src/= and =tests/= directories.
   
+  #+begin_tip
+  *Autoconf* macros start with ~AC_~ and *Automake* macros start with ~AM_~.
+  #+end_tip
+
   Then, create the file =Makefile.am= with the following content:
 
   #+begin_src makefile
@@ -535,7 +544,6 @@ sherman-morrison-0.0.1.tar.gz
   Success! the distribution compiles and we now have something that we
   can give to our users!
   
-
 * Automake Syntax
 
 ** Variables
@@ -735,7 +743,6 @@ Testsuite summary for sherman-morrison 0.0.1
   Now, when we run ~make distcheck~, the tests will also be run when
   building the source distribution package.
   
-  
 * Using pkg-config
 
   When your software depends on external libraries and you try to
@@ -810,12 +817,75 @@ LDFLAGS="${LDFLAGS} `pkg-config --libs qmckl`"
    - [[https://autotools.io/pkgconfig/index.html][Dependency discovery — pkg-config]]
   #+end_seealso  
 
+* Configuration headers
+
+  If you are using the C/C++ preprocessor, you can enable /conditional
+  compilation/ in your code. This is particularly frequent when you
+  use MPI. For example:
+
+  #+begin_src c
+#ifdef HAVE_MPI
+  rc = mpi_reduce(...)
+#endif
+  #+end_src
+
+  allows you to activate the MPI calls only when the ~-DHAVE_MPI~
+  option is passed in the command line, or if an included header file
+  defines the ~HAVE_MPI~ variable.
+
+  In the =configure.ac= file, the ~AC_CONFIG_HEADERS~ macro produces a
+  configuration header file which will enable the definition of C
+  preprocessor variables. Inserting the following in =configure.ac=:
+
+  #+begin_src bash
+AC_CONFIG_HEADERS([include/config.h])
+
+case $CC in
+    *icc*)
+       AC_DEFINE([HAVE_INTEL], [], [Define if using the Intel compiler]) ;;
+    *) ;;
+esac
+  #+end_src
+
+  Will produce the following in =include/config.h= if the Intel
+  compiler is used:
+
+  #+begin_src c
+/* Define if using the Intel compiler */
+#define HAVE_INTEL /**/
+  #+end_src
+  
+  and this code if not
+
+  #+begin_src c
+/* Define if using the Intel compiler */
+/* #undef HAVE_INTEL */
+  #+end_src
+  
+  Similarly, you can give values to the definitions, to pass values
+  determined at configuration time, like the installation ~prefix~
+  to locate the configuration files for instance:
+
+  #+begin_src bash
+AC_DEFINE_UNQUOTED([PREFIX_DIR], ["`echo $prefix`"], [Installation prefix])
+  #+end_src
+
+  #+begin_src bash
+$ ./configure --prefix=/usr/local
+  #+end_src
+
+  #+begin_src c
+/* Installation prefix */
+#define PREFIX_DIR "/usr/local"
+  #+end_src
 
 * Useful links
 
   - [[http://clusterchimps.org/autotools.php][CUDA and GNU Autotools]]
   - [[https://www.gnu.org/software/automake/manual/html_node/Multiple-Outputs.html][Handling Tools that Produce Many Outputs]]
   - [[https://stackoverflow.com/questions/67460091/autotools-and-fortran-modules/67535762#67535762][Autotools and Fortran Modules]]
+  - [[https://github.com/TREX-CoE/qmckl][Example: The QMCkl library]]
+  - [[https://gitlab.inria.fr/starpu/starpu][Example: The StarPU library]]
 
 * No export                                                        :noexport:
   #+BEGIN_SRC bash
