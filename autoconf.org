@@ -379,6 +379,13 @@ just run ~./config.status~ and the options of the previous
 
 * Detecting external dependencies
 
+#+begin_important
+You can download the modified project, which contains the checkpoint corresponding to the beginning of this section. 
+This might be useful if you did not type along during the previous part.
+The link to the checkpoint version of the project is here:
+https://github.com/q-posev/Sherman-Morrison/archive/refs/tags/v0.1-checkpoint.tar.gz
+#+end_important
+
 It is possible to write your our own macros to detect external dependencies.
 However, in this example we will try to locate the HDF5 library, which is widely used.
 Luckily for us, the GNU website has an [[https://www.gnu.org/software/autoconf-archive/The-Macros.html][archive of Autoconf macros]] for many packages, including HDF5.
@@ -386,7 +393,8 @@ The ~ax_lib_hdf5.m4~ file can be downloaded/copied from
 [[http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_lib_hdf5.m4][this webpage]].
 
 #+begin_tip
-It is considered good practice to put *Autoconf* macros in the ~m4~ directory of your project.
+It is considered good practice to put *Autoconf* macros in the ~m4~ directory of your source tree. 
+This has been already done for you in the aforementioned checkpoint version of the project.
 #+end_tip
 
 Once the file is in the ~m4~ directory, one can add the following lines to ~configure.ac~
