@@ -1,0 +1,20 @@
+\mode<presentation>
+
+% Frame title
+\defbeamertemplate*{frametitle}{trex}[1][]
+{
+ \begin{beamercolorbox}[wd=\paperwidth,ht=0.95cm]{frametitle} 
+ \begin{tikzpicture}
+% \useasboundingbox[fill=white](0,0) rectangle(\the\paperwidth,1.);
+%\fill[red!80!black] (0,0) rectangle(2.95,1.);
+%\fill[blue!50!cyan!80!black] (3.05,0) rectangle(\the\paperwidth,1.);
+%\fill[white!50] (3.05,0) rectangle(\the\paperwidth,1.);
+  \useasboundingbox[](0,0) rectangle(\the\paperwidth,1.);
+  \node[anchor=east, white,font=\large] at
+  (\paperwidth,0.25){\insertframetitle \phantom{m}};
+ \end{tikzpicture}
+ \end{beamercolorbox}
+}
+
+\mode<all>
+

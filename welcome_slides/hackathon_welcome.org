@@ -1,0 +1,149 @@
+#+TITLE: Build-system Hackathon
+#+DATE: 8-12/11/2021
+#+AUTHOR: Anthony Scemama, Evgeny Posenitskiy, Vijay Gopal Chilkuri
+
+#+LaTeX_HEADER: \institute{Lab. Chimie et Physique Quantiques, IRSAMC, UPS/CNRS, Toulouse (France)}
+#+LATEX_CLASS: beamer
+#+LaTeX_CLASS_OPTIONS:[aspectratio=169]
+#+BEAMER_THEME: trex
+#+LaTeX_HEADER: \usepackage{minted}
+#+LaTeX_HEADER: \usemintedstyle{emacs}
+#+LaTeX_HEADER: \newminted{f90}{fontsize=\footnotesize}
+#+LaTeX_HEADER: \usepackage[utf8]{inputenc}
+#+LaTeX_HEADER: \usepackage[T1]{fontenc}
+#+LaTeX_HEADER: \usepackage{hyperref}
+#+LaTeX_HEADER: \usepackage{mathtools}
+#+LaTeX_HEADER: \usepackage{physics}
+#+LaTeX_HEADER: \definecolor{darkgreen}{rgb}{0.,0.6,0.}
+#+LaTeX_HEADER: \definecolor{darkblue}{rgb}{0.,0.2,0.7}
+#+LaTeX_HEADER: \definecolor{darkred}{rgb}{0.6,0.1,0.1}
+#+LaTeX_HEADER: \definecolor{darkpink}{rgb}{0.7,0.0,0.7}
+#+EXPORT_EXCLUDE_TAGS: noexport
+
+#+startup: beamer
+#+options: H:1 toc:nil
+
+* Welcome
+
+  
+** Objective
+
+   - Understand how the CMake and GNU Autotools build systems work
+   - Improve the way you distribute your software
+
+** Why?
+
+   - When you can't use your own software on a new machine, you are frustated
+   - When users download your software and are not able to
+     install it, they look for another one
+   - If they really need that software, they will you bother you
+     asking for help
+   - Once set up, it will save you a lot of day in every day development
+
+** Important
+
+   We don't support the Windows OS in this hackathon.
+
+  
+* Beginning of the week
+   
+** Presentations
+   
+   - Short intro to CMake (Radovan Bast) and Autotools (Christian Feld): you will
+     start to decide which one you prefer using for your project.
+   - Longer tutorials on CMake (Radovan) and Autotools (Evgeny,
+     Anthony) to confirm your choice and to start to diving into it.
+
+* Middle of the week
+
+** Work on your own code
+
+   - Improve your Makefiles
+   - Introduce/improve your CMake/Autotools scripts
+   - Ask plenty questions to us or other participants
+   - During hands-on sessions, work as you prefer: take breaks when
+     you want, etc. It is a moment where we are available for questions.
+
+* How to interact with us
+
+  #+LATEX:\begin{columns}
+  #+LATEX: \begin{column}{0.25\textwidth}
+  #+LATEX: \begin{block}{Helpers}
+
+   - Anthony
+   - Evgeny
+   - Vijay
+   - Pablo
+   - Radovan
+
+  #+LATEX: \end{block}
+  #+LATEX: \end{column}
+  #+LATEX: \begin{column}{0.75\textwidth}
+  #+LATEX: \begin{block}{Zoom}
+
+   - You will be separated in break-out rooms, one for each team.
+   - Those who are alone in their team can join in a common room
+
+  #+LATEX: \end{block}
+  #+LATEX: \begin{block}{Slack}
+
+   - The Zoom chat will be disabled.
+   - All written/chat communication should be done via Slack
+   - You can use Slack to communicate asynchronously with helpers that are not on Zoom
+
+  #+LATEX: \end{block}
+  #+LATEX: \end{column}
+  #+LATEX: \end{columns}
+
+* You participation
+  
+** We expect you to
+   - Present your code and how it is installed.
+     It should not be optimal, otherwise you would not be here! Don't
+     be shy!
+   - Present to others in detail the progress you made for your code,
+     sharing with others tips and tricks, useful links on the web etc
+   - /Code-swapping/: Take the code of other teams, try to install it
+     on some of your machines and give some feedback
+
+** Note
+   Don't spend too much time preparing a nice presentation. You can
+   improvise sharing your screen and showing things live.
+   
+* End of the week
+   
+** Presentations
+   
+   Now your software can build, how to go beyond:
+   - HPC Containers (Kai Löhnig)
+   - Guix-HPC (Ludovic Courtès)
+   - Conda (Leopold Talirz)
+   - Spack (Todd Gamblin)
+     
+* Special Thanks
+
+  - European Commission (TREX Center of Excellence)
+  - EuroCC National Competence Center Sweden
+  - All the invited speakers: Christian Feld, Kai Löhnig, Ludovic
+    Courtès, Radovan Bast, Todd Gamblin, Nico Mittenzwey, Leopold Talirz
+
+* Export                                                           :noexport:
+  #+BEGIN_SRC elisp :output none
+(setq org-latex-listings 'minted)
+(setq org-latex-custom-lang-environments
+      '(
+        (f90 "fortran")
+      ))
+(setq org-latex-minted-options
+      '(("frame" "lines")
+        ("fontsize" "\\scriptsize")
+        ("linenos" "")))
+(setq org-latex-to-pdf-process
+      '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+(org-beamer-export-to-pdf)
+  #+END_SRC
+
+  #+RESULTS:
+  : /home/scemama/TREX-Admin/hackathon/welcome_slides/hackathon_welcome.pdf

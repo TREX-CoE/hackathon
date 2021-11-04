@@ -1,0 +1,29 @@
+\mode<presentation>
+
+
+% Requirement
+\RequirePackage{tikz}
+
+% Settings
+\useinnertheme{trex}
+\useoutertheme{trex}
+\usecolortheme{trex}
+\usefonttheme{trex}
+
+
+% we remove the navigation symbols and define blocks aspect.
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{blocks}[rounded][shadow=true]
+
+\AtBeginSection[]{%
+    \begin{frame}[plain]
+        \usebeamertemplate{section page}
+    \end{frame}
+}
+
+\setbeamertemplate{footline}{
+    \vspace{0.6cm}
+}
+
+
+\mode<all>

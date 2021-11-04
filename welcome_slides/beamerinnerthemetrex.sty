@@ -1,0 +1,53 @@
+\mode<presentation>
+
+\setbeamertemplate{background}{
+\ifnum\thepage>1
+\includegraphics[height=\paperheight]{beamerbackgroundtrex.png}
+\else
+\includegraphics[height=\paperheight]{beamertitletrex.png}
+\fi
+}
+
+% Title page
+\defbeamertemplate*{title page}{trex}[1][]
+{
+   \vskip3cm%
+    \begin{beamercolorbox}[wd=6.cm,leftskip=-0.5cm,#1]{title page header}
+      \usebeamerfont{title}\inserttitle\par%
+    \end{beamercolorbox}%
+    \vskip0.2cm%
+    \begin{beamercolorbox}[wd=6.cm,leftskip=-0.5cm,#1]{author}
+      \usebeamerfont{author}\insertauthor%
+    \end{beamercolorbox}
+     \vskip0.3cm%
+    \begin{beamercolorbox}[wd=6.cm,leftskip=-0.5cm,#1]{date}
+      \usebeamerfont{author}\insertdate%
+    \end{beamercolorbox}
+     \vskip0.3cm%
+    \begin{beamercolorbox}[wd=7.cm,leftskip=-0.5cm,#1]{institute}
+      \usebeamerfont{author}{\tiny \insertinstitute}%
+    \end{beamercolorbox}
+  \vfill
+}
+
+% Section page
+\defbeamertemplate*{section page}{trex}{
+  \centering
+  \begin{minipage}{22em}
+    \raggedright
+    \usebeamercolor[fg]{section title}
+    \usebeamerfont{section title}
+    \insertsectionhead\\[-1ex]
+    \par
+    \ifx\insertsubsectionhead\@empty\else%
+      \usebeamercolor[fg]{subsection title}%
+      \usebeamerfont{subsection title}%
+      \insertsubsectionhead
+    \fi
+  \end{minipage}
+  \par
+  \vspace{\baselineskip}
+}
+
+
+\mode<all>
