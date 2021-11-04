@@ -512,7 +512,7 @@ CPPFLAGS="${HDF5_CPPFLAGS} ${CPPFLAGS}"
   and =Makefile.am= has the extra line:
 
   #+begin_src makefile
-INCLUDES =  -I$(srcdir)/include/
+AM_CPPFLAGS =  -I$(srcdir)/include/
   #+end_src
   
   You can remark that we have now introduced the ~srcdir~ variable
@@ -524,7 +524,7 @@ INCLUDES =  -I$(srcdir)/include/
   Now, let us test our source distribution:
 
   #+begin_src bash
-$ make
+$ make distcheck
 [...]
 ========================================================
 sherman-morrison-0.0.1 archives ready for distribution: 
