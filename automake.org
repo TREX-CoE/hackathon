@@ -640,13 +640,102 @@ distribution package, and to install the =README.md= file into the
 documentation directory.
    #+end_exercise
 
-* Unit testing
+* Testing
+
+  Automake provides a framework for testing your program. The ~TEST~
+  variable contains a list of tests to execute when the user runs
+  ~make check~. The tests should be written such that success
+  corresponds to an exit code equal to ~0~. An exit status of ~77~
+  means that the test should be ignored. For all other exit codes, the
+  test failed.
+
+  #+begin_important
+Once you have added the ~TEST~ variable to =Makefile.am=, you need to
+run ~autoreconf -i~. It will detect that you will need the testing
+framework and install it in your package.
+  #+end_important
 
   #+begin_exercise
-  Provide a unit test for the current package which always succeeds,
-  and another one which always fails.
+  1. Provide a dummy test for the current package which always succeeds,
+     and another one which always fails.
+  2. Add the tests to the =Makefile.am=
+  3. Run ~make check~
   #+end_exercise
 
+  #+begin_note
+  The prefix ~check~ is used for products that should only be
+  built when ~make check~ is run.
+  #+end_note
+
+  In =Makefile.am=, we add
+
+  #+begin_src makefile
+TESTS = tests/success tests/failure
+check_PROGRAMS = $(TESTS)
+
+tests_success_SOURCES = tests/success.cpp
+tests_failure_SOURCES = tests/failure.cpp
+  #+end_src
+
+  We can now test the package by running
+
+  #+begin_src bash
+$ make check
+[...]
+PASS: tests/success
+FAIL: tests/failure
+============================================================================
+Testsuite summary for sherman-morrison 0.0.1
+============================================================================
+# TOTAL: 2
+# PASS:  1
+# SKIP:  0
+# XFAIL: 0
+# FAIL:  1
+# XPASS: 0
+# ERROR: 0
+============================================================================
+See ./test-suite.log
+============================================================================
+  #+end_src
+
+  which results in an error.
+
+  Sometimes, you know that a test fails, but you don't have time to
+  fix it right away. You can add this test to the ~XFAIL_TESTS~
+  variable, which contains the list of tests that are expected to
+  fail. Similarly, the ~XPASS_TESTS~ are tests that are not supposed
+  to pass.
+
+  #+begin_src makefile
+TESTS = tests/success tests/failure
+XFAIL_TESTS = tests/failure
+check_PROGRAMS = $(TESTS)
+
+tests_success_SOURCES = tests/success.cpp
+tests_failure_SOURCES = tests/failure.cpp
+  #+end_src
+
+  #+begin_src bash
+PASS: tests/success
+XFAIL: tests/failure
+============================================================================
+Testsuite summary for sherman-morrison 0.0.1
+============================================================================
+# TOTAL: 2
+# PASS:  1
+# SKIP:  0
+# XFAIL: 1
+# FAIL:  0
+# XPASS: 0
+# ERROR: 0
+============================================================================
+  #+end_src
+
+  Now, when we run ~make distcheck~, the tests will also be run when
+  building the source distribution package.
+  
+  
 * Using pkg-config
 
   When your software depends on external libraries and you try to
@@ -720,6 +809,13 @@ LDFLAGS="${LDFLAGS} `pkg-config --libs qmckl`"
    - [[https://people.freedesktop.org/~dbn/pkg-config-guide.html][Guide to pkg-config]]
    - [[https://autotools.io/pkgconfig/index.html][Dependency discovery — pkg-config]]
   #+end_seealso  
+
+
+* Useful links
+
+  - [[http://clusterchimps.org/autotools.php][CUDA and GNU Autotools]]
+  - [[https://www.gnu.org/software/automake/manual/html_node/Multiple-Outputs.html][Handling Tools that Produce Many Outputs]]
+  - [[https://stackoverflow.com/questions/67460091/autotools-and-fortran-modules/67535762#67535762][Autotools and Fortran Modules]]
 
 * No export                                                        :noexport:
   #+BEGIN_SRC bash
