@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-11-04 Thu 15:37 -->
+<!-- 2021-11-04 Thu 17:08 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Autoconf</title>
@@ -244,12 +244,12 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org04cce6d">1. Introduction</a></li>
-<li><a href="#org304163d">2. Makefile</a></li>
-<li><a href="#org0a07abc">3. Autoconf</a></li>
-<li><a href="#orgafdad6b">4. Detecting external dependencies</a></li>
-<li><a href="#org5d8163a">5. pkg-config</a></li>
-<li><a href="#org57db4fe">6. Conclusion</a></li>
+<li><a href="#org3e58b7d">1. Introduction</a></li>
+<li><a href="#orgd922c4a">2. Makefile</a></li>
+<li><a href="#orgddf2c96">3. Autoconf</a></li>
+<li><a href="#orgb7eeae5">4. Detecting external dependencies</a></li>
+<li><a href="#orgf9f5572">5. pkg-config</a></li>
+<li><a href="#org52b5791">6. Conclusion</a></li>
 </ul>
 </div>
 </div>
@@ -266,8 +266,8 @@ Make sure to extract the files from the archive before starting the tutorial.
 
 </div>
 
-<div id="outline-container-org04cce6d" class="outline-2">
-<h2 id="org04cce6d"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-org3e58b7d" class="outline-2">
+<h2 id="org3e58b7d"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Building software on different platforms is a challenging task.
@@ -340,8 +340,8 @@ Our goal is to demonstrate how cumbersome configuration/compilation steps can be
 </div>
 </div>
 
-<div id="outline-container-org304163d" class="outline-2">
-<h2 id="org304163d"><span class="section-number-2">2</span> Makefile</h2>
+<div id="outline-container-orgd922c4a" class="outline-2">
+<h2 id="orgd922c4a"><span class="section-number-2">2</span> Makefile</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 Below is the <code>Makefile</code> of our project:
@@ -479,8 +479,8 @@ Well, this is where <b><b>Autoconf</b></b> comes into play.
 </div>
 </div>
 
-<div id="outline-container-org0a07abc" class="outline-2">
-<h2 id="org0a07abc"><span class="section-number-2">3</span> Autoconf</h2>
+<div id="outline-container-orgddf2c96" class="outline-2">
+<h2 id="orgddf2c96"><span class="section-number-2">3</span> Autoconf</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 In this section, we will talk about several files:
@@ -735,9 +735,19 @@ just run <code>./config.status</code> and the options of the previous
 </div>
 </div>
 
-<div id="outline-container-orgafdad6b" class="outline-2">
-<h2 id="orgafdad6b"><span class="section-number-2">4</span> Detecting external dependencies</h2>
+<div id="outline-container-orgb7eeae5" class="outline-2">
+<h2 id="orgb7eeae5"><span class="section-number-2">4</span> Detecting external dependencies</h2>
 <div class="outline-text-2" id="text-4">
+<div class="important">
+<p>
+You can download the modified project, which contains the checkpoint corresponding to the beginning of this section. 
+This might be useful if you did not type along during the previous part.
+The link to the checkpoint version of the project is here:
+<a href="https://github.com/q-posev/Sherman-Morrison/archive/refs/tags/v0.1-checkpoint.tar.gz">https://github.com/q-posev/Sherman-Morrison/archive/refs/tags/v0.1-checkpoint.tar.gz</a>
+</p>
+
+</div>
+
 <p>
 It is possible to write your our own macros to detect external dependencies.
 However, in this example we will try to locate the HDF5 library, which is widely used.
@@ -748,7 +758,8 @@ The <code>ax_lib_hdf5.m4</code> file can be downloaded/copied from
 
 <div class="tip">
 <p>
-It is considered good practice to put <b>Autoconf</b> macros in the <code>m4</code> directory of your project.
+It is considered good practice to put <b>Autoconf</b> macros in the <code>m4</code> directory of your source tree. 
+This has been already done for you in the aforementioned checkpoint version of the project.
 </p>
 
 </div>
@@ -914,8 +925,8 @@ Which part of the <code>configure.ac</code> script produces the output message?
 </div>
 </div>
 
-<div id="outline-container-org5d8163a" class="outline-2">
-<h2 id="org5d8163a"><span class="section-number-2">5</span> pkg-config</h2>
+<div id="outline-container-orgf9f5572" class="outline-2">
+<h2 id="orgf9f5572"><span class="section-number-2">5</span> pkg-config</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 The <a href="https://linux.die.net/man/1/pkg-config">pkg-config program</a> is a powerful tool to get information about installed libraries.
@@ -1037,8 +1048,8 @@ Notably, the raised warning allows the configuration to pass (unlike <code>AC_MS
 </div>
 </div>
 
-<div id="outline-container-org57db4fe" class="outline-2">
-<h2 id="org57db4fe"><span class="section-number-2">6</span> Conclusion</h2>
+<div id="outline-container-org52b5791" class="outline-2">
+<h2 id="org52b5791"><span class="section-number-2">6</span> Conclusion</h2>
 <div class="outline-text-2" id="text-6">
 <p>
 In this Tutorial you have learned how to make your in-house <code>Makefile</code> compatible with <b>Autoconf</b>.
@@ -1052,7 +1063,7 @@ Finally, you used the <b>Autoconf</b> macro from the GNU archive to configure th
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Evgeny Posenitskiy, Anthony Scemama</p>
-<p class="date">Created: 2021-11-04 Thu 15:37</p>
+<p class="date">Created: 2021-11-04 Thu 17:08</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
