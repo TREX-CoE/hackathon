@@ -382,7 +382,8 @@ just run ~./config.status~ and the options of the previous
 It is possible to write your our own macros to detect external dependencies.
 However, in this example we will try to locate the HDF5 library, which is widely used.
 Luckily for us, the GNU website has an [[https://www.gnu.org/software/autoconf-archive/The-Macros.html][archive of Autoconf macros]] for many packages, including HDF5.
-The ~ax_lib_hdf5.m4~ file can be downloaded from the aforementioned page.
+The ~ax_lib_hdf5.m4~ file can be downloaded/copied from 
+[[http://git.savannah.gnu.org/gitweb/?p=autoconf-archive.git;a=blob_plain;f=m4/ax_lib_hdf5.m4][this webpage]].
 
 #+begin_tip
 It is considered good practice to put *Autoconf* macros in the ~m4~ directory of your project.
@@ -608,11 +609,11 @@ No package 'hdf5' found
 #+end_src
 
 This might happen when package developers forgot to provide 
-the configuration file for ~pkg-config~. 
-From now on, this is up to you to decide what should be done.
+the configuration file for ~pkg-config~ or when it is installed in 
+some non-standard location. 
 
 Many *Autoconf* macros (including ~PKG_CHECK_MODULES~) allow to specify
-actions to be taken if a given file/program/library is found and/or not found.
+actions to be taken if a given file/program/library has been found or not.
 In the case of ~PKG_CHECK_MODULES~, the syntax is the following:
 
 #+begin_src
@@ -623,6 +624,8 @@ PKG_CHECK_MODULES(prefix, list-of-modules, action-if-found, action-if-not-found)
 Modify the call to the ~PKG_CHECK_MODULES~ macro in order to raise a warning 
 when HDF5 cannot be detected with ~pkg-config~. This can be done using ~AC_MSG_WARN~ macro.
 #+end_exercise
+
+Notably, the raised warning allows the configuration to pass (unlike ~AC_MSG_ERROR~).
 
 * Conclusion
 
