@@ -225,6 +225,10 @@ These are now stored in the ~$PACKAGE_NAME~ and ~$PACKAGE_VERSION~ variables, re
 We will not cover the details of the M4 syntax that is used internally by the Autoconf.
 For more information, see the [[https://www.gnu.org/software/autoconf/manual/autoconf-2.69/html_node/index.html][Autoconf documentation page]].
 
+#+begin_tip
+Most of the built-in *Autoconf* macros start with the ~AC_~ prefix.
+#+end_tip
+
 We know that the source code is written in ~C++~ programming language (it can also be guessed from the ~.cpp~ extension).
 Thus, we would like the *Autoconf* to find and possibly run some checks
 using the ~C++~ compiler that is available on the current machine.
