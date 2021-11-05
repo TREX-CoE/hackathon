@@ -55,7 +55,7 @@ second part of the [[./index.html][Autotools tutorial]].
   [[https://conda.io/][Conda]],
   [[https://spack.io/][Spack]],
   [[https://easybuild.io/][EasyBuild]], ...
-  
+
   #+begin_seealso
   - [[https://www.gnu.org/prep/standards/html_node/index.html][GNU coding standards]]
   - [[https://coderwall.com/p/urkybq/how-to-create-debian-package-from-source][How to create Debian package from source]]
@@ -67,7 +67,7 @@ second part of the [[./index.html][Autotools tutorial]].
    The GCS defines standard target names to be included in
    Makefiles, such that the behavior of make becomes uniform among
    multiple packages. Here is a short list of the main targets:
-   
+
    - ~make all~ :: Builds all the targets sufficient to declare the package built.
    - ~make clean~ :: Removes all derived files.
    - ~make check~ :: Runs unit tests provided by the package.
@@ -105,14 +105,14 @@ second part of the [[./index.html][Autotools tutorial]].
    will let you know where to install your software and the extra
    files that are distributed with it such as the documentation or the
    configuration files.
-   
+
    #+begin_seealso
    - [[https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard][FHS on Wikipedia]]
    - [[https://refspecs.linuxfoundation.org/FHS_3.0/fhs-3.0.pdf][FHS specification]]
    #+end_seealso
 
 ** Standard =Makefile.in= variables
-   
+
    Installation directories are named by standard variables, so it
    gives the user the flexibility to install the package in a
    non-standard place. For example, this feature is required for
@@ -133,7 +133,7 @@ second part of the [[./index.html][Autotools tutorial]].
    | ~sysconfdir~  | ~$(prefix)/etc~                 | Where to install configuration files        |
    | ~docdir~      | ~$(datarootdir)/doc/$(package)~ | Where to install the documentation          |
    | ~srcdir~      | Set by =configure=              | The directory of the sources being compiled |
-   
+
    In the =Makefile.in=, these variables may be used between ~@~
    symbols, like ~@bindir@~ for instance.
 
@@ -143,9 +143,9 @@ second part of the [[./index.html][Autotools tutorial]].
    #+begin_src bash
 ./configure --prefix=$HOME/install --sysconfdir=$HOME/.config/
    #+end_src
-   
+
 ** Standard environment variables
-   
+
    The GCS also defines a set of user-defined environment variables
    allowing to change the compilation behavior of the package.
 
@@ -162,15 +162,15 @@ second part of the [[./index.html][Autotools tutorial]].
    | ~CPPFLAGS~ | C/C++ preprocessor flags       |
    | ~LDFLAGS~  | Linker flags                   |
    | ~LIBS~     | Libraries to add to the linker |
-   
+
    #+begin_tip
    To use alternate compiler flags without changing the Makefile, you
    can set these variables on the command line as arguments to
    =make=. For example:
-   
+
    src_bash{make FC=ifort FCFLAGS="-xAVX -O2"}
    #+end_tip
-   
+
    #+begin_tip
    To see the complete list of user variables, you can run
    ~./configure --help~
@@ -190,14 +190,14 @@ second part of the [[./index.html][Autotools tutorial]].
   evolved than the POSIX standard, so Makefiles designed for GNU Make are not
   guaranteed to work with alternate implementations of =make=, such as BSD make for
   instance. If you want your software to be /really/ portable, you should stick to the
-  POSIX standard in your Makefile by including the line
+  POSIX standard in your Makefiles by including the line
 
   #+BEGIN_SRC makefile
 .POSIX
   #+END_SRC
 
   at the top of your Makefile.
-  
+
 ** What you will lose by sticking to the POSIX standard
 
    - Pattern rules, such as
@@ -212,7 +212,7 @@ second part of the [[./index.html][Autotools tutorial]].
 
 ** Rules that will make everything simpler
 
-   - Don't use any other automatic variable than ~$@~ (the name of the current target) 
+   - Don't use any other automatic variable than ~$@~ (the name of the current target)
    - Use src_bash{/bin/sh} instead of src_bash{/bin/bash}
    - Don't put your compiled files (=.o=) in a separate location than the source files
    - Give up writing your Makefiles by hand. Write *scripts* (Bash, Python) to
@@ -237,7 +237,7 @@ second part of the [[./index.html][Autotools tutorial]].
   src_bash{make clean}, ...) in a portable Makefile.
   =Makefile.am= contains portable =make= syntax, and the code it
   contains will be inserted at the proper location in the =Makefile.in=
-  file. 
+  file.
 
   #+begin_note
   *Automake* enables the use of the ~+=~ operator, which is an
@@ -259,14 +259,14 @@ AM_INIT_AUTOMAKE([foreign subdir-objects silent-rules])
   =README=, =AUTHORS=, =ChangeLog= and =COPYING= should be present in
   the project.
 
-  The ~slient-rules~ option causes *Automake* to generate Makefiles
+  The ~silent-rules~ option causes *Automake* to generate Makefiles
   that don't display the complete command line of the actions it
   performs, but a less verbose output similar to CMake.
 
   The ~subdir-objects~ option informs *Automake* that source files
   can be located in subdirectories. It is the case here because all
   the source files are located in the =src/= and =tests/= directories.
-  
+
   #+begin_tip
   *Autoconf* macros start with ~AC_~ and *Automake* macros start with ~AM_~.
   #+end_tip
@@ -295,19 +295,19 @@ SOURCES = src/SM_Maponi.cpp \
   make syntax such as src_makefile{$(wildcard src/*.cpp)}.
   #+end_note
 
-  
+
   #+begin_warning
-  *Automake* will overwrite =Makefile.in=. Before running automake the
+  *Automake* will overwrite =Makefile.in=. Before running *Automake* the
   first time, don't forget to make a backup copy of your =Makefile.in= file.
   #+end_warning
-  
+
   We can now create the =Makefile.in= and the =Makefile= by running
   #+begin_src bash
 $ autoreconf
 $ ./configure
   #+end_src
 
-  and build the project 
+  and build the project
 
   #+begin_src bash
 $ make
@@ -339,11 +339,11 @@ test_h5
 $ make uninstall
  ( cd '/home/test/Sherman-Morrison-0.1-demo/_install/bin' && rm -f test_h5 )
 $ ls _install/bin/
-$ 
+$
   #+end_src
-  
+
 * Creating a distributed tarball
-  
+
 ** Maintainer mode
    There are two types of people who will try to compile the source
    code:
@@ -373,11 +373,11 @@ $
    #+BEGIN_SRC bash
 ./configure --enable-maintainer-mode
    #+END_SRC
-  
+
    #+begin_seealso
    - [[https://autotools.io/automake/maintainer.html][Maintainer mode and the =missing= script]]
    #+end_seealso
-  
+
 ** Source distribution targets
 
    *Automake* provides automatically the ~dist~ target.
@@ -385,11 +385,11 @@ $
    files necessary to install the package: installation instructions,
    =configure= script, source code, documentation, man pages, unit
    tests, etc.
-   
+
   #+begin_src bash
 $ make dist
 [...]
-$ tar --list -f sherman-morrison-0.0.1.tar.gz 
+$ tar --list -f sherman-morrison-0.0.1.tar.gz
 sherman-morrison-0.0.1/
 sherman-morrison-0.0.1/m4/
 sherman-morrison-0.0.1/m4/ax_lib_hdf5.m4
@@ -431,7 +431,7 @@ make[1]: Leaving directory '/home/test/Sherman-Morrison-0.1-demo/sherman-morriso
 make: *** [Makefile:613: distcheck] Error 1
   #+end_src
 
-  Oh no! this archive is not valid.  By inspecting the content of the
+  Oh no! This archive is not valid.  By inspecting the content of the
   archive, we notice we forgot to add the header files in the
   sources. Although the project builds on our platform, the Makefile
   is incomplete because it lacks some dependencies.
@@ -458,7 +458,7 @@ SOURCES = src/SM_Maponi.cpp       \
   =config.status= before producing the updated archive.
 
   #+begin_src bash
-$ tar --list -f sherman-morrison-0.0.1.tar.gz 
+$ tar --list -f sherman-morrison-0.0.1.tar.gz
 sherman-morrison-0.0.1/
 sherman-morrison-0.0.1/include/
 sherman-morrison-0.0.1/include/Helpers.hpp
@@ -505,7 +505,7 @@ make[1]: Leaving directory '/home/test/Sherman-Morrison-0.1-demo/sherman-morriso
 make: *** [Makefile:613: distcheck] Error 1
   #+end_src
 
-  Oh no! still the same error! But now we know that the header file is
+  Oh no! Still the same error! But now we know that the header file is
   present.
 
   #+begin_question
@@ -527,16 +527,16 @@ Can you figure out what is wrong now?
   #+begin_src makefile
 CPPFLAGS="${HDF5_CPPFLAGS} ${CPPFLAGS}"
   #+end_src
-  
+
   and =Makefile.am= has the extra line:
 
   #+begin_src makefile
 AM_CPPFLAGS =  -I$(srcdir)/include/
   #+end_src
-  
+
   You can remark that we have now introduced the ~srcdir~ variable
   which points the the root of the source. For /in source/ builds,
-  ~srcdir~ is ~.~ but for /out of source/ builts it is set to the
+  ~srcdir~ is ~.~ but for /out of source/ builds it is set to the
   relative path to the root. If for some reason you need the absolute
   path, you can use ~abs_srcdir~ instead.
 
@@ -546,14 +546,14 @@ AM_CPPFLAGS =  -I$(srcdir)/include/
 $ make distcheck
 [...]
 ========================================================
-sherman-morrison-0.0.1 archives ready for distribution: 
+sherman-morrison-0.0.1 archives ready for distribution:
 sherman-morrison-0.0.1.tar.gz
 ========================================================
   #+end_src
 
   Success! the distribution compiles and we now have something that we
   can give to our users!
-  
+
   #+begin_tip
   You can specify which tarball format to use with ~make dist~ by
   adding the ~dist-zip~, ~dist-bzip2~, ~dist-xz~, ... option to the
@@ -575,7 +575,7 @@ sherman-morrison-0.0.1.tar.gz
   - ~CLEANFILES = my_file.mod ...~ :: List of extra files to remove
     with ~make clean~
   - ~EXTRA_DIST~ :: Additional files to be  shipped with the binary distribution.
-    
+
     #+begin_note
 User variables such as ~CFLAGS~ or ~CPPFLAGS~ should never be
 overwritten in a ~Makefile.am~. This explains why these variables have
@@ -593,12 +593,12 @@ the ~AM_~ prefix.
 
   /Product list variables/ (PLV) conform to the following template:
 
-  #+begin_src 
+  #+begin_src
 [modifier-list]prefix_PRIMARY = product1 product2 ... productN
   #+end_src
-    
+
 *** Installation location prefixes
-   
+
     The ~prefix~ can be an /installation location prefix/, as in for
     example ~bin_PROGRAMS~ or ~lib_LIBRARIES~. The ~prefix~ corresponds
     to a variable defining a directory chopping off the ~dir~
@@ -609,13 +609,13 @@ the ~AM_~ prefix.
 gpudir = $(exec_prefix)/gpu
 gpu_PROGRAMS = cublas_test
     #+end_src
-  
+
 *** Other prefixes
 
     - ~noinst~ :: Products that should not be installed
     - ~check~ :: Products that should be built for testing
     - ~EXTRA~ :: Products that are built conditionally
-      
+
 *** Primaries
 
     A primary is a class of products. This defines the rules to create
@@ -634,10 +634,10 @@ gpu_PROGRAMS = cublas_test
   ~test_h5_SOURCES~ we can list the source files needed to build
   ~test_h5~. Automake will then do everything necessary in the
   =Makefile.in= to build ~test_h5~.
-  
+
    /Product source variables/ (PSV) conform to the following template:
 
-  #+begin_src 
+  #+begin_src
 [modifier-list]product_SOURCES = file1 file2 ... fileN
   #+end_src
 
@@ -649,13 +649,13 @@ gpu_PROGRAMS = cublas_test
 lib_LIBRARIES = libc++.a
 libc___a_SOURCES = ...
   #+end_src
-  
+
 ** PLV and PSV modifiers
-   
+
    Modifiers change the default behavior of the variable. The main
    modifiers are ~dist~ and ~nodist~, which indicate if the files
    should be part of the distributed package or not.
-   
+
 
    #+begin_exercise
 Modify the =Makefile.am= to add the =LICENSE= file to the source
@@ -757,7 +757,7 @@ Testsuite summary for sherman-morrison 0.0.1
 
   Now, when we run ~make distcheck~, the tests will also be run when
   building the source distribution package.
-  
+
 * Using pkg-config
 
   When your software depends on external libraries and you try to
@@ -766,8 +766,8 @@ Testsuite summary for sherman-morrison 0.0.1
   link it. `configure` will try to find the libraries in the standard
   locations, but if the configuration is a bit exotic, this will
   require some extra knowledge.
-  
-  At the moment you install a library on a a system, you have all the
+
+  At the moment you install a library on a system, you have all the
   knowledge required to use this library in other software: what
   compiler options to add. All this information can be saved in a
   file with the suffix =.pc= stored in a standard location such as
@@ -791,9 +791,9 @@ URL: https://github.com/trex-coe/qmckl
 Version: 0.1.1
 Cflags:  -I${includedir}
 Libs: -L${libdir} -lqmckl
-Libs.private:  -L/home/scemama/TREX/trexio/_install/lib -L/usr/lib/x86_64-linux-gnu/hdf5/serial -ltrexio -lhdf5 -lpthread -lm 
-  #+END_SRC 
-  
+Libs.private:  -L/home/scemama/TREX/trexio/_install/lib -L/usr/lib/x86_64-linux-gnu/hdf5/serial -ltrexio -lhdf5 -lpthread -lm
+  #+END_SRC
+
   This file tells you that you need to include the flag
   ~-I/usr/local/include~ to the C preprocessor (the ~CPPFLAGS~
   variable), and the ~-L/usr/local/lib -lqmckl~ flag at the link stage
@@ -821,16 +821,16 @@ LDFLAGS="${LDFLAGS} `pkg-config --libs qmckl`"
   to include the appropriate flags. The ~PKG_CHECK_MODULE~ macro
   will fail if pkg-config is not installed on the system, or if the
   =qmckl.pc= file is not found.
-  
-  #+begin_tip 
+
+  #+begin_tip
   The pkg-config files are searched in the directories defined by the
   src_bash{PKG_CONFIG_PATH} environment variable.
-  #+end_tip 
+  #+end_tip
 
-  #+begin_seealso  
+  #+begin_seealso
    - [[https://people.freedesktop.org/~dbn/pkg-config-guide.html][Guide to pkg-config]]
    - [[https://autotools.io/pkgconfig/index.html][Dependency discovery — pkg-config]]
-  #+end_seealso  
+  #+end_seealso
 
 * Back to Autoconf
 ** Searching for dependencies
@@ -873,14 +873,14 @@ esac
 /* Define if using the Intel compiler */
 #define HAVE_INTEL /**/
      #+end_src
-  
+
      and this code if not
 
      #+begin_src c
 /* Define if using the Intel compiler */
 /* #undef HAVE_INTEL */
      #+end_src
-  
+
      Similarly, you can give values to the definitions, to pass values
      determined at configuration time, like the installation ~prefix~
      to locate the configuration files for instance:
@@ -933,7 +933,7 @@ AC_CHECK_HEADERS([mkl_lapacke.h], [],
 AC_SEARCH_LIBS (function, search-libs, [action-if-found],
                 [action-if-not-found], [other-libraries])
     #+end_src
-   
+
     ~function~ is a function provided by the library, and ~search-libs~
     is a list of libraries that can provide the function we search for
     (for example ~[mpich openmpi]~). ~other-libraries~ contains the
@@ -964,7 +964,7 @@ AC_CHECK_PROGS(variable, progs-to-check-for, [value-if-not-found], [path = ‘$P
     #+begin_src bash
 AC_CHECK_PROGS(PYTHON, [python3 python], [not_found])
     #+end_src
-   
+
 ** Printing
 
    The following macros will be useful to display messages to the
@@ -975,8 +975,8 @@ AC_CHECK_PROGS(PYTHON, [python3 python], [not_found])
   | ~AC_MSG_ERROR (error-description, [exit-status = $?/1])~ | Make =configure= fail with an error message            |
   | ~AC_MSG_NOTICE(message)~                                 | Print the message                                      |
   | ~AC_MSG_WARN (problem-description)~                      | Inform the user of a possible problem                  |
-  
-  
+
+
 ** Using external software
 
    The usage of an external software can be controlled by the user by
@@ -994,7 +994,7 @@ AC_ARG_WITH(mpi, [AS_HELP_STRING([--with-mpi=yes/no], [Activate MPI])])
     After regenerating the =configure= script, we see that now
     ~configure --help~ shows the ~--with-mpi~ option.
     If the ~--with-mpi~ is absent of the command line, the ~with_mpi~
-    variable will be empty. Otherwise, it will contain ~yes~. 
+    variable will be empty. Otherwise, it will contain ~yes~.
 
     #+begin_src bash
 AC_ARG_WITH(mpi, [AS_HELP_STRING([--with-mpi], [Activate MPI])])
@@ -1016,9 +1016,9 @@ AS_IF([test "x$with_mpi" == "xyes"], [
 
   *Autoscan* scans the source tree and tries to fix vulnerabilities
    encountered in the =configure.ac=.
-   
+
   #+begin_src bash
-$ autoscan 
+$ autoscan
 configure.ac: warning: missing AC_CHECK_FUNCS([memset]) wanted by: include/Helpers.hpp:86
 configure.ac: warning: missing AC_CHECK_FUNCS([pow]) wanted by: include/Helpers.hpp:148
 configure.ac: warning: missing AC_CHECK_FUNCS([sqrt]) wanted by: include/Helpers.hpp:262
@@ -1036,7 +1036,7 @@ configure.ac: warning: missing AC_CHECK_HEADER_STDBOOL wanted by: include/Helper
   =configure.scan= which is a good starting point for creating the
   =configure.ac= file.
   #+end_tip
-  
+
 * Useful links
 
   - [[http://clusterchimps.org/autotools.php][CUDA and GNU Autotools]]
@@ -1051,4 +1051,4 @@ configure.ac: warning: missing AC_CHECK_HEADER_STDBOOL wanted by: include/Helper
   #+END_SRC
 
   #+RESULTS:
-  
+
