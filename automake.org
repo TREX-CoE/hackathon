@@ -955,7 +955,14 @@ AC_SEARCH_LIBS (function, search-libs, [action-if-found],
     ~AC_CHECK_PROGS~ macro:
 
     #+begin_src bash
-AC_CHECK_PROGS(PYTHON, [python3 python])
+AC_CHECK_PROGS(variable, progs-to-check-for, [value-if-not-found], [path = ‘$PATH’])
+    #+end_src
+
+    The following exampl checks for a Python interpreter and saves the
+    result in the ~PYTHON~ variable:
+
+    #+begin_src bash
+AC_CHECK_PROGS(PYTHON, [python3 python], [not_found])
     #+end_src
    
 ** Printing
@@ -963,13 +970,68 @@ AC_CHECK_PROGS(PYTHON, [python3 python])
    The following macros will be useful to display messages to the
    users running configure:
 
-  | AC_MSG_CHECKING (feature-description)                  | Inform the user that =configure= is checking something |
-  | AC_MSG_RESULT (result-description)                     | Return to the user the results of a check              |
-  | AC_MSG_ERROR (error-description, [exit-status = $?/1]) | Make =configure= fail with an error message            |
-  | AC_MSG_NOTICE (message)                                | Print the message                                      |
-  | AC_MSG_WARN (problem-description)                      | Inform the user of a possible problem                  |
+  | ~AC_MSG_CHECKING (feature-description)~                  | Inform the user that =configure= is checking something |
+  | ~AC_MSG_RESULT (result-description)~                     | Return to the user the results of a check              |
+  | ~AC_MSG_ERROR (error-description, [exit-status = $?/1])~ | Make =configure= fail with an error message            |
+  | ~AC_MSG_NOTICE(message)~                                 | Print the message                                      |
+  | ~AC_MSG_WARN (problem-description)~                      | Inform the user of a possible problem                  |
+  
+  
+** Using external software
 
+   The usage of an external software can be controlled by the user by
+   specifying some options to the =configure= script:
+   ~--with-<package>=<arg>~ or ~--without-<package>~.
 
+   Let us now add the possibility to compile our program with or
+   without MPI. To do that, we start by adding to the =configure.ac=
+   file:
+
+   #+begin_src bash
+AC_ARG_WITH(mpi, [AS_HELP_STRING([--with-mpi=yes/no], [Activate MPI])])
+   #+end_src
+
+    After regenerating the =configure= script, we see that now
+    ~configure --help~ shows the ~--with-mpi~ option.
+    If the ~--with-mpi~ is absent of the command line, the ~with_mpi~
+    variable will be empty. Otherwise, it will contain ~yes~. 
+
+    #+begin_src bash
+AC_ARG_WITH(mpi, [AS_HELP_STRING([--with-mpi], [Activate MPI])])
+AS_IF([test "x$with_mpi" == "xyes"], [
+  AC_DEFINE([HAVE_MPI], [], [MPI is activated])
+  AC_MSG_NOTICE([MPI is configured])
+  AC_CHECK_PROGS(MPICC, [mpicc])
+  AC_CHECK_PROGS(MPICXX, [mpicxx])
+  CC=$MPICC
+  CXX=$MPICXX
+])
+    #+end_src
+
+#+begin_seealso
+  - [[https://autotools.io/autoconf/arguments.html][Adding Options]]
+#+end_seealso
+
+* Autoscan
+
+  *Autoscan* scans the source tree and tries to fix vulnerabilities
+   encountered in the =configure.ac=.
+   
+  #+begin_src bash
+$ autoscan 
+configure.ac: warning: missing AC_CHECK_FUNCS([memset]) wanted by: include/Helpers.hpp:86
+configure.ac: warning: missing AC_CHECK_FUNCS([pow]) wanted by: include/Helpers.hpp:148
+configure.ac: warning: missing AC_CHECK_FUNCS([sqrt]) wanted by: include/Helpers.hpp:262
+configure.ac: warning: missing AC_CHECK_HEADER_STDBOOL wanted by: include/Helpers.hpp:192
+  #+end_src
+
+  Here, *Autoscan* has detected that we are using the ~memset~, ~pow~
+  and ~sqrt~ functions. It is safer to check that these functions are
+  available and functional. We simply need to follow the instructions
+  given by *Autoscan*.
+
+  If you do it at the 
+  
 * Useful links
 
   - [[http://clusterchimps.org/autotools.php][CUDA and GNU Autotools]]
