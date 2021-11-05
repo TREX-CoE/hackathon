@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-11-05 Fri 15:06 -->
+<!-- 2021-11-05 Fri 15:59 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Autoconf</title>
@@ -244,12 +244,12 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org5f42dae">1. Introduction</a></li>
-<li><a href="#orgcfe6a4c">2. Makefile</a></li>
-<li><a href="#orgfa3b7b0">3. Autoconf</a></li>
-<li><a href="#org41b4747">4. Detecting external dependencies</a></li>
-<li><a href="#org21d3e14">5. pkg-config</a></li>
-<li><a href="#orged3fde4">6. Conclusion</a></li>
+<li><a href="#orgd696fc3">1. Introduction</a></li>
+<li><a href="#org7355b4c">2. Makefile</a></li>
+<li><a href="#org20c81a9">3. Autoconf</a></li>
+<li><a href="#orge952de8">4. Detecting external dependencies</a></li>
+<li><a href="#org2aa929d">5. pkg-config</a></li>
+<li><a href="#orgcf59618">6. Conclusion</a></li>
 </ul>
 </div>
 </div>
@@ -266,8 +266,8 @@ Make sure to extract the files from the archive before starting the tutorial.
 
 </div>
 
-<div id="outline-container-org5f42dae" class="outline-2">
-<h2 id="org5f42dae"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-orgd696fc3" class="outline-2">
+<h2 id="orgd696fc3"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Building software on different platforms is a challenging task.
@@ -340,8 +340,8 @@ Our goal is to demonstrate how cumbersome configuration/compilation steps can be
 </div>
 </div>
 
-<div id="outline-container-orgcfe6a4c" class="outline-2">
-<h2 id="orgcfe6a4c"><span class="section-number-2">2</span> Makefile</h2>
+<div id="outline-container-org7355b4c" class="outline-2">
+<h2 id="org7355b4c"><span class="section-number-2">2</span> Makefile</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 Below is the <code>Makefile</code> of our project:
@@ -479,8 +479,8 @@ Well, this is where <b><b>Autoconf</b></b> comes into play.
 </div>
 </div>
 
-<div id="outline-container-orgfa3b7b0" class="outline-2">
-<h2 id="orgfa3b7b0"><span class="section-number-2">3</span> Autoconf</h2>
+<div id="outline-container-org20c81a9" class="outline-2">
+<h2 id="org20c81a9"><span class="section-number-2">3</span> Autoconf</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 In this section, we will talk about several files:
@@ -750,8 +750,8 @@ just run <code>./config.status</code> and the options of the previous
 </div>
 </div>
 
-<div id="outline-container-org41b4747" class="outline-2">
-<h2 id="org41b4747"><span class="section-number-2">4</span> Detecting external dependencies</h2>
+<div id="outline-container-orge952de8" class="outline-2">
+<h2 id="orge952de8"><span class="section-number-2">4</span> Detecting external dependencies</h2>
 <div class="outline-text-2" id="text-4">
 <div class="important">
 <p>
@@ -813,6 +813,14 @@ If HDF5 is successfully found, this macro calls
 
 and sets with_hdf5="yes". ...
 </pre>
+
+<div class="tip">
+<p>
+The <code>AC_SUBST</code> macro defines a non-standard (e.g. project-specific) substitution variable.
+Similarly, <code>AC_DEFINE</code> macro defines a preprocessor symbol, which can be used to write preprocessor conditionals.
+</p>
+
+</div>
 
 <p>
 This means that the macro will define a set of variables that can be manupulated
@@ -940,8 +948,8 @@ Which part of the <code>configure.ac</code> script produces the output message?
 </div>
 </div>
 
-<div id="outline-container-org21d3e14" class="outline-2">
-<h2 id="org21d3e14"><span class="section-number-2">5</span> pkg-config</h2>
+<div id="outline-container-org2aa929d" class="outline-2">
+<h2 id="org2aa929d"><span class="section-number-2">5</span> pkg-config</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 The <a href="https://linux.die.net/man/1/pkg-config">pkg-config program</a> is a powerful tool to get information about installed libraries.
@@ -1063,8 +1071,8 @@ Notably, the raised warning allows the configuration to pass (unlike <code>AC_MS
 </div>
 </div>
 
-<div id="outline-container-orged3fde4" class="outline-2">
-<h2 id="orged3fde4"><span class="section-number-2">6</span> Conclusion</h2>
+<div id="outline-container-orgcf59618" class="outline-2">
+<h2 id="orgcf59618"><span class="section-number-2">6</span> Conclusion</h2>
 <div class="outline-text-2" id="text-6">
 <p>
 In this Tutorial you have learned how to make your in-house <code>Makefile</code> compatible with <b>Autoconf</b>.
@@ -1078,7 +1086,7 @@ Finally, you used the <b>Autoconf</b> macro from the GNU archive to configure th
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Evgeny Posenitskiy, Anthony Scemama</p>
-<p class="date">Created: 2021-11-05 Fri 15:06</p>
+<p class="date">Created: 2021-11-05 Fri 15:59</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
