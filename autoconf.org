@@ -198,7 +198,7 @@ In this section, we will talk about several files:
 - =Makefile=
 
 #+begin_tip
-The ultimate goal of the *Autoconf* is to produce the ~configure~ script based on the ~configure.ac~ file.
+The ultimate goal of the *Autoconf* is to produce the ~configure~ shell script based on the ~configure.ac~ file.
 The ~configure~ script then detects the ~Makefile.in~ file and replaces some variables there to produce
 the final ~Makefile~, which is used to build a project.
 #+end_tip
@@ -285,6 +285,11 @@ CXXFLAGS ......:  -fPIC -isystem ${CONDA_PREFIX}/include
 
 --------------------------------------------------
 #+end_src
+
+#+begin_tip
+=configure= produces a file named =config.log= which contains a log
+of all the tests that were run. 
+#+end_tip
 
 In the example above, the ~configure~ script has detected the GNU ~C++~ compiler and expanded the
 ~${CXX}~ variable with the corresponding name.

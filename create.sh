@@ -37,4 +37,5 @@ fi
 
 mv Autotools.html docs/index.html
 mv autoconf.html automake.html docs/
+mv autotools.png docs/
 

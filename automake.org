@@ -3,7 +3,7 @@
 #+LANGUAGE:  en
 #+STARTUP: latexpreview
 #+HTML_LINK_HOME: index.html
-#+HTML_LINK_UP: index.html
+#+HTML_LINK_UP: autoconf.html
 
 
 # OLD STYLE
@@ -31,8 +31,10 @@ second part of the [[./index.html][Autotools tutorial]].
   install philosophies common to GNU projects, as well as the underlying
   infrastructure managed by *Autotools*.
 
-  #+CAPTION[The Basics of Autotools (Gentoo)]: Figure from [[https://devmanual.gentoo.org/general-concepts/autotools/index.html][The Basics of Autotools]]
-  [[https://devmanual.gentoo.org/general-concepts/autotools/diagram.png]]
+  #+begin_center
+  [[./autotools.png]]
+  #+end_center
+#  [[https://devmanual.gentoo.org/general-concepts/autotools/diagram.png]]
 
   You have seen in the *Autoconf* tutorial how to write =configure.ac=
   and =Makefile.in=.  Here, we introduce *Automake* which will produce
@@ -123,11 +125,12 @@ second part of the [[./index.html][Autotools tutorial]].
    | ~prefix~      | ~/usr/local~                    | Root of the hierarchy                       |
    | ~exec_prefix~ | ~$(prefix)~                     | Root of the hierarchy of executable files   |
    | ~bindir~      | ~$(exec_prefix)/bin~            | Where to install the binaries               |
-   | ~datarootdir~ | ~$(prefix)/share~               | The root of the platform-independent files  |
-   | ~datadir~     | ~$(datarootdir)~                | Where to install platform-independent files |
-   | ~sysconfdir~  | ~$(prefix)/etc~                 | Where to install configuration files        |
    | ~libdir~      | ~$(exec_prefix)/lib~            | Where to install the libraries              |
    | ~includedir~  | ~$(prefix)/include~             | Where to install include files              |
+   | ~datarootdir~ | ~$(prefix)/share~               | The root of the platform-independent files  |
+   | ~datadir~     | ~$(datarootdir)~                | Where to install platform-independent files |
+   | ~mandir~      | ~$(datarootdir)/man~                | Where to install platform-independent files |
+   | ~sysconfdir~  | ~$(prefix)/etc~                 | Where to install configuration files        |
    | ~docdir~      | ~$(datarootdir)/doc/$(package)~ | Where to install the documentation          |
    | ~srcdir~      | Set by =configure=              | The directory of the sources being compiled |
    
@@ -168,6 +171,11 @@ second part of the [[./index.html][Autotools tutorial]].
    src_bash{make FC=ifort FCFLAGS="-xAVX -O2"}
    #+end_tip
    
+   #+begin_tip
+   To see the complete list of user variables, you can run
+   ~./configure --help~
+   #+end_tip
+
    #+begin_seealso
    - [[https://www.gnu.org/prep/standards/html_node/Directory-Variables.html#Directory-Variables][Directory variables]]
    #+end_seealso
@@ -211,6 +219,8 @@ second part of the [[./index.html][Autotools tutorial]].
      write them for you.
    - Install =bmake= as an alternative to GNU make to check the portability of
      your Makefiles.
+   - Similarly, use POSIX constructs for your shell scripts or shell
+     constructs in =configure.ac=
 
 
    #+begin_seealso
@@ -544,6 +554,11 @@ sherman-morrison-0.0.1.tar.gz
   Success! the distribution compiles and we now have something that we
   can give to our users!
   
+  #+begin_tip
+  You can specify which tarball format to use with ~make dist~ by
+  adding the ~dist-zip~, ~dist-bzip2~, ~dist-xz~, ... option to the
+  ~AM_INIT_AUTOMAKE~ macro in =configure.ac=
+  #+end_tip
 * Automake Syntax
 
 ** Variables
@@ -819,25 +834,28 @@ LDFLAGS="${LDFLAGS} `pkg-config --libs qmckl`"
 
 * Configuration headers
 
-  If you are using the C/C++ preprocessor, you can enable /conditional
-  compilation/ in your code. This is particularly frequent when you
-  use MPI. For example:
+** C definitions
 
-  #+begin_src c
+    If you are using the C/C++ preprocessor, you can enable /conditional
+    compilation/ in your code. This is particularly frequent when you
+    use MPI. For example:
+
+    #+begin_src c
 #ifdef HAVE_MPI
   rc = mpi_reduce(...)
 #endif
-  #+end_src
+    #+end_src
 
-  allows you to activate the MPI calls only when the ~-DHAVE_MPI~
-  option is passed in the command line, or if an included header file
-  defines the ~HAVE_MPI~ variable.
+    allows you to activate the MPI calls only when the ~-DHAVE_MPI~
+    option is passed in the command line, or if an included header file
+    defines the ~HAVE_MPI~ variable.
 
-  In the =configure.ac= file, the ~AC_CONFIG_HEADERS~ macro produces a
-  configuration header file which will enable the definition of C
-  preprocessor variables. Inserting the following in =configure.ac=:
+    In the =configure.ac= file, the ~AC_CONFIG_HEADERS~ macro produces a
+    configuration header file which will enable the definition of C
+    preprocessor variables. The ~AC_DEFINE~ macro in =configure.ac=
+    allows to create C definitions.
 
-  #+begin_src bash
+    #+begin_src bash
 AC_CONFIG_HEADERS([include/config.h])
 
 case $CC in
@@ -845,40 +863,66 @@ case $CC in
        AC_DEFINE([HAVE_INTEL], [], [Define if using the Intel compiler]) ;;
     *) ;;
 esac
-  #+end_src
+    #+end_src
 
-  Will produce the following in =include/config.h= if the Intel
-  compiler is used:
+    Will produce the following in =include/config.h= if the Intel
+    compiler is used:
 
-  #+begin_src c
+    #+begin_src c
 /* Define if using the Intel compiler */
 #define HAVE_INTEL /**/
-  #+end_src
+    #+end_src
   
-  and this code if not
+    and this code if not
 
-  #+begin_src c
+    #+begin_src c
 /* Define if using the Intel compiler */
 /* #undef HAVE_INTEL */
-  #+end_src
+    #+end_src
   
-  Similarly, you can give values to the definitions, to pass values
-  determined at configuration time, like the installation ~prefix~
-  to locate the configuration files for instance:
+    Similarly, you can give values to the definitions, to pass values
+    determined at configuration time, like the installation ~prefix~
+    to locate the configuration files for instance:
 
-  #+begin_src bash
+    #+begin_src bash
 AC_DEFINE_UNQUOTED([PREFIX_DIR], ["`echo $prefix`"], [Installation prefix])
-  #+end_src
+    #+end_src
 
-  #+begin_src bash
+    #+begin_src bash
 $ ./configure --prefix=/usr/local
-  #+end_src
+    #+end_src
 
-  #+begin_src c
+    #+begin_src c
 /* Installation prefix */
 #define PREFIX_DIR "/usr/local"
-  #+end_src
+    #+end_src
 
+** Checking for headers
+
+   You may need to check if some headers are available. For this, you
+   can use the ~AC_CHECK_HEADERS~ macros:
+
+   #+begin_src bash
+AC_CHECK_HEADERS ([header-file ...], [action-if-found], [action-if-
+not-found], [includes])
+   #+end_src
+
+   For example, one can remark in our example that the
+   =include/Helpers.hpp= requires the =mkl_lapacke.h= header which is
+   not standard. We can introduce a check for it, and force the
+   failure of ~configure~ if it is not found.
+
+   #+begin_src bash
+AC_CHECK_HEADERS([mkl_lapacke.h], [],
+                [AC_MSG_ERROR([Unable to find mkl_lapacke.h])])
+   #+end_src
+
+   #+begin_tip
+   If later on in =configure.ac= you need to remember if you have or
+   not the header, the result is stored in ~ac_cv_header_<header_file>~.
+   #+end_tip
+
+** Checking for functions
 * Useful links
 
   - [[http://clusterchimps.org/autotools.php][CUDA and GNU Autotools]]

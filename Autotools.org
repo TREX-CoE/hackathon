@@ -43,11 +43,13 @@
 
 --------------------------------
 
+* Build system Hackathon
+
   This website contains the Autotools tutorial of the
   [[https://trex-coe.eu/events/trex-build-system-hackathon-8-12-nov-2021][TREX build system Hackathon]].
 
-   - [[./autoconf.html][Autoconf]]
-   - [[./automake.html][Automake]]
+   - [[./autoconf.html][Part  I: Autoconf]]
+   - [[./automake.html][Part II: Automake]]
 
   If you want to go deeper into Autotools, we recommend:
   - [[https://devmanual.gentoo.org/general-concepts/autotools/index.html][The Basics of Autotools]], an online introduction
