@@ -1,4 +1,4 @@
-#+TITLE: Autoconf
+#+TITLE: Part I: Autoconf
 #+AUTHOR: Evgeny Posenitskiy, Anthony Scemama
 #+LANGUAGE:  en
 #+HTML_LINK_HOME: index.html

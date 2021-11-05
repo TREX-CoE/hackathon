@@ -59,8 +59,7 @@ Make sure to extract the files from the archive before starting the tutorial.
 
    - [[./autoconf.html][Part  I: Autoconf]]
    - [[./automake.html][Part II: Automake]]
-
-  Here is a [[./files.html][link to the final files] that you should have at the end of this tutorial.
+   - [[./files.html][Link to the final files]] that you should have at the end of this tutorial.
 
 --------------------------------
   If you want to go deeper into Autotools, we recommend:
