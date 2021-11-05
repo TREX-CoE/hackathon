@@ -47,6 +47,7 @@
 
   This website contains the Autotools tutorial of the
   [[https://trex-coe.eu/events/trex-build-system-hackathon-8-12-nov-2021][TREX build system Hackathon]].
+  The content is released under the CC-BY-SA license.
 
   #+begin_important
 Before you proceed to the tutorial, download the example project called *Sherman-Morrison* 
@@ -64,7 +65,8 @@ Make sure to extract the files from the archive before starting the tutorial.
 --------------------------------
   If you want to go deeper into Autotools, we recommend:
   - [[https://devmanual.gentoo.org/general-concepts/autotools/index.html][The Basics of Autotools]], an online introduction
-  - the book
+  - [[https://autotools.io/][Autotools Mythbuster]] 
+  - the excellent book
     [[https://nostarch.com/autotools.htm][A Practitioner's Guide to GNU Autoconf, Automake, and Libtool]]
     by John Calcote,
   - the "Autobook" by Gary V. Vaughan, Ben Elliston, Tom Tromey and Ian Lance
@@ -81,3 +83,7 @@ Innovation program - under grant agreement no. 952165. The content of this
 document does not represent the opinion of the European Union, and the European
 Union is not responsible for any use that might be made of such content.
 
+------------------------
+#+begin_export html 
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+#+end_export

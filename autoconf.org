@@ -650,3 +650,8 @@ This is achieved by converting ~Makefile~ into ~Makefile.in~ and introducing sub
 You have also learned how to use *Autoconf* to create the ~configure~ script, which sets up and checks programs and libraries on the host machine.
 The ~configure~ script is also responsible for producing the final ~Makefile~, which is used to build the project.
 Finally, you used the *Autoconf* macro from the GNU archive to configure the project, which has an external dependency (i.e. the HDF5 library).
+
+------------------------
+#+begin_export html 
+<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+#+end_export
