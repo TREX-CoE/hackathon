@@ -1,5 +1,5 @@
 #!/bin/bash                                                                                                                   
-readonly ORG_FILES="Autotools.org autoconf.org automake.org"
+readonly ORG_FILES="Autotools.org autoconf.org automake.org files.org"
 readonly HTMLIZE=./docs/htmlize.el
 
 
@@ -36,6 +36,6 @@ else
 fi
 
 mv Autotools.html docs/index.html
-mv autoconf.html automake.html docs/
-mv autotools.png docs/
+mv autoconf.html automake.html files.html docs/
+cp autotools.png docs/
 

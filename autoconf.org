@@ -17,12 +17,6 @@
 
 This page contains the [[https://www.gnu.org/software/autoconf/][GNU Autoconf]] tutorial, which is the first part of the [[./index.html][Autotools tutorial]].
 
-  #+begin_important
-Before you proceed to the tutorial, download the example project called *Sherman-Morrison* 
-using the following link: https://github.com/q-posev/Sherman-Morrison/archive/refs/tags/v0.1-demo.tar.gz. 
-Make sure to extract the files from the archive before starting the tutorial.
-  #+end_important
-
 * Introduction
 
 Building software on different platforms is a challenging task.

@@ -1,0 +1,130 @@
+#+TITLE: Autoconf final files
+#+AUTHOR: Evgeny Posenitskiy, Anthony Scemama
+#+LANGUAGE:  en
+#+STARTUP: latexpreview
+#+HTML_LINK_HOME: index.html
+#+HTML_LINK_UP: autoconf.html
+
+
+# OLD STYLE
+# #+HTML_HEAD: <link rel="stylesheet" title="Standard" href="worg.css" type="text/css" />
+# #+INFOJS_OPT: toc:t mouse:underline path:org-info.js
+
+# Read the org
+#+SETUPFILE: org-html-themes/org/theme-readtheorg-local.setup
+
+#+PROPERTY: header-args  :exports code
+
+* configure.ac
+
+  #+begin_src bash
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+#initialize autoconf
+AC_INIT([sherman-morrison], [0.0.1], [])
+AM_INIT_AUTOMAKE([foreign subdir-objects silent-rules dist-zip])
+
+
+# do the tests with C++ flags
+AC_LANG(C++)
+# search for the C++ compiler
+AC_PROG_CXX
+# check if the C++ compiler accepts -c and -o simultaneously
+AC_PROG_CXX_C_O
+
+# tell Autoconf the name of directory with external M4 macros
+AC_CONFIG_MACRO_DIR([m4])
+# call the m4 macro to locate the HDF5 library
+AX_LIB_HDF5()
+
+# prepend compiler and linking flags with that of HDF5
+CXXFLAGS="${HDF5_CFLAGS} ${CXXFLAGS} -std=c++11"
+CPPFLAGS="${HDF5_CPPFLAGS} ${CPPFLAGS}"
+LDFLAGS="${HDF5_LDFLAGS} ${LDFLAGS}"
+LIBS="${HDF5_LIBS} ${LIBS} -lhdf5_cpp"
+
+AC_CONFIG_FILES([Makefile])
+AC_CONFIG_HEADERS([include/config.h])
+
+AC_CHECK_HEADERS([mkl_lapacke.h], [],
+                [AC_MSG_ERROR([Unable to find mkl_lapacke.h])])
+case $CC in
+    *icc*)
+       AC_DEFINE([HAVE_INTEL], [], [Define if using the Intel compiler]) ;;
+    *) ;;
+esac
+
+AC_DEFINE_UNQUOTED([PREFIX_DIR], ["`echo $prefix`"], [Installation prefix])
+
+AC_ARG_WITH(mpi, [AS_HELP_STRING([--with-mpi], [Activate MPI])])
+AS_IF([test "x$with_mpi" == "xyes"], [
+  AC_DEFINE([HAVE_MPI], [], [MPI is activated])
+  AC_MSG_NOTICE([MPI is configured])
+  AC_CHECK_PROGS(MPICC, [mpicc])
+  AC_CHECK_PROGS(MPICXX, [mpicxx])
+  CC=$MPICC
+  CXX=$MPICXX
+])
+
+AC_CHECK_FUNCS([memset])
+AC_CHECK_FUNCS([pow])
+AC_CHECK_FUNCS([sqrt])
+AC_CHECK_HEADER_STDBOOL
+
+AC_OUTPUT
+
+
+echo \
+"-------------------------------------------------
+
+${PACKAGE_NAME} Version ${PACKAGE_VERSION}
+
+CXX ...........:  ${CXX}
+CXXFLAGS ......:  ${CXXFLAGS}
+CPPFLAGS ......:  ${CPPFLAGS}
+LDFLAGS .......:  ${LDFLAGS}
+LIBS ..........:  ${LIBS}
+
+Package features:
+  Compilation with HDF5 ..:  ${with_hdf5}
+  HDF5 version ...........:  ${HDF5_VERSION}
+
+--------------------------------------------------"
+
+  #+end_src
+
+* Makefile.am
+
+  #+begin_src makefile
+bin_PROGRAMS = test_h5
+
+test_h5_SOURCES = $(SOURCES)
+
+AM_CPPFLAGS =  -I$(srcdir)/include/
+
+SOURCES = src/SM_Maponi.cpp       \
+          src/SM_Standard.cpp     \
+          src/Woodbury.cpp        \
+          src/SMWB.cpp            \
+          src/Helpers.cpp         \
+          tests/test_h5.cpp       \
+          include/Helpers.hpp     \
+          include/SM_Maponi.hpp   \
+          include/SM_Standard.hpp \
+          include/SMWB.hpp        \
+          include/Woodbury.hpp
+
+EXTRA_DIST = LICENSE
+dist_doc_DATA = README.md
+
+TESTS = tests/success \
+        tests/failure
+XFAIL_TESTS = tests/failure
+
+check_PROGRAMS = $(TESTS)
+
+tests_success_SOURCES = tests/success.cpp
+tests_failure_SOURCES = tests/failure.cpp
+
+  #+end_src

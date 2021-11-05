@@ -48,9 +48,21 @@
   This website contains the Autotools tutorial of the
   [[https://trex-coe.eu/events/trex-build-system-hackathon-8-12-nov-2021][TREX build system Hackathon]].
 
+  #+begin_important
+Before you proceed to the tutorial, download the example project called *Sherman-Morrison* 
+using the following link:
+
+https://github.com/q-posev/Sherman-Morrison/archive/refs/tags/v0.1-demo.tar.gz
+
+Make sure to extract the files from the archive before starting the tutorial.
+  #+end_important
+
    - [[./autoconf.html][Part  I: Autoconf]]
    - [[./automake.html][Part II: Automake]]
 
+  Here is a [[./files.html][link to the final files] that you should have at the end of this tutorial.
+
+--------------------------------
   If you want to go deeper into Autotools, we recommend:
   - [[https://devmanual.gentoo.org/general-concepts/autotools/index.html][The Basics of Autotools]], an online introduction
   - the book
