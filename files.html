@@ -6,7 +6,7 @@
 <!-- 2021-11-05 Fri 18:00 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Autotools</title>
+<title>Autoconf final files</title>
 <meta name="generator" content="Org mode" />
 <meta name="author" content="Evgeny Posenitskiy, Anthony Scemama" />
 <style type="text/css">
@@ -235,76 +235,140 @@ for the JavaScript code in this tag.
 </head>
 <body>
 <div id="org-div-home-and-up">
- <a accesskey="h" href=""> UP </a>
+ <a accesskey="h" href="automake.html"> UP </a>
  |
  <a accesskey="H" href="index.html"> HOME </a>
 </div><div id="content">
-<h1 class="title">Autotools</h1>
+<h1 class="title">Autoconf final files</h1>
 <div id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgc8b7141">1. Build system Hackathon</a></li>
+<li><a href="#org31d95d0">1. configure.ac</a></li>
+<li><a href="#org29280cb">2. Makefile.am</a></li>
 </ul>
 </div>
 </div>
-<hr />
 
-<div id="outline-container-orgc8b7141" class="outline-2">
-<h2 id="orgc8b7141"><span class="section-number-2">1</span> Build system Hackathon</h2>
+<div id="outline-container-org31d95d0" class="outline-2">
+<h2 id="org31d95d0"><span class="section-number-2">1</span> configure.ac</h2>
 <div class="outline-text-2" id="text-1">
-<p>
-This website contains the Autotools tutorial of the
-<a href="https://trex-coe.eu/events/trex-build-system-hackathon-8-12-nov-2021">TREX build system Hackathon</a>.
-</p>
+<div class="org-src-container">
+<pre class="src src-bash">#                                               <span style="color: #b22222;">-*- Autoconf -*-</span>
+# <span style="color: #b22222;">Process this file with autoconf to produce a configure script.</span>
 
-<div class="important">
-<p>
-Before you proceed to the tutorial, download the example project called <b>Sherman-Morrison</b> 
-using the following link:
-</p>
+#<span style="color: #b22222;">initialize autoconf</span>
+<span style="color: #0000ff;">AC_INIT</span>([sherman-morrison], [0.0.1], [])
+<span style="color: #0000ff;">AM_INIT_AUTOMAKE</span>([foreign subdir-objects silent-rules dist-zip])
 
-<p>
-<a href="https://github.com/q-posev/Sherman-Morrison/archive/refs/tags/v0.1-demo.tar.gz">https://github.com/q-posev/Sherman-Morrison/archive/refs/tags/v0.1-demo.tar.gz</a>
-</p>
 
-<p>
-Make sure to extract the files from the archive before starting the tutorial.
-</p>
+# <span style="color: #b22222;">do the tests with C++ flags</span>
+<span style="color: #0000ff;">AC_LANG</span>(C++)
+# <span style="color: #b22222;">search for the C++ compiler</span>
+AC_PROG_CXX
+# <span style="color: #b22222;">check if the C++ compiler accepts -c and -o simultaneously</span>
+AC_PROG_CXX_C_O
 
+# <span style="color: #b22222;">tell Autoconf the name of directory with external M4 macros</span>
+<span style="color: #0000ff;">AC_CONFIG_MACRO_DIR</span>([m4])
+# <span style="color: #b22222;">call the m4 macro to locate the HDF5 library</span>
+<span style="color: #0000ff;">AX_LIB_HDF5</span>()
+
+# <span style="color: #b22222;">prepend compiler and linking flags with that of HDF5</span>
+<span style="color: #a0522d;">CXXFLAGS</span>=<span style="color: #8b2252;">"${HDF5_CFLAGS} ${CXXFLAGS} -std=c++11"</span>
+<span style="color: #a0522d;">CPPFLAGS</span>=<span style="color: #8b2252;">"${HDF5_CPPFLAGS} ${CPPFLAGS}"</span>
+<span style="color: #a0522d;">LDFLAGS</span>=<span style="color: #8b2252;">"${HDF5_LDFLAGS} ${LDFLAGS}"</span>
+<span style="color: #a0522d;">LIBS</span>=<span style="color: #8b2252;">"${HDF5_LIBS} ${LIBS} -lhdf5_cpp"</span>
+
+<span style="color: #0000ff;">AC_CONFIG_FILES</span>([Makefile])
+<span style="color: #0000ff;">AC_CONFIG_HEADERS</span>([include/config.h])
+
+<span style="color: #0000ff;">AC_CHECK_HEADERS</span>([mkl_lapacke.h], [],
+                [AC_MSG_ERROR([Unable to find mkl_lapacke.h])])
+<span style="color: #a020f0;">case</span> $<span style="color: #a0522d;">CC</span><span style="color: #a020f0;"> in</span>
+    *icc*)
+       AC_DEFINE([HAVE_INTEL], [], [Define if using the Intel compiler]) ;;
+    *) ;;
+<span style="color: #a020f0;">esac</span>
+
+<span style="color: #0000ff;">AC_DEFINE_UNQUOTED</span>([PREFIX_DIR], [<span style="color: #8b2252;">"`echo $prefix`"</span>], [Installation prefix])
+
+<span style="color: #0000ff;">AC_ARG_WITH</span>(mpi, [AS_HELP_STRING([--with-mpi], [Activate MPI])])
+<span style="color: #0000ff;">AS_IF</span>([test <span style="color: #8b2252;">"x$with_mpi"</span> == <span style="color: #8b2252;">"xyes"</span>], [
+  AC_DEFINE([HAVE_MPI], [], [MPI is activated])
+  AC_MSG_NOTICE([MPI is configured])
+  AC_CHECK_PROGS(MPICC, [mpicc])
+  AC_CHECK_PROGS(MPICXX, [mpicxx])
+  <span style="color: #a0522d;">CC</span>=$<span style="color: #a0522d;">MPICC</span>
+  <span style="color: #a0522d;">CXX</span>=$<span style="color: #a0522d;">MPICXX</span>
+])
+
+<span style="color: #0000ff;">AC_CHECK_FUNCS</span>([memset])
+<span style="color: #0000ff;">AC_CHECK_FUNCS</span>([pow])
+<span style="color: #0000ff;">AC_CHECK_FUNCS</span>([sqrt])
+AC_CHECK_HEADER_STDBOOL
+
+AC_OUTPUT
+
+
+<span style="color: #483d8b;">echo</span> <span style="color: #8b2252;">\</span>
+<span style="color: #8b2252;">"-------------------------------------------------</span>
+
+<span style="color: #8b2252;">${PACKAGE_NAME} Version ${PACKAGE_VERSION}</span>
+
+<span style="color: #8b2252;">CXX ...........:  ${CXX}</span>
+<span style="color: #8b2252;">CXXFLAGS ......:  ${CXXFLAGS}</span>
+<span style="color: #8b2252;">CPPFLAGS ......:  ${CPPFLAGS}</span>
+<span style="color: #8b2252;">LDFLAGS .......:  ${LDFLAGS}</span>
+<span style="color: #8b2252;">LIBS ..........:  ${LIBS}</span>
+
+<span style="color: #8b2252;">Package features:</span>
+<span style="color: #8b2252;">  Compilation with HDF5 ..:  ${with_hdf5}</span>
+<span style="color: #8b2252;">  HDF5 version ...........:  ${HDF5_VERSION}</span>
+
+<span style="color: #8b2252;">--------------------------------------------------"</span>
+
+</pre>
+</div>
+</div>
 </div>
 
-<ul class="org-ul">
-<li><a href="./autoconf.html">Part  I: Autoconf</a></li>
-<li><a href="./automake.html">Part II: Automake</a></li>
-<li><a href="./files.html">Link to the final files</a> that you should have at the end of this tutorial.</li>
-</ul>
+<div id="outline-container-org29280cb" class="outline-2">
+<h2 id="org29280cb"><span class="section-number-2">2</span> Makefile.am</h2>
+<div class="outline-text-2" id="text-2">
+<div class="org-src-container">
+<pre class="src src-makefile"><span style="color: #a0522d;">bin_PROGRAMS</span> = test_h5
 
-<hr />
-<p>
-If you want to go deeper into Autotools, we recommend:
-</p>
-<ul class="org-ul">
-<li><a href="https://devmanual.gentoo.org/general-concepts/autotools/index.html">The Basics of Autotools</a>, an online introduction</li>
-<li>the book
-<a href="https://nostarch.com/autotools.htm">A Practitioner's Guide to GNU Autoconf, Automake, and Libtool</a>
-by John Calcote,</li>
-<li>the "Autobook" by Gary V. Vaughan, Ben Elliston, Tom Tromey and Ian Lance
-Taylor, which is available
-<a href="https://sourceware.org/autobook/index.html">online</a> or as a
-<a href="http://mdcc.cx/pub/autobook/autobook-latest/autobook.pdf">PDF document</a>.</li>
-</ul>
+<span style="color: #a0522d;">test_h5_SOURCES</span> = $(<span style="color: #a0522d;">SOURCES</span>)
 
-<hr />
+<span style="color: #a0522d;">AM_CPPFLAGS</span> =  -I$(<span style="color: #a0522d;">srcdir</span>)/include/
 
-<p>
-<img src="https://trex-coe.eu/sites/default/files/inline-images/euflag.jpg" alt="euflag.jpg" />
-<a href="https://trex-coe.eu">TREX</a> : Targeting Real Chemical Accuracy at the Exascale project
-has received funding from the European Union’s Horizon 2020 - Research and
-Innovation program - under grant agreement no. 952165. The content of this
-document does not represent the opinion of the European Union, and the European
-Union is not responsible for any use that might be made of such content.
-</p>
+<span style="color: #a0522d;">SOURCES</span> = src/SM_Maponi.cpp       \
+          src/SM_Standard.cpp     \
+          src/Woodbury.cpp        \
+          src/SMWB.cpp            \
+          src/Helpers.cpp         \
+          tests/test_h5.cpp       \
+          include/Helpers.hpp     \
+          include/SM_Maponi.hpp   \
+          include/SM_Standard.hpp \
+          include/SMWB.hpp        \
+          include/Woodbury.hpp
+
+<span style="color: #a0522d;">EXTRA_DIST</span> = LICENSE
+<span style="color: #a0522d;">dist_doc_DATA</span> = README.md
+
+<span style="color: #a0522d;">TESTS</span> = tests/success \
+        tests/failure
+<span style="color: #a0522d;">XFAIL_TESTS</span> = tests/failure
+
+<span style="color: #a0522d;">check_PROGRAMS</span> = $(<span style="color: #a0522d;">TESTS</span>)
+
+<span style="color: #a0522d;">tests_success_SOURCES</span> = tests/success.cpp
+<span style="color: #a0522d;">tests_failure_SOURCES</span> = tests/failure.cpp
+
+</pre>
+</div>
 </div>
 </div>
 </div>
