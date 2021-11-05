@@ -1030,7 +1030,12 @@ configure.ac: warning: missing AC_CHECK_HEADER_STDBOOL wanted by: include/Helper
   available and functional. We simply need to follow the instructions
   given by *Autoscan*.
 
-  If you do it at the 
+  #+begin_tip
+  If you do it at the very beginning of your transition to
+  *Autotools*, ~autoscan~ will provide you a file named
+  =configure.scan= which is a good starting point for creating the
+  =configure.ac= file.
+  #+end_tip
   
 * Useful links
 
