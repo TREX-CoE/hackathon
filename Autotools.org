@@ -64,7 +64,8 @@ Make sure to extract the files from the archive before starting the tutorial.
 --------------------------------
   If you want to go deeper into Autotools, we recommend:
   - [[https://devmanual.gentoo.org/general-concepts/autotools/index.html][The Basics of Autotools]], an online introduction
-  - the book
+  - [[https://autotools.io/][Autotools Mythbuster]] 
+  - the excellent book
     [[https://nostarch.com/autotools.htm][A Practitioner's Guide to GNU Autoconf, Automake, and Libtool]]
     by John Calcote,
   - the "Autobook" by Gary V. Vaughan, Ben Elliston, Tom Tromey and Ian Lance
