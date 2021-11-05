@@ -436,6 +436,11 @@ If HDF5 is successfully found, this macro calls
 and sets with_hdf5="yes". ...
 #+end_src
 
+#+begin_tip
+The ~AC_SUBST~ macro defines a non-standard (e.g. project-specific) substitution variable.
+Similarly, ~AC_DEFINE~ macro defines a preprocessor symbol, which can be used to write preprocessor conditionals.
+#+end_tip
+
 This means that the macro will define a set of variables that can be manupulated
 within ~configure.ac~ and/or ~Makefile.in~ files.
 In this example, we choose the former and will append the necessary flags with the ~HDF5_~ ones.
