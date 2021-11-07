@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-11-07 Sun 14:34 -->
+<!-- 2021-11-07 Sun 17:15 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Autotools</title>
@@ -244,37 +244,80 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org7319112">1. Build system Hackathon</a></li>
+<li><a href="#orga453cf9">1. Installation instructions</a></li>
+<li><a href="#orgb269874">2. Tutorial</a></li>
 </ul>
 </div>
 </div>
 <hr />
 
-<div id="outline-container-org7319112" class="outline-2">
-<h2 id="org7319112"><span class="section-number-2">1</span> Build system Hackathon</h2>
-<div class="outline-text-2" id="text-1">
+
 <p>
 This website contains the Autotools tutorial of the
 <a href="https://trex-coe.eu/events/trex-build-system-hackathon-8-12-nov-2021">TREX build system Hackathon</a>.
 The content is released under the CC-BY-SA license.
 </p>
 
-<div class="important">
+
+<div id="outline-container-orga453cf9" class="outline-2">
+<h2 id="orga453cf9"><span class="section-number-2">1</span> Installation instructions</h2>
+<div class="outline-text-2" id="text-1">
 <p>
-Before you proceed to the tutorial, download the example project called <b>Sherman-Morrison</b> 
-using the following link:
+You need to use an isolated Conda environment.  If you do not have
+Anaconda or Miniconda on your system, you can install it using
+instructions from one of the following pages (the version of Python
+is not important here):
+</p>
+
+<ul class="org-ul">
+<li>for Linux users: <a href="https://docs.conda.io/en/latest/miniconda.html#linux-installers">https://docs.conda.io/en/latest/miniconda.html#linux-installers</a></li>
+<li>for MacOS users: <a href="https://docs.conda.io/en/latest/miniconda.html#macosx-installers">https://docs.conda.io/en/latest/miniconda.html#macosx-installers</a></li>
+</ul>
+
+<p>
+Once you have Conda installed, you can use the <a href="https://raw.githubusercontent.com/TREX-CoE/hackathon/master/environment.yml">environment.yml</a> file
+to set up the environment needed for the Autotools
+tutorial. Download the file on your hard drive, then in the terminal
+navigate to the directory with the file and execute the following
+command:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash">$ conda env create -f environment.yml
+</pre>
+</div>
+
+<p>
+You then need to activate the new environment:
+</p>
+<div class="org-src-container">
+<pre class="src src-bash">$ conda activate autotools
+</pre>
+</div>
+
+<p>
+Now you should have Autoconf, Automake, compilers and a few other
+packages installed in an isolated environment. Before you
+proceed to the tutorial, download the example project called
+Sherman-Morrison using the following link:
+Starting point:
+<a href="https://github.com/q-posev/Sherman-Morrison/archive/refs/tags/v0.1-demo.tar.gz">https://github.com/q-posev/Sherman-Morrison/archive/refs/tags/v0.1-demo.tar.gz</a>
 </p>
 
 <p>
-<a href="https://github.com/q-posev/Sherman-Morrison/archive/refs/tags/v0.1-demo.tar.gz">https://github.com/q-posev/Sherman-Morrison/archive/refs/tags/v0.1-demo.tar.gz</a>
+Here is a checkpoint betweeen the two parts:
+<a href="https://github.com/q-posev/Sherman-Morrison/archive/refs/tags/v0.1-checkpoint.tar.gz">https://github.com/q-posev/Sherman-Morrison/archive/refs/tags/v0.1-checkpoint.tar.gz</a>
 </p>
 
 <p>
 Make sure to extract the files from the archive before starting the tutorial.
 </p>
-
+</div>
 </div>
 
+<div id="outline-container-orgb269874" class="outline-2">
+<h2 id="orgb269874"><span class="section-number-2">2</span> Tutorial</h2>
+<div class="outline-text-2" id="text-2">
 <ul class="org-ul">
 <li><a href="./autoconf.html">Part  I: Autoconf</a></li>
 <li><a href="./automake.html">Part II: Automake</a></li>
@@ -315,7 +358,7 @@ Union is not responsible for any use that might be made of such content.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Evgeny Posenitskiy, Anthony Scemama</p>
-<p class="date">Created: 2021-11-07 Sun 14:34</p>
+<p class="date">Created: 2021-11-07 Sun 17:15</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
