@@ -56,9 +56,9 @@ Application deadline: 1 Nov 2021
 
   - 09:00-09:15 : Intro to hackathon
   - 09:15-10:00 : Autotools presentation (Christian Feld)
-  - 10:15-10:45 : CMake presentation (Radovan Bast)
+  - 10:15-10:45 : [[https://coderefinery.github.io/cmake-workshop/motivation/][CMake presentation]] (Radovan Bast)
   - 10:45-11:30 : Participants present how their code is installed
-  - 13:30-16:30 : CMake tutorial (Radovan Bast)
+  - 13:30-16:30 : [[https://coderefinery.github.io/cmake-workshop/][CMake tutorial]] (Radovan Bast)
 
 ** Tuesday 9 Nov 2021
 
