@@ -48,7 +48,7 @@ second part of the [[./index.html][Autotools tutorial]].
   users. If you use them, your users will be grateful because it will
   avoid them to read your installation instructions! In addition, it
   will make the packaging of your code much simpler if
-  you want to make it available as as Linux distribution package
+  you want to make it available as a Linux distribution package
   (=.deb=, =.rpm=, ...), or as a package for
   [[https://brew.sh/][Homebrew]],
   [[http://guix.gnu.org/][Guix]],
@@ -144,6 +144,10 @@ second part of the [[./index.html][Autotools tutorial]].
 ./configure --prefix=$HOME/install --sysconfdir=$HOME/.config/
    #+end_src
 
+   #+begin_seealso
+   - [[https://www.gnu.org/prep/standards/html_node/Directory-Variables.html#Directory-Variables][Directory variables]]
+   #+end_seealso
+
 ** Standard environment variables
 
    The GCS also defines a set of user-defined environment variables
@@ -169,16 +173,14 @@ second part of the [[./index.html][Autotools tutorial]].
    =make=. For example:
 
    src_bash{make FC=ifort FCFLAGS="-xAVX -O2"}
-   #+end_tip
 
-   #+begin_tip
+   You can also do it at configuration time:
+
+   src_bash{./configure FC=ifort FCFLAGS="-xAVX -O2"}
+
    To see the complete list of user variables, you can run
    ~./configure --help~
    #+end_tip
-
-   #+begin_seealso
-   - [[https://www.gnu.org/prep/standards/html_node/Directory-Variables.html#Directory-Variables][Directory variables]]
-   #+end_seealso
 
 * Writing portable Makefiles
 
@@ -193,7 +195,7 @@ second part of the [[./index.html][Autotools tutorial]].
   POSIX standard in your Makefiles by including the line
 
   #+BEGIN_SRC makefile
-.POSIX
+.POSIX:
   #+END_SRC
 
   at the top of your Makefile.
@@ -210,20 +212,22 @@ second part of the [[./index.html][Autotools tutorial]].
    - Special functions src_makefile{$(wildcard *.c)}, src_makefile{$(patsubst %.f, %.o, $(SRC))}, ...
    - The ability to have one rule with multiple output files
 
-** Rules that will make everything simpler
+** Guidelines that will make everything more portable
 
    - Don't use any other automatic variable than ~$@~ (the name of the current target)
-   - Use src_bash{/bin/sh} instead of src_bash{/bin/bash}
+   - Write your scripts with _bash{/bin/sh} instead of src_bash{/bin/bash}
    - Don't put your compiled files (=.o=) in a separate location than the source files
-   - Give up writing your Makefiles by hand. Write *scripts* (Bash, Python) to
+   - Give up writing your Makefiles by hand. Use *scripts* (Bash, Python) to
      write them for you.
    - Install =bmake= as an alternative to GNU make to check the portability of
      your Makefiles.
+   - Use ~$(MAKE)~ in your Makefiles instead of ~make~ for recursive builds
    - Similarly, use POSIX constructs for your shell scripts or shell
-     constructs in =configure.ac=
+     constructs in =configure.ac= (tests with a single square bracket).
 
 
    #+begin_seealso
+   - [[https://pubs.opengroup.org/onlinepubs/9699919799/utilities/make.html][Make's specification]]
    - [[http://gnu.ist.utl.pt/software/autoconf/manual/autoconf-2.57/html_chapter/autoconf_10.html][Portable shell programming]]
    - [[https://www.oreilly.com/library/view/managing-projects-with/0596006101/ch07.html][Portable Makefiles]]
    - [[https://www.gnu.org/savannah-checkouts/gnu/autoconf/manual/autoconf-2.70/html_node/Portable-Make.html#Portable-Make][Portable Make programming]]

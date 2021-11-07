@@ -43,20 +43,50 @@
 
 --------------------------------
 
-* Build system Hackathon
 
   This website contains the Autotools tutorial of the
   [[https://trex-coe.eu/events/trex-build-system-hackathon-8-12-nov-2021][TREX build system Hackathon]].
   The content is released under the CC-BY-SA license.
 
-  #+begin_important
-Before you proceed to the tutorial, download the example project called *Sherman-Morrison* 
-using the following link:
+  
+* Installation instructions
+  
+  You need to use an isolated Conda environment.  If you do not have
+  Anaconda or Miniconda on your system, you can install it using
+  instructions from one of the following pages (the version of Python
+  is not important here):
 
-https://github.com/q-posev/Sherman-Morrison/archive/refs/tags/v0.1-demo.tar.gz
+  - for Linux users: https://docs.conda.io/en/latest/miniconda.html#linux-installers
+  - for MacOS users: https://docs.conda.io/en/latest/miniconda.html#macosx-installers
 
-Make sure to extract the files from the archive before starting the tutorial.
-  #+end_important
+  Once you have Conda installed, you can use the [[https://raw.githubusercontent.com/TREX-CoE/hackathon/master/environment.yml][environment.yml]] file
+  to set up the environment needed for the Autotools
+  tutorial. Download the file on your hard drive, then in the terminal
+  navigate to the directory with the file and execute the following
+  command:
+
+#+begin_src bash
+$ conda env create -f environment.yml
+#+end_src
+
+  You then need to activate the new environment:
+#+begin_src bash
+$ conda activate autotools
+#+end_src
+
+  Now you should have Autoconf, Automake, compilers and a few other
+  packages installed in an isolated environment. Before you
+  proceed to the tutorial, download the example project called
+  Sherman-Morrison using the following link:
+  Starting point:
+  https://github.com/q-posev/Sherman-Morrison/archive/refs/tags/v0.1-demo.tar.gz
+
+  Here is a checkpoint betweeen the two parts:
+  https://github.com/q-posev/Sherman-Morrison/archive/refs/tags/v0.1-checkpoint.tar.gz
+
+  Make sure to extract the files from the archive before starting the tutorial.
+
+* Tutorial
 
    - [[./autoconf.html][Part  I: Autoconf]]
    - [[./automake.html][Part II: Automake]]
