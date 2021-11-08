@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-11-07 Sun 17:15 -->
+<!-- 2021-11-08 Mon 19:13 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Part II: Automake</title>
@@ -244,60 +244,66 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org911a23e">1. Introduction</a></li>
-<li><a href="#orge7c17d6">2. GNU coding standards</a>
+<li><a href="#org31fda59">1. Introduction</a></li>
+<li><a href="#orga1c1aad">2. GNU coding standards</a>
 <ul>
-<li><a href="#orgf076d81">2.1. Standard targets</a></li>
-<li><a href="#org695c796">2.2. Filesystem Hierarchy Standard</a></li>
-<li><a href="#orgbc7aba4">2.3. Standard <code>Makefile.in</code> variables</a></li>
-<li><a href="#org0ff3009">2.4. Standard environment variables</a></li>
+<li><a href="#orgc81f00a">2.1. Standard targets</a></li>
+<li><a href="#org636092d">2.2. Filesystem Hierarchy Standard</a></li>
+<li><a href="#org4cabd1e">2.3. Standard <code>Makefile.in</code> variables</a></li>
+<li><a href="#org1abbf06">2.4. Standard environment variables</a></li>
 </ul>
 </li>
-<li><a href="#org65c7189">3. Writing portable Makefiles</a>
+<li><a href="#orgcd394cd">3. Writing portable Makefiles</a>
 <ul>
-<li><a href="#orgb18a06c">3.1. What you will lose by sticking to the POSIX standard</a></li>
-<li><a href="#org3f55582">3.2. Guidelines that will make everything more portable</a></li>
+<li><a href="#org9b414d0">3.1. What you will lose by sticking to the POSIX standard</a></li>
+<li><a href="#orgc97ec40">3.2. Guidelines that will make everything more portable</a></li>
 </ul>
 </li>
-<li><a href="#org3c51fe6">4. Automake basics</a></li>
-<li><a href="#orga0cd093">5. Creating a distributed tarball</a>
+<li><a href="#org9c4eca5">4. Automake basics</a></li>
+<li><a href="#org8818a32">5. Creating a distributed tarball</a>
 <ul>
-<li><a href="#org87b0bd4">5.1. Maintainer mode</a></li>
-<li><a href="#orgdc38488">5.2. Source distribution targets</a></li>
+<li><a href="#orge4a78a7">5.1. Maintainer mode</a></li>
+<li><a href="#orgee843a5">5.2. Source distribution targets</a></li>
 </ul>
 </li>
-<li><a href="#org098be28">6. Automake Syntax</a>
+<li><a href="#orgd6d796b">6. Automake Syntax</a>
 <ul>
-<li><a href="#org9f06dc9">6.1. Variables</a></li>
-<li><a href="#orga63c5d8">6.2. Product list variables</a>
+<li><a href="#org6ade8b7">6.1. Variables</a></li>
+<li><a href="#org4220591">6.2. Product list variables</a>
 <ul>
-<li><a href="#org97271f4">6.2.1. Installation location prefixes</a></li>
-<li><a href="#orga957a79">6.2.2. Other prefixes</a></li>
-<li><a href="#orgfc84b69">6.2.3. Primaries</a></li>
+<li><a href="#orgf9355d0">6.2.1. Installation location prefixes</a></li>
+<li><a href="#org9bb285d">6.2.2. Other prefixes</a></li>
+<li><a href="#org6dda027">6.2.3. Primaries</a></li>
 </ul>
 </li>
-<li><a href="#orge044f7b">6.3. Product source variables</a></li>
-<li><a href="#org19482fe">6.4. PLV and PSV modifiers</a></li>
+<li><a href="#orgccfab73">6.3. Product source variables</a></li>
+<li><a href="#org451c695">6.4. PLV and PSV modifiers</a></li>
 </ul>
 </li>
-<li><a href="#org0648e97">7. Testing</a></li>
-<li><a href="#org17e55d4">8. Using pkg-config</a></li>
-<li><a href="#org6a07197">9. Back to Autoconf</a>
+<li><a href="#orgee49c78">7. Testing</a></li>
+<li><a href="#org1de98eb">8. Using pkg-config</a></li>
+<li><a href="#orgdc0fb4b">9. Back to Autoconf</a>
 <ul>
-<li><a href="#orga5c5ac5">9.1. Searching for dependencies</a>
+<li><a href="#orgf1ec4ca">9.1. Searching for dependencies</a>
 <ul>
-<li><a href="#org188e151">9.1.1. C definitions</a></li>
-<li><a href="#org3ab0bb1">9.1.2. Checking for headers</a></li>
-<li><a href="#orga5a71e2">9.1.3. Checking for libraries</a></li>
-<li><a href="#org142eff9">9.1.4. Checking for external programs</a></li>
+<li><a href="#org2c89354">9.1.1. C definitions</a></li>
+<li><a href="#orgd6fb03f">9.1.2. Checking for headers</a></li>
+<li><a href="#orgc577814">9.1.3. Checking for libraries</a></li>
+<li><a href="#org196924d">9.1.4. Checking for external programs</a></li>
 </ul>
 </li>
-<li><a href="#org17503c8">9.2. Printing</a></li>
-<li><a href="#org6290422">9.3. Using external software</a></li>
+<li><a href="#org628b214">9.2. Printing</a></li>
+<li><a href="#org53831b7">9.3. Using external software</a></li>
 </ul>
 </li>
-<li><a href="#org62041df">10. Autoscan</a></li>
-<li><a href="#org84e9df5">11. Useful links</a></li>
+<li><a href="#org8d2034d">10. Autoscan</a></li>
+<li><a href="#org55492ff">11. More about maintainer mode</a>
+<ul>
+<li><a href="#org2da50c7">11.1. Automatic maintainer/user switching</a></li>
+<li><a href="#orgde175a9">11.2. Example: Saving the Git Hash</a></li>
+</ul>
+</li>
+<li><a href="#org84c3c27">12. Useful links</a></li>
 </ul>
 </div>
 </div>
@@ -306,8 +312,8 @@ This page contains a tutorial on the usage <a href="http://www.gnu.org/software/
 second part of the <a href="./index.html">Autotools tutorial</a>.
 </p>
 
-<div id="outline-container-org911a23e" class="outline-2">
-<h2 id="org911a23e"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-org31fda59" class="outline-2">
+<h2 id="org31fda59"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Using a simplified syntax, <b>Automake</b> produces functional Makefiles
@@ -339,8 +345,8 @@ Makefile, using standard target names.
 </div>
 </div>
 
-<div id="outline-container-orge7c17d6" class="outline-2">
-<h2 id="orge7c17d6"><span class="section-number-2">2</span> GNU coding standards</h2>
+<div id="outline-container-orga1c1aad" class="outline-2">
+<h2 id="orga1c1aad"><span class="section-number-2">2</span> GNU coding standards</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 Some aspects of the GNU coding standards (GCS) are well known to
@@ -366,8 +372,8 @@ you want to make it available as a Linux distribution package
 </div>
 </div>
 
-<div id="outline-container-orgf076d81" class="outline-3">
-<h3 id="orgf076d81"><span class="section-number-3">2.1</span> Standard targets</h3>
+<div id="outline-container-orgc81f00a" class="outline-3">
+<h3 id="orgc81f00a"><span class="section-number-3">2.1</span> Standard targets</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 The GCS defines standard target names to be included in
@@ -394,8 +400,8 @@ multiple packages. Here is a short list of the main targets:
 </div>
 </div>
 
-<div id="outline-container-org695c796" class="outline-3">
-<h3 id="org695c796"><span class="section-number-3">2.2</span> Filesystem Hierarchy Standard</h3>
+<div id="outline-container-org636092d" class="outline-3">
+<h3 id="org636092d"><span class="section-number-3">2.2</span> Filesystem Hierarchy Standard</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 The Filesystem Hierarchy Standard (FHS) defines the directory
@@ -493,8 +499,8 @@ configuration files.
 </div>
 </div>
 
-<div id="outline-container-orgbc7aba4" class="outline-3">
-<h3 id="orgbc7aba4"><span class="section-number-3">2.3</span> Standard <code>Makefile.in</code> variables</h3>
+<div id="outline-container-org4cabd1e" class="outline-3">
+<h3 id="org4cabd1e"><span class="section-number-3">2.3</span> Standard <code>Makefile.in</code> variables</h3>
 <div class="outline-text-3" id="text-2-3">
 <p>
 Installation directories are named by standard variables, so it
@@ -617,8 +623,8 @@ arguments of the <code>configure</code> script:
 </div>
 </div>
 
-<div id="outline-container-org0ff3009" class="outline-3">
-<h3 id="org0ff3009"><span class="section-number-3">2.4</span> Standard environment variables</h3>
+<div id="outline-container-org1abbf06" class="outline-3">
+<h3 id="org1abbf06"><span class="section-number-3">2.4</span> Standard environment variables</h3>
 <div class="outline-text-3" id="text-2-4">
 <p>
 The GCS also defines a set of user-defined environment variables
@@ -722,8 +728,8 @@ To see the complete list of user variables, you can run
 </div>
 </div>
 
-<div id="outline-container-org65c7189" class="outline-2">
-<h2 id="org65c7189"><span class="section-number-2">3</span> Writing portable Makefiles</h2>
+<div id="outline-container-orgcd394cd" class="outline-2">
+<h2 id="orgcd394cd"><span class="section-number-2">3</span> Writing portable Makefiles</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 The Makefiles produced by <b>Automake</b> are made to be portable among
@@ -749,8 +755,8 @@ at the top of your Makefile.
 </p>
 </div>
 
-<div id="outline-container-orgb18a06c" class="outline-3">
-<h3 id="orgb18a06c"><span class="section-number-3">3.1</span> What you will lose by sticking to the POSIX standard</h3>
+<div id="outline-container-org9b414d0" class="outline-3">
+<h3 id="org9b414d0"><span class="section-number-3">3.1</span> What you will lose by sticking to the POSIX standard</h3>
 <div class="outline-text-3" id="text-3-1">
 <ul class="org-ul">
 <li><p>
@@ -769,8 +775,8 @@ Pattern rules, such as
 </div>
 </div>
 
-<div id="outline-container-org3f55582" class="outline-3">
-<h3 id="org3f55582"><span class="section-number-3">3.2</span> Guidelines that will make everything more portable</h3>
+<div id="outline-container-orgc97ec40" class="outline-3">
+<h3 id="orgc97ec40"><span class="section-number-3">3.2</span> Guidelines that will make everything more portable</h3>
 <div class="outline-text-3" id="text-3-2">
 <ul class="org-ul">
 <li>Don't use any other automatic variable than <code>$@</code> (the name of the current target)</li>
@@ -799,8 +805,8 @@ constructs in <code>configure.ac</code> (tests with a single square bracket).</l
 </div>
 </div>
 
-<div id="outline-container-org3c51fe6" class="outline-2">
-<h2 id="org3c51fe6"><span class="section-number-2">4</span> Automake basics</h2>
+<div id="outline-container-org9c4eca5" class="outline-2">
+<h2 id="org9c4eca5"><span class="section-number-2">4</span> Automake basics</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 <b>Automake</b> reads a file named <code>Makefile.am</code> and produces the <code>Makefile.in</code>
@@ -954,12 +960,12 @@ $
 </div>
 </div>
 
-<div id="outline-container-orga0cd093" class="outline-2">
-<h2 id="orga0cd093"><span class="section-number-2">5</span> Creating a distributed tarball</h2>
+<div id="outline-container-org8818a32" class="outline-2">
+<h2 id="org8818a32"><span class="section-number-2">5</span> Creating a distributed tarball</h2>
 <div class="outline-text-2" id="text-5">
 </div>
-<div id="outline-container-org87b0bd4" class="outline-3">
-<h3 id="org87b0bd4"><span class="section-number-3">5.1</span> Maintainer mode</h3>
+<div id="outline-container-orge4a78a7" class="outline-3">
+<h3 id="orge4a78a7"><span class="section-number-3">5.1</span> Maintainer mode</h3>
 <div class="outline-text-3" id="text-5-1">
 <p>
 There are two types of people who will try to compile the source
@@ -1010,8 +1016,8 @@ Makefiles by running
 </div>
 </div>
 
-<div id="outline-container-orgdc38488" class="outline-3">
-<h3 id="orgdc38488"><span class="section-number-3">5.2</span> Source distribution targets</h3>
+<div id="outline-container-orgee843a5" class="outline-3">
+<h3 id="orgee843a5"><span class="section-number-3">5.2</span> Source distribution targets</h3>
 <div class="outline-text-3" id="text-5-2">
 <p>
 <b>Automake</b> provides automatically the <code>dist</code> target.
@@ -1238,12 +1244,12 @@ adding the <code>dist-zip</code>, <code>dist-bzip2</code>, <code>dist-xz</code>,
 </div>
 </div>
 </div>
-<div id="outline-container-org098be28" class="outline-2">
-<h2 id="org098be28"><span class="section-number-2">6</span> Automake Syntax</h2>
+<div id="outline-container-orgd6d796b" class="outline-2">
+<h2 id="orgd6d796b"><span class="section-number-2">6</span> Automake Syntax</h2>
 <div class="outline-text-2" id="text-6">
 </div>
-<div id="outline-container-org9f06dc9" class="outline-3">
-<h3 id="org9f06dc9"><span class="section-number-3">6.1</span> Variables</h3>
+<div id="outline-container-org6ade8b7" class="outline-3">
+<h3 id="org6ade8b7"><span class="section-number-3">6.1</span> Variables</h3>
 <div class="outline-text-3" id="text-6-1">
 <p>
 Here is the list of the main variables that are used in
@@ -1275,8 +1281,8 @@ the <code>AM_</code> prefix.
 </div>
 </div>
 
-<div id="outline-container-orga63c5d8" class="outline-3">
-<h3 id="orga63c5d8"><span class="section-number-3">6.2</span> Product list variables</h3>
+<div id="outline-container-org4220591" class="outline-3">
+<h3 id="org4220591"><span class="section-number-3">6.2</span> Product list variables</h3>
 <div class="outline-text-3" id="text-6-2">
 <p>
 In the previous section, we have seen two special variables
@@ -1298,8 +1304,8 @@ and these will be installed in <code>$(exec_prefix)/bin</code> upon invocation o
 </pre>
 </div>
 
-<div id="outline-container-org97271f4" class="outline-4">
-<h4 id="org97271f4"><span class="section-number-4">6.2.1</span> Installation location prefixes</h4>
+<div id="outline-container-orgf9355d0" class="outline-4">
+<h4 id="orgf9355d0"><span class="section-number-4">6.2.1</span> Installation location prefixes</h4>
 <div class="outline-text-4" id="text-6-2-1">
 <p>
 The <code>prefix</code> can be an <i>installation location prefix</i>, as in for
@@ -1317,8 +1323,8 @@ variable. You can make your own prefix, for example:
 </div>
 </div>
 
-<div id="outline-container-orga957a79" class="outline-4">
-<h4 id="orga957a79"><span class="section-number-4">6.2.2</span> Other prefixes</h4>
+<div id="outline-container-org9bb285d" class="outline-4">
+<h4 id="org9bb285d"><span class="section-number-4">6.2.2</span> Other prefixes</h4>
 <div class="outline-text-4" id="text-6-2-2">
 <dl class="org-dl">
 <dt><code>noinst</code></dt><dd>Products that should not be installed</dd>
@@ -1328,8 +1334,8 @@ variable. You can make your own prefix, for example:
 </div>
 </div>
 
-<div id="outline-container-orgfc84b69" class="outline-4">
-<h4 id="orgfc84b69"><span class="section-number-4">6.2.3</span> Primaries</h4>
+<div id="outline-container-org6dda027" class="outline-4">
+<h4 id="org6dda027"><span class="section-number-4">6.2.3</span> Primaries</h4>
 <div class="outline-text-4" id="text-6-2-3">
 <p>
 A primary is a class of products. This defines the rules to create
@@ -1348,8 +1354,8 @@ in the Makefile to satisfy the needs of the product.
 </div>
 </div>
 
-<div id="outline-container-orge044f7b" class="outline-3">
-<h3 id="orge044f7b"><span class="section-number-3">6.3</span> Product source variables</h3>
+<div id="outline-container-orgccfab73" class="outline-3">
+<h3 id="orgccfab73"><span class="section-number-3">6.3</span> Product source variables</h3>
 <div class="outline-text-3" id="text-6-3">
 <p>
 In our example, the name of the program is <code>test_h5</code>, so by defining
@@ -1380,8 +1386,8 @@ example:
 </div>
 </div>
 
-<div id="outline-container-org19482fe" class="outline-3">
-<h3 id="org19482fe"><span class="section-number-3">6.4</span> PLV and PSV modifiers</h3>
+<div id="outline-container-org451c695" class="outline-3">
+<h3 id="org451c695"><span class="section-number-3">6.4</span> PLV and PSV modifiers</h3>
 <div class="outline-text-3" id="text-6-4">
 <p>
 Modifiers change the default behavior of the variable. The main
@@ -1402,8 +1408,8 @@ documentation directory.
 </div>
 </div>
 
-<div id="outline-container-org0648e97" class="outline-2">
-<h2 id="org0648e97"><span class="section-number-2">7</span> Testing</h2>
+<div id="outline-container-orgee49c78" class="outline-2">
+<h2 id="orgee49c78"><span class="section-number-2">7</span> Testing</h2>
 <div class="outline-text-2" id="text-7">
 <p>
 Automake provides a framework for testing your program. The <code>TEST</code>
@@ -1525,8 +1531,8 @@ building the source distribution package.
 </div>
 </div>
 
-<div id="outline-container-org17e55d4" class="outline-2">
-<h2 id="org17e55d4"><span class="section-number-2">8</span> Using pkg-config</h2>
+<div id="outline-container-org1de98eb" class="outline-2">
+<h2 id="org1de98eb"><span class="section-number-2">8</span> Using pkg-config</h2>
 <div class="outline-text-2" id="text-8">
 <p>
 When your software depends on external libraries and you try to
@@ -1623,16 +1629,16 @@ The pkg-config files are searched in the directories defined by the
 </div>
 </div>
 
-<div id="outline-container-org6a07197" class="outline-2">
-<h2 id="org6a07197"><span class="section-number-2">9</span> Back to Autoconf</h2>
+<div id="outline-container-orgdc0fb4b" class="outline-2">
+<h2 id="orgdc0fb4b"><span class="section-number-2">9</span> Back to Autoconf</h2>
 <div class="outline-text-2" id="text-9">
 </div>
-<div id="outline-container-orga5c5ac5" class="outline-3">
-<h3 id="orga5c5ac5"><span class="section-number-3">9.1</span> Searching for dependencies</h3>
+<div id="outline-container-orgf1ec4ca" class="outline-3">
+<h3 id="orgf1ec4ca"><span class="section-number-3">9.1</span> Searching for dependencies</h3>
 <div class="outline-text-3" id="text-9-1">
 </div>
-<div id="outline-container-org188e151" class="outline-4">
-<h4 id="org188e151"><span class="section-number-4">9.1.1</span> C definitions</h4>
+<div id="outline-container-org2c89354" class="outline-4">
+<h4 id="org2c89354"><span class="section-number-4">9.1.1</span> C definitions</h4>
 <div class="outline-text-4" id="text-9-1-1">
 <p>
 If you are using the C/C++ preprocessor, you can enable <i>conditional
@@ -1716,8 +1722,8 @@ to locate the configuration files for instance:
 </div>
 </div>
 
-<div id="outline-container-org3ab0bb1" class="outline-4">
-<h4 id="org3ab0bb1"><span class="section-number-4">9.1.2</span> Checking for headers</h4>
+<div id="outline-container-orgd6fb03f" class="outline-4">
+<h4 id="orgd6fb03f"><span class="section-number-4">9.1.2</span> Checking for headers</h4>
 <div class="outline-text-4" id="text-9-1-2">
 <p>
 You may need to check if some headers are available. For this, you
@@ -1753,8 +1759,8 @@ not the header, the result is stored in <code>ac_cv_header_&lt;header_file&gt;</
 </div>
 </div>
 
-<div id="outline-container-orga5a71e2" class="outline-4">
-<h4 id="orga5a71e2"><span class="section-number-4">9.1.3</span> Checking for libraries</h4>
+<div id="outline-container-orgc577814" class="outline-4">
+<h4 id="orgc577814"><span class="section-number-4">9.1.3</span> Checking for libraries</h4>
 <div class="outline-text-4" id="text-9-1-3">
 <p>
 As we have seen in Part I, we can look in the archive of <b>Autoconf</b>
@@ -1790,8 +1796,8 @@ not the library, the result is stored in <code>ac_cv_search_&lt;function&gt;</co
 </div>
 </div>
 
-<div id="outline-container-org142eff9" class="outline-4">
-<h4 id="org142eff9"><span class="section-number-4">9.1.4</span> Checking for external programs</h4>
+<div id="outline-container-org196924d" class="outline-4">
+<h4 id="org196924d"><span class="section-number-4">9.1.4</span> Checking for external programs</h4>
 <div class="outline-text-4" id="text-9-1-4">
 <p>
 You package might need some other programs to be functional. For
@@ -1818,8 +1824,8 @@ result in the <code>PYTHON</code> variable:
 </div>
 </div>
 
-<div id="outline-container-org17503c8" class="outline-3">
-<h3 id="org17503c8"><span class="section-number-3">9.2</span> Printing</h3>
+<div id="outline-container-org628b214" class="outline-3">
+<h3 id="org628b214"><span class="section-number-3">9.2</span> Printing</h3>
 <div class="outline-text-3" id="text-9-2">
 <p>
 The following macros will be useful to display messages to the
@@ -1865,8 +1871,8 @@ users running configure:
 </div>
 
 
-<div id="outline-container-org6290422" class="outline-3">
-<h3 id="org6290422"><span class="section-number-3">9.3</span> Using external software</h3>
+<div id="outline-container-org53831b7" class="outline-3">
+<h3 id="org53831b7"><span class="section-number-3">9.3</span> Using external software</h3>
 <div class="outline-text-3" id="text-9-3">
 <p>
 The usage of an external software can be controlled by the user by
@@ -1915,8 +1921,8 @@ variable will be empty. Otherwise, it will contain <code>yes</code>.
 </div>
 </div>
 
-<div id="outline-container-org62041df" class="outline-2">
-<h2 id="org62041df"><span class="section-number-2">10</span> Autoscan</h2>
+<div id="outline-container-org8d2034d" class="outline-2">
+<h2 id="org8d2034d"><span class="section-number-2">10</span> Autoscan</h2>
 <div class="outline-text-2" id="text-10">
 <p>
 <b>Autoscan</b> scans the source tree and tries to fix vulnerabilities
@@ -1951,9 +1957,138 @@ If you do it at the very beginning of your transition to
 </div>
 </div>
 
-<div id="outline-container-org84e9df5" class="outline-2">
-<h2 id="org84e9df5"><span class="section-number-2">11</span> Useful links</h2>
+<div id="outline-container-org55492ff" class="outline-2">
+<h2 id="org55492ff"><span class="section-number-2">11</span> More about maintainer mode</h2>
 <div class="outline-text-2" id="text-11">
+</div>
+<div id="outline-container-org2da50c7" class="outline-3">
+<h3 id="org2da50c7"><span class="section-number-3">11.1</span> Automatic maintainer/user switching</h3>
+<div class="outline-text-3" id="text-11-1">
+<p>
+It is convenient to define a variable that allows to know if the
+configuration should be for a maintainer or for an end user. The
+simplest recipe is to check for the existence of the <code>.git</code>
+directory at the root of the project. If it exists, we are not in
+the source distribution but in a directory obtained by <code>git clone</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash"><span style="color: #0000ff;">AC_CHECK_FILE</span>([.git], [<span style="color: #a0522d;">IS_MAINTAINER</span>=<span style="color: #8b2252;">"yes"</span>], [<span style="color: #a0522d;">IS_MAINTAINER</span>=<span style="color: #8b2252;">"no"</span>])
+</pre>
+</div>
+
+<p>
+Then, the commands specific to maintainer mode can be executed in
+<code>configure.ac</code> by checking the value of this variable:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash"><span style="color: #0000ff;">AS_IF</span>([test <span style="color: #8b2252;">"$IS_MAINTAINER"</span> == <span style="color: #8b2252;">"yes"</span>],
+      [AC_MSG_NOTICE([Maintainer configuration])],
+      [AC_MSG_NOTICE([User configuration])])
+</pre>
+</div>
+
+<p>
+To propagate this knowledge to <code>Makefile.am</code>, you can use in <code>configure.ac</code>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash"><span style="color: #0000ff;">AM_CONDITIONAL</span>([IS_MAINTAINER], [test <span style="color: #8b2252;">"$IS_MAINTAINER"</span> == <span style="color: #8b2252;">"yes"</span>])
+</pre>
+</div>
+
+<p>
+and then, in <code>Makefile.am</code>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile">if IS_MAINTAINER
+[...]
+endif
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgde175a9" class="outline-3">
+<h3 id="orgde175a9"><span class="section-number-3">11.2</span> Example: Saving the Git Hash</h3>
+<div class="outline-text-3" id="text-11-2">
+<p>
+Inside <code>configure.ac</code>, it is rather simple to get the git hash and
+store it into a defined variable:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash"><span style="color: #a0522d;">GIT_HASH</span>=<span style="color: #ff00ff;">`git log | head -1 | cut -d ' ' -f 2`</span>
+</pre>
+</div>
+
+<p>
+When the distribution package is made, the information relative to
+the Git repository is not stored in the tarball. So it will not be
+possible to get the Git hash by executing this command for the end
+user. The Git hash is available only for maintainers and needs to
+be stored somewhere in the distribution package to be propagated to
+the users.
+</p>
+
+<p>
+In <code>configure.ac</code>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-bash"><span style="color: #0000ff;">AS_IF</span>([test <span style="color: #8b2252;">"$IS_MAINTAINER"</span> = <span style="color: #8b2252;">"yes"</span>],
+      [<span style="color: #a0522d;">GIT_HASH</span>=<span style="color: #ff00ff;">`git log | head -1 | cut -d ' ' -f 2 | tee ${srcdir}/.git_hash`</span>],
+      [<span style="color: #a0522d;">GIT_HASH</span>=<span style="color: #ff00ff;">`cat ${srcdir}/.git_hash`</span>])
+
+<span style="color: #0000ff;">AC_DEFINE_UNQUOTED</span>(GIT_HASH, [<span style="color: #8b2252;">"${GIT_HASH}"</span>], [Git SHA1 Hash])
+</pre>
+</div>
+
+<p>
+In maintainer mode, we fetch the Git hash and store it in
+<code>.git_hash</code>. In user mode, we read the content of <code>.git_hash</code>.
+Then, we propagate this variable to <code>config.h</code> with
+<code>AC_DEFINE_UNQUOTED</code>.
+</p>
+
+<p>
+In <code>Makefile.am</code>, we add the new file to the source distribution tarball:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile"><span style="color: #a0522d;">EXTRA_DIST</span> += .git_hash
+</pre>
+</div>
+
+<p>
+and we add rules to always regenerate it in case we make a commit:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-makefile">if IS_MAINTAINER
+
+<span style="color: #a0522d;">CLEANFILES</span> = .git_hash
+
+<span style="color: #0000ff;">.git_hash</span>: FORCE
+        git log | head -1 | cut -d <span style="color: #8b2252;">' '</span> -f 2 &gt; .git_hash
+
+<span style="color: #0000ff;">all</span>: .git_hash
+
+<span style="color: #0000ff;">.PHONY</span>: FORCE
+endif
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-org84c3c27" class="outline-2">
+<h2 id="org84c3c27"><span class="section-number-2">12</span> Useful links</h2>
+<div class="outline-text-2" id="text-12">
 <ul class="org-ul">
 <li><a href="http://clusterchimps.org/autotools.php">CUDA and GNU Autotools</a></li>
 <li><a href="https://www.gnu.org/software/automake/manual/html_node/Multiple-Outputs.html">Handling Tools that Produce Many Outputs</a></li>
@@ -1969,7 +2104,7 @@ If you do it at the very beginning of your transition to
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Evgeny Posenitskiy, Anthony Scemama</p>
-<p class="date">Created: 2021-11-07 Sun 17:15</p>
+<p class="date">Created: 2021-11-08 Mon 19:13</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
