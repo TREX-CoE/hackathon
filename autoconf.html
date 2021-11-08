@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2021-11-08 Mon 19:13 -->
+<!-- 2021-11-08 Mon 19:34 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Part I: Autoconf</title>
@@ -244,12 +244,13 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgf581fec">1. Introduction</a></li>
-<li><a href="#orgcb44664">2. Makefile</a></li>
-<li><a href="#org3e98e14">3. Autoconf</a></li>
-<li><a href="#org8bae20d">4. Detecting external dependencies</a></li>
-<li><a href="#orgdffdc66">5. pkg-config</a></li>
-<li><a href="#org7a01a1d">6. Conclusion</a></li>
+<li><a href="#orgb4f9e4b">1. Introduction</a></li>
+<li><a href="#orgfea9648">2. Demo project</a></li>
+<li><a href="#org474d93b">3. Makefile</a></li>
+<li><a href="#org40c05fb">4. Autoconf</a></li>
+<li><a href="#orgefc22a2">5. Detecting external dependencies</a></li>
+<li><a href="#org8575bed">6. pkg-config</a></li>
+<li><a href="#org32c4db1">7. Conclusion</a></li>
 </ul>
 </div>
 </div>
@@ -257,8 +258,8 @@ for the JavaScript code in this tag.
 This page contains the <a href="https://www.gnu.org/software/autoconf/">GNU Autoconf</a> tutorial, which is the first part of the <a href="./index.html">Autotools tutorial</a>.
 </p>
 
-<div id="outline-container-orgf581fec" class="outline-2">
-<h2 id="orgf581fec"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-orgb4f9e4b" class="outline-2">
+<h2 id="orgb4f9e4b"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Building software on different platforms is a challenging task.
@@ -281,7 +282,12 @@ systems not initially considered by the developer. As opposed to
 <code>CMake</code>, all the burden is put on the shoulders of the developer to
 make the life simpler for the end user.
 </p>
+</div>
+</div>
 
+<div id="outline-container-orgfea9648" class="outline-2">
+<h2 id="orgfea9648"><span class="section-number-2">2</span> Demo project</h2>
+<div class="outline-text-2" id="text-2">
 <p>
 In this tutorial, we will learn how to configure a particular project using <b>Autoconf</b>.
 This project consists of several <code>C++</code> source files, which are compiled into a single program using custom <code>Makefile</code>.
@@ -328,12 +334,17 @@ Our goal is to demonstrate how cumbersome configuration/compilation steps can be
 &#9500;&#9472; .gitignore
 </pre>
 </div>
+
+<p>
+The source code comes from the <a href="https://github.com/TREX-CoE/Sherman-Morrison">Sherman-Morrison GitHub repository</a> of the TREX-CoE.
+It is distributed under BSD 3-Clause License. 
+</p>
 </div>
 </div>
 
-<div id="outline-container-orgcb44664" class="outline-2">
-<h2 id="orgcb44664"><span class="section-number-2">2</span> Makefile</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-org474d93b" class="outline-2">
+<h2 id="org474d93b"><span class="section-number-2">3</span> Makefile</h2>
+<div class="outline-text-2" id="text-3">
 <p>
 Below is the <code>Makefile</code> of our project:
 </p>
@@ -470,9 +481,9 @@ Well, this is where <b><b>Autoconf</b></b> comes into play.
 </div>
 </div>
 
-<div id="outline-container-org3e98e14" class="outline-2">
-<h2 id="org3e98e14"><span class="section-number-2">3</span> Autoconf</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-org40c05fb" class="outline-2">
+<h2 id="org40c05fb"><span class="section-number-2">4</span> Autoconf</h2>
+<div class="outline-text-2" id="text-4">
 <p>
 In this section, we will talk about several files:
 </p>
@@ -741,9 +752,9 @@ just run <code>./config.status</code> and the options of the previous
 </div>
 </div>
 
-<div id="outline-container-org8bae20d" class="outline-2">
-<h2 id="org8bae20d"><span class="section-number-2">4</span> Detecting external dependencies</h2>
-<div class="outline-text-2" id="text-4">
+<div id="outline-container-orgefc22a2" class="outline-2">
+<h2 id="orgefc22a2"><span class="section-number-2">5</span> Detecting external dependencies</h2>
+<div class="outline-text-2" id="text-5">
 <div class="important">
 <p>
 You can download the modified project, which contains the checkpoint corresponding to the beginning of this section. 
@@ -939,9 +950,9 @@ Which part of the <code>configure.ac</code> script produces the output message?
 </div>
 </div>
 
-<div id="outline-container-orgdffdc66" class="outline-2">
-<h2 id="orgdffdc66"><span class="section-number-2">5</span> pkg-config</h2>
-<div class="outline-text-2" id="text-5">
+<div id="outline-container-org8575bed" class="outline-2">
+<h2 id="org8575bed"><span class="section-number-2">6</span> pkg-config</h2>
+<div class="outline-text-2" id="text-6">
 <p>
 The <a href="https://linux.die.net/man/1/pkg-config">pkg-config program</a> is a powerful tool to get information about installed libraries.
 <b>Autoconf</b> incorporates some of the <code>pkg-config</code> functionality.
@@ -1062,9 +1073,9 @@ Notably, the raised warning allows the configuration to pass (unlike <code>AC_MS
 </div>
 </div>
 
-<div id="outline-container-org7a01a1d" class="outline-2">
-<h2 id="org7a01a1d"><span class="section-number-2">6</span> Conclusion</h2>
-<div class="outline-text-2" id="text-6">
+<div id="outline-container-org32c4db1" class="outline-2">
+<h2 id="org32c4db1"><span class="section-number-2">7</span> Conclusion</h2>
+<div class="outline-text-2" id="text-7">
 <p>
 In this Tutorial you have learned how to make your in-house <code>Makefile</code> compatible with <b>Autoconf</b>.
 This is achieved by converting <code>Makefile</code> into <code>Makefile.in</code> and introducing substitution variables.
@@ -1080,7 +1091,7 @@ Finally, you used the <b>Autoconf</b> macro from the GNU archive to configure th
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Evgeny Posenitskiy, Anthony Scemama</p>
-<p class="date">Created: 2021-11-08 Mon 19:13</p>
+<p class="date">Created: 2021-11-08 Mon 19:34</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
