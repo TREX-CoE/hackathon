@@ -35,6 +35,8 @@ systems not initially considered by the developer. As opposed to
 =CMake=, all the burden is put on the shoulders of the developer to
 make the life simpler for the end user.
 
+* Demo project
+
 In this tutorial, we will learn how to configure a particular project using *Autoconf*.
 This project consists of several ~C++~ source files, which are compiled into a single program using custom ~Makefile~.
 It is worth mentioning that you don't need to be a ~C++~ programmer to be able to do this tutorial.
@@ -74,6 +76,9 @@ Sherman-Morrison/
 ├─ README.md
 ├─ .gitignore
 #+end_src
+
+The source code comes from the [[https://github.com/TREX-CoE/Sherman-Morrison][Sherman-Morrison GitHub repository]] of the TREX-CoE.
+It is distributed under BSD 3-Clause License. 
 
 * Makefile
 
