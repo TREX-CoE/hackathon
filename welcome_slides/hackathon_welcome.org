@@ -38,7 +38,7 @@
      install it, they look for another one
    - If they really need that software, they will you bother you
      asking for help
-   - Once set up, it will save you a lot of day in every day development
+   - Once set up, it will save you a lot of time in every day development
 
 ** Important
 
@@ -70,11 +70,12 @@
   #+LATEX: \begin{column}{0.25\textwidth}
   #+LATEX: \begin{block}{Helpers}
 
-   - Anthony
-   - Evgeny
-   - Vijay
-   - Pablo
-   - Radovan
+   - Radovan Bast
+   - Vijay Gopal Chilkuri
+   - Pablo Oliveira
+   - Evgeny Posenitskiy
+   - Anthony Scemama
+   - Cedric Valensi
 
   #+LATEX: \end{block}
   #+LATEX: \end{column}

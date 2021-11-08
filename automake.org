@@ -1041,6 +1041,98 @@ configure.ac: warning: missing AC_CHECK_HEADER_STDBOOL wanted by: include/Helper
   =configure.ac= file.
   #+end_tip
 
+* More about maintainer mode
+
+** Automatic maintainer/user switching
+
+   It is convenient to define a variable that allows to know if the
+   configuration should be for a maintainer or for an end user. The
+   simplest recipe is to check for the existence of the =.git=
+   directory at the root of the project. If it exists, we are not in
+   the source distribution but in a directory obtained by ~git clone~.
+
+   #+begin_src bash
+AC_CHECK_FILE([.git], [IS_MAINTAINER="yes"], [IS_MAINTAINER="no"])
+   #+end_src
+
+   Then, the commands specific to maintainer mode can be executed in
+   =configure.ac= by checking the value of this variable:
+
+   #+begin_src bash
+AS_IF([test "$IS_MAINTAINER" == "yes"],
+      [AC_MSG_NOTICE([Maintainer configuration])],
+      [AC_MSG_NOTICE([User configuration])])
+   #+end_src
+
+   To propagate this knowledge to =Makefile.am=, you can use in =configure.ac=
+
+   #+begin_src bash
+AM_CONDITIONAL([IS_MAINTAINER], [test "$IS_MAINTAINER" == "yes"])
+   #+end_src
+
+   and then, in =Makefile.am=
+
+   #+begin_src makefile
+if IS_MAINTAINER
+[...]
+endif
+   #+end_src
+
+** Example: Saving the Git Hash
+
+   Inside =configure.ac=, it is rather simple to get the git hash and
+   store it into a defined variable:
+
+   #+begin_src bash
+GIT_HASH=`git log | head -1 | cut -d ' ' -f 2`
+   #+end_src
+
+   When the distribution package is made, the information relative to
+   the Git repository is not stored in the tarball. So it will not be
+   possible to get the Git hash by executing this command for the end
+   user. The Git hash is available only for maintainers and needs to
+   be stored somewhere in the distribution package to be propagated to
+   the users.
+
+   In =configure.ac=:
+
+   #+begin_src bash
+AS_IF([test "$IS_MAINTAINER" = "yes"],
+      [GIT_HASH=`git log | head -1 | cut -d ' ' -f 2 | tee ${srcdir}/.git_hash`],
+      [GIT_HASH=`cat ${srcdir}/.git_hash`])
+
+AC_DEFINE_UNQUOTED(GIT_HASH, ["${GIT_HASH}"], [Git SHA1 Hash])
+   #+end_src
+
+   In maintainer mode, we fetch the Git hash and store it in
+   =.git_hash=. In user mode, we read the content of =.git_hash=.
+   Then, we propagate this variable to =config.h= with
+   ~AC_DEFINE_UNQUOTED~.
+
+   In =Makefile.am=, we add the new file to the source distribution tarball:
+
+   #+begin_src makefile
+EXTRA_DIST += .git_hash
+   #+end_src
+
+   and we add rules to always regenerate it in case we make a commit:
+
+   #+begin_src makefile
+if IS_MAINTAINER
+
+CLEANFILES = .git_hash
+
+.git_hash: FORCE
+	git log | head -1 | cut -d ' ' -f 2 > .git_hash
+
+all: .git_hash
+
+.PHONY: FORCE
+endif
+   #+end_src
+
+
+
 * Useful links
 
   - [[http://clusterchimps.org/autotools.php][CUDA and GNU Autotools]]
@@ -1050,7 +1142,7 @@ configure.ac: warning: missing AC_CHECK_HEADER_STDBOOL wanted by: include/Helper
   - [[https://gitlab.inria.fr/starpu/starpu][Example: The StarPU library]]
 
 ------------------------
-#+begin_export html 
+#+begin_export html
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
 #+end_export
 

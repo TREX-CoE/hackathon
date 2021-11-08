@@ -25,6 +25,12 @@
 AC_INIT([sherman-morrison], [0.0.1], [])
 AM_INIT_AUTOMAKE([foreign subdir-objects silent-rules dist-zip])
 
+AC_CHECK_FILE([.git], [IS_MAINTAINER="yes"], [IS_MAINTAINER="no"])
+AS_IF([test "$IS_MAINTAINER" == "yes"],
+      [AC_MSG_NOTICE([Maintainer configuration])],
+      [AC_MSG_NOTICE([User configuration])])
+AM_CONDITIONAL([IS_MAINTAINER], [test "$IS_MAINTAINER" == "yes"])
+
 
 # do the tests with C++ flags
 AC_LANG(C++)
@@ -72,13 +78,21 @@ AC_CHECK_FUNCS([pow])
 AC_CHECK_FUNCS([sqrt])
 AC_CHECK_HEADER_STDBOOL
 
+GIT_HASH=`git log | head -1 | cut -d ' ' -f 2`
+AS_IF([test "$IS_MAINTAINER" = "yes"],
+      [GIT_HASH=`git log | head -1 | cut -d ' ' -f 2 | tee ${srcdir}/.git_hash`],
+      [GIT_HASH=`cat ${srcdir}/.git_hash`])
+
+AC_DEFINE_UNQUOTED(GIT_HASH, ["${GIT_HASH}"], [Git SHA1 Hash])
+
+
 AC_OUTPUT
 
 
 echo \
 "-------------------------------------------------
 
-${PACKAGE_NAME} Version ${PACKAGE_VERSION}
+${PACKAGE_NAME} Version ${PACKAGE_VERSION} (${GIT_HASH})
 
 CXX ...........:  ${CXX}
 CXXFLAGS ......:  ${CXXFLAGS}
@@ -127,7 +141,39 @@ check_PROGRAMS = $(TESTS)
 tests_success_SOURCES = tests/success.cpp
 tests_failure_SOURCES = tests/failure.cpp
 
+EXTRA_DIST += .git_hash
+
+if IS_MAINTAINER
+
+CLEANFILES = .git_hash
+
+.git_hash: FORCE
+	git log | head -1 | cut -d ' ' -f 2 > .git_hash
+
+all: .git_hash
+
+.PHONY: FORCE
+endif
   #+end_src
+
+* Test files
+
+** tests/success.cpp
+
+  #+begin_src c++
+int main() {
+  return 0;
+}
+  #+end_src
+
+** tests/failure.cpp
+
+  #+begin_src c++
+int main() {
+  return 1;
+}
+  #+end_src
+
 
 ------------------------
 #+begin_export html 
