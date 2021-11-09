@@ -1135,9 +1135,14 @@ endif
 
 * Useful links
 
+  - [[https://www.gnu.org/software/autoconf-archive/The-Macros.html][Autoconf archive of macros]]
   - [[http://clusterchimps.org/autotools.php][CUDA and GNU Autotools]]
   - [[https://www.gnu.org/software/automake/manual/html_node/Multiple-Outputs.html][Handling Tools that Produce Many Outputs]]
-  - [[https://stackoverflow.com/questions/67460091/autotools-and-fortran-modules/67535762#67535762][Autotools and Fortran Modules]]
+  - [[https://aoterodelaroza.github.io/devnotes/modern-fortran-makefiles/][Modern Fortran Makefiles]]: talks about the problems due to using
+    modules, and proposes a solution for Automatic dependency generation
+  - [[https://gitlab.mpcdf.mpg.de/elpa/elpa/-/tree/master/fdep][fdep]] : Small set of scripts to teach autoconf/automake (using GNU
+    make) about the additional dependencies in Fortran 90 files due to
+    modules. 
   - [[https://github.com/TREX-CoE/qmckl][Example: The QMCkl library]]
   - [[https://gitlab.inria.fr/starpu/starpu][Example: The StarPU library]]
 
